@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLearningStore, Screen } from '@/store/learningStore';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
+import logoImage from '@/assets/logo.png';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -62,9 +63,11 @@ export function Header({ showBack = false, backTo = 'home' }: HeaderProps) {
             onClick={handleHome}
             className="flex items-center gap-3 group"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-primary-foreground font-sanskrit text-xl font-bold shadow-md group-hover:shadow-lg transition-shadow">
-              अ
-            </div>
+            <img 
+              src={logoImage} 
+              alt="Ashta Padi Logo" 
+              className="w-10 h-10 rounded-xl shadow-md group-hover:shadow-lg transition-shadow object-cover"
+            />
             <div className="hidden sm:block">
               <h1 className="text-base font-semibold text-foreground group-hover:text-primary transition-colors">
                 Ashta Padi
