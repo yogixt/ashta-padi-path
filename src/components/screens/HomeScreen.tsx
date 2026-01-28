@@ -7,7 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { BookOpen, GraduationCap, Sparkles, Users, ArrowRight, Star, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import heroImage from '@/assets/hero-patanjali.jpg';
-import mandalaDecorative from '@/assets/mandala-decorative.png';
+import mandalaElegant from '@/assets/mandala-elegant.png';
 import ashtaPadiFramework from '@/assets/ashta-padi-framework.jpg';
 
 // Author data from the research paper
@@ -19,7 +19,7 @@ const authors = [
 ];
 
 export function HomeScreen() {
-  const { vocabCompleted, sutrasCompleted } = useLearningStore();
+  const { vocabCompleted, sutrasCompleted, setScreen } = useLearningStore();
   const { user, role } = useAuth();
   const navigate = useNavigate();
   const hasProgress = vocabCompleted || sutrasCompleted > 0;
@@ -71,7 +71,7 @@ export function HomeScreen() {
             transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
             className="absolute top-1/4 right-0 w-[500px] h-[500px] translate-x-1/3"
           >
-            <img src={mandalaDecorative} alt="" className="w-full h-full object-contain" />
+            <img src={mandalaElegant} alt="" className="w-full h-full object-contain" />
           </motion.div>
           
           <motion.div 
@@ -80,7 +80,7 @@ export function HomeScreen() {
             transition={{ duration: 150, repeat: Infinity, ease: "linear" }}
             className="absolute bottom-0 left-0 w-[400px] h-[400px] -translate-x-1/3 translate-y-1/4"
           >
-            <img src={mandalaDecorative} alt="" className="w-full h-full object-contain" />
+            <img src={mandalaElegant} alt="" className="w-full h-full object-contain" />
           </motion.div>
         </div>
 
@@ -98,12 +98,15 @@ export function HomeScreen() {
           
           <div className="flex items-center gap-3">
             {user ? (
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-card border border-border rounded-full">
-                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-primary-foreground text-xs font-bold font-sanskrit">
+              <Button
+                onClick={() => setScreen(role === 'teacher' ? 'guru-dashboard' : 'shishya-dashboard')}
+                className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/25 gap-2"
+              >
+                <div className="w-5 h-5 rounded-full bg-primary-foreground/20 flex items-center justify-center text-xs font-bold font-sanskrit">
                   {role === 'teacher' ? 'गु' : 'शि'}
                 </div>
-                <span className="text-sm font-medium text-foreground">{role === 'teacher' ? 'Guru' : 'Śiṣya'}</span>
-              </div>
+                {role === 'teacher' ? 'Guru Dashboard' : 'My Dashboard'}
+              </Button>
             ) : (
               <Button
                 onClick={() => navigate('/auth')}
@@ -268,7 +271,7 @@ export function HomeScreen() {
           viewport={{ once: true }}
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px]"
         >
-          <img src={mandalaDecorative} alt="" className="w-full h-full object-contain" />
+          <img src={mandalaElegant} alt="" className="w-full h-full object-contain" />
         </motion.div>
         
         <div className="max-w-5xl mx-auto relative z-10">
@@ -324,10 +327,10 @@ export function HomeScreen() {
       <section className="py-20 px-4 section-pattern relative overflow-hidden">
         {/* Corner mandalas */}
         <div className="absolute -top-32 -right-32 w-80 h-80 opacity-[0.06]">
-          <img src={mandalaDecorative} alt="" className="w-full h-full object-contain" />
+          <img src={mandalaElegant} alt="" className="w-full h-full object-contain" />
         </div>
         <div className="absolute -bottom-32 -left-32 w-80 h-80 opacity-[0.06]">
-          <img src={mandalaDecorative} alt="" className="w-full h-full object-contain" />
+          <img src={mandalaElegant} alt="" className="w-full h-full object-contain" />
         </div>
         
         <div className="max-w-5xl mx-auto relative z-10">

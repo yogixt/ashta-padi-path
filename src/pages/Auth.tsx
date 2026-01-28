@@ -8,8 +8,8 @@ import { Label } from '@/components/ui/label';
 import { BookOpen, GraduationCap, ArrowLeft, Mail, Lock, User, Loader2 } from 'lucide-react';
 import { z } from 'zod';
 import { useToast } from '@/hooks/use-toast';
-import mandalaDecorative from '@/assets/mandala-decorative.png';
-import mandalaCorner from '@/assets/mandala-corner.png';
+import mandalaElegant from '@/assets/mandala-elegant.png';
+import mandalaCorner from '@/assets/mandala-corner-elegant.png';
 
 const signUpSchema = z.object({
   fullName: z.string().min(2, 'Name must be at least 2 characters').max(100),
@@ -142,11 +142,11 @@ export default function AuthPage() {
         {/* Large center mandala - very subtle */}
         <motion.div 
           initial={{ opacity: 0, scale: 0.8, rotate: 0 }}
-          animate={{ opacity: 0.06, scale: 1, rotate: 360 }}
+          animate={{ opacity: 0.08, scale: 1, rotate: 360 }}
           transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px]"
         >
-          <img src={mandalaDecorative} alt="" className="w-full h-full object-contain" />
+          <img src={mandalaElegant} alt="" className="w-full h-full object-contain" />
         </motion.div>
         
         {/* Top-right corner mandala */}
