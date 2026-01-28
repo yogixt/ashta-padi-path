@@ -10,6 +10,14 @@ import heroImage from '@/assets/hero-patanjali.jpg';
 import mandalaDecorative from '@/assets/mandala-decorative.png';
 import ashtaPadiFramework from '@/assets/ashta-padi-framework.jpg';
 
+// Author data from the research paper
+const authors = [
+  { name: "Bhagyashree Joshi Vyasa", title: "Vedic Scholar", affiliation: "Satyam Sadhana Kutir Ashram" },
+  { name: "Bijoy Laxmi Biswas", title: "Yoga Practitioner, M.Tech CS", affiliation: "Satyam Sadhana Kutir Ashram" },
+  { name: "Divyangana Kothari", title: "Yoga Practitioner, M.Sc. CS", affiliation: "Satyam Sadhana Kutir Ashram" },
+  { name: "Aarti Panwar", title: "Pursuing Masters in Yogic Science", affiliation: "Uttarakhand Sanskrit University, Haridwar" }
+];
+
 export function HomeScreen() {
   const { vocabCompleted, sutrasCompleted } = useLearningStore();
   const { user, role } = useAuth();
@@ -19,25 +27,25 @@ export function HomeScreen() {
   const features = [
     {
       icon: BookOpen,
-      title: "Vocabulary First",
-      description: "Master key Sanskrit terms before diving into sutras",
+      title: "शब्दकोश (Vocabulary)",
+      description: "Profession-aware vocabulary linked to sutra content",
       color: "from-blue-500 to-indigo-600"
     },
     {
       icon: GraduationCap,
-      title: "Grammar Reference",
-      description: "Learn Sanskrit grammar alongside your studies",
+      title: "व्याकरण (Grammar)",
+      description: "Contextual grammar: sandhi, pada, and varṇa",
       color: "from-amber-500 to-orange-600"
     },
     {
       icon: Sparkles,
-      title: "Interactive Quizzes",
-      description: "Test and reinforce your understanding",
+      title: "परीक्षा (Assessment)",
+      description: "Test and track your sutra-wise progress",
       color: "from-emerald-500 to-teal-600"
     },
     {
       icon: Users,
-      title: "AI Sanskrit Guide",
+      title: "सहायक (AI Guide)",
       description: "Chat with an AI tutor for personalized help",
       color: "from-violet-500 to-purple-600"
     }
@@ -185,6 +193,29 @@ export function HomeScreen() {
         </div>
       </section>
 
+      {/* Abstract Section */}
+      <section className="py-16 px-4 bg-card/30 border-y border-border">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center"
+          >
+            <span className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-6">
+              सारांश (Abstract)
+            </span>
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              Sanskrit scriptures form the foundation of Indian philosophy and contemplative traditions. 
+              Despite their significance, systematic study remains inaccessible due to linguistic complexity 
+              and lack of structured pathways. <strong className="text-foreground">Ashta Padi</strong> addresses 
+              this gap by connecting Sanskrit learning with learners' professional contexts, lowering entry 
+              barriers while preserving grammatical rigor.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Features Section */}
       <section className="py-20 px-4 bg-muted/30">
         <div className="max-w-6xl mx-auto">
@@ -194,10 +225,13 @@ export function HomeScreen() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <span className="tag mb-4 inline-block">Features</span>
+            <span className="tag mb-4 inline-block">Demo Scope: Steps 1-3</span>
             <h3 className="text-3xl md:text-4xl font-serif font-bold text-foreground mt-4">
-              Everything you need to learn Sanskrit
+              Key Features
             </h3>
+            <p className="text-muted-foreground mt-3 max-w-2xl mx-auto">
+              The demo implements Steps 1–3 using the Yoga Sūtras, Samādhi Pāda
+            </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -213,7 +247,7 @@ export function HomeScreen() {
                 <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 group-hover:scale-105 transition-transform shadow-lg`}>
                   <feature.icon className="w-6 h-6 text-white" />
                 </div>
-                <h4 className="text-lg font-semibold text-foreground mb-2">
+                <h4 className="text-lg font-semibold text-foreground mb-2 font-sanskrit">
                   {feature.title}
                 </h4>
                 <p className="text-sm text-muted-foreground leading-relaxed">
@@ -302,9 +336,37 @@ export function HomeScreen() {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 px-4 border-t border-border bg-card/50">
+      <footer className="py-16 px-4 border-t border-border bg-card/50">
         <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+          {/* Authors Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-12"
+          >
+            <h4 className="text-center text-lg font-semibold text-foreground mb-6">
+              Research Team
+            </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {authors.map((author, index) => (
+                <motion.div
+                  key={author.name}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="text-center p-4 rounded-xl bg-background/50 border border-border"
+                >
+                  <p className="font-medium text-foreground text-sm">{author.name}</p>
+                  <p className="text-xs text-primary mt-1">{author.title}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{author.affiliation}</p>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 pt-8 border-t border-border">
             {/* Logo & Quote */}
             <div className="text-center md:text-left">
               <div className="inline-flex items-center gap-3 mb-3">
@@ -326,9 +388,21 @@ export function HomeScreen() {
               <p className="text-sm text-foreground font-medium mb-1">
                 8th International Sanskrit Computational Linguistics Symposium
               </p>
-              <p className="text-xs text-muted-foreground">
-                Built for Sanskrit computational linguistics research
+              <p className="text-xs text-muted-foreground mb-2">
+                ISCLS 2026 Demo Paper
               </p>
+              <div className="flex items-center justify-center md:justify-end gap-4 text-xs text-muted-foreground">
+                <a 
+                  href="https://github.com/DivyanganaKothari/Ashta-Padi" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="hover:text-primary transition-colors underline"
+                >
+                  GitHub Repository
+                </a>
+                <span>•</span>
+                <span>Satyam Sadhana Kutir Ashram</span>
+              </div>
             </div>
           </div>
         </div>
