@@ -2,126 +2,122 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Poppins:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 
-/* Ashta Padi - Rich Traditional Indian Design System
-   Inspired by ancient manuscripts, temple architecture, and traditional art */
+/* Ashta Padi - Modern & Clean Design System */
 
 @layer base {
   :root {
-    /* Base - Deep warm parchment */
-    --background: 35 35% 94%;
-    --foreground: 25 30% 15%;
+    /* Base - Clean white/light gray */
+    --background: 0 0% 98%;
+    --foreground: 220 15% 15%;
 
-    /* Card - Aged paper with warmth */
-    --card: 38 40% 96%;
-    --card-foreground: 25 30% 15%;
+    /* Card - Pure white */
+    --card: 0 0% 100%;
+    --card-foreground: 220 15% 15%;
 
     /* Popover */
-    --popover: 40 45% 98%;
-    --popover-foreground: 25 30% 15%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 15% 15%;
 
-    /* Primary - Deep saffron/burnt orange */
-    --primary: 25 75% 42%;
-    --primary-foreground: 40 45% 98%;
+    /* Primary - Warm amber/saffron */
+    --primary: 32 95% 52%;
+    --primary-foreground: 0 0% 100%;
 
-    /* Secondary - Deep indigo/royal blue */
-    --secondary: 240 35% 25%;
-    --secondary-foreground: 40 40% 95%;
+    /* Secondary - Cool slate */
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 220 15% 25%;
 
-    /* Muted - Warm beige */
-    --muted: 35 25% 88%;
-    --muted-foreground: 25 15% 40%;
+    /* Muted - Light gray */
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 10% 45%;
 
-    /* Accent - Antique gold */
-    --accent: 42 80% 50%;
-    --accent-foreground: 25 30% 15%;
+    /* Accent - Soft amber */
+    --accent: 38 100% 95%;
+    --accent-foreground: 32 95% 40%;
 
     /* Destructive */
-    --destructive: 0 65% 50%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Border & Input - Warm bronze tones */
-    --border: 30 25% 80%;
-    --input: 35 20% 85%;
-    --ring: 25 75% 42%;
+    /* Border & Input */
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 32 95% 52%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
-    /* Extended Traditional Palette */
-    --saffron: 25 75% 42%;
-    --saffron-light: 28 70% 55%;
-    --saffron-dark: 22 80% 32%;
-    --maroon: 350 50% 30%;
-    --maroon-light: 350 45% 40%;
-    --gold: 42 80% 50%;
-    --gold-light: 45 75% 60%;
-    --gold-dark: 40 85% 40%;
-    --cream: 40 45% 96%;
-    --parchment: 35 35% 90%;
-    --indigo: 240 35% 25%;
-    --indigo-light: 235 30% 35%;
-    --copper: 20 60% 45%;
-    --terracotta: 15 55% 50%;
-    --sage: 140 25% 35%;
-    --peacock: 175 50% 30%;
-    
-    /* Traditional Shadows */
-    --shadow-sm: 0 1px 3px 0 hsl(25 30% 15% / 0.06), 0 1px 2px -1px hsl(25 30% 15% / 0.06);
-    --shadow-md: 0 4px 6px -1px hsl(25 30% 15% / 0.08), 0 2px 4px -2px hsl(25 30% 15% / 0.08);
-    --shadow-lg: 0 10px 15px -3px hsl(25 30% 15% / 0.10), 0 4px 6px -4px hsl(25 30% 15% / 0.10);
-    --shadow-xl: 0 20px 25px -5px hsl(25 30% 15% / 0.12), 0 8px 10px -6px hsl(25 30% 15% / 0.12);
-    --shadow-inner: inset 0 2px 4px 0 hsl(25 30% 15% / 0.05);
-    --shadow-glow: 0 0 20px 0 hsl(42 80% 50% / 0.15);
+    /* Extended palette */
+    --saffron: 32 95% 52%;
+    --saffron-light: 38 95% 65%;
+    --saffron-dark: 28 95% 42%;
+    --gold: 45 93% 55%;
+    --gold-light: 48 95% 65%;
+    --gold-dark: 42 90% 45%;
+    --indigo: 234 89% 64%;
+    --indigo-light: 234 85% 75%;
+    --sage: 142 40% 45%;
+    --peacock: 175 50% 40%;
+    --terracotta: 15 70% 55%;
+    --cream: 40 30% 96%;
+    --parchment: 38 25% 93%;
+
+    /* Modern shadows */
+    --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.03);
+    --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.05);
+    --shadow-glow: 0 0 30px 0 hsl(32 95% 52% / 0.15);
 
     /* Sidebar */
-    --sidebar-background: 38 40% 95%;
-    --sidebar-foreground: 25 30% 15%;
-    --sidebar-primary: 25 75% 42%;
-    --sidebar-primary-foreground: 40 45% 98%;
-    --sidebar-accent: 35 25% 88%;
-    --sidebar-accent-foreground: 25 30% 15%;
-    --sidebar-border: 30 25% 80%;
-    --sidebar-ring: 25 75% 42%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 220 15% 15%;
+    --sidebar-primary: 32 95% 52%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 96%;
+    --sidebar-accent-foreground: 220 15% 15%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 32 95% 52%;
   }
 
   .dark {
-    --background: 25 20% 8%;
-    --foreground: 35 25% 90%;
+    --background: 220 15% 8%;
+    --foreground: 220 10% 95%;
 
-    --card: 25 18% 12%;
-    --card-foreground: 35 25% 90%;
+    --card: 220 15% 11%;
+    --card-foreground: 220 10% 95%;
 
-    --popover: 25 18% 10%;
-    --popover-foreground: 35 25% 90%;
+    --popover: 220 15% 10%;
+    --popover-foreground: 220 10% 95%;
 
-    --primary: 28 70% 50%;
-    --primary-foreground: 25 20% 8%;
+    --primary: 32 90% 55%;
+    --primary-foreground: 220 15% 8%;
 
-    --secondary: 235 25% 20%;
-    --secondary-foreground: 35 25% 90%;
+    --secondary: 220 15% 15%;
+    --secondary-foreground: 220 10% 90%;
 
-    --muted: 25 15% 18%;
-    --muted-foreground: 30 15% 55%;
+    --muted: 220 15% 18%;
+    --muted-foreground: 220 10% 55%;
 
-    --accent: 42 75% 55%;
-    --accent-foreground: 25 20% 8%;
+    --accent: 32 50% 15%;
+    --accent-foreground: 32 90% 60%;
 
-    --destructive: 0 55% 45%;
+    --destructive: 0 65% 55%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 25 15% 22%;
-    --input: 25 15% 20%;
-    --ring: 28 70% 50%;
+    --border: 220 15% 18%;
+    --input: 220 15% 18%;
+    --ring: 32 90% 55%;
 
-    --sidebar-background: 25 18% 10%;
-    --sidebar-foreground: 35 25% 90%;
-    --sidebar-primary: 28 70% 50%;
-    --sidebar-primary-foreground: 25 20% 8%;
-    --sidebar-accent: 25 15% 15%;
-    --sidebar-accent-foreground: 35 25% 90%;
-    --sidebar-border: 25 15% 20%;
-    --sidebar-ring: 28 70% 50%;
+    --sidebar-background: 220 15% 10%;
+    --sidebar-foreground: 220 10% 95%;
+    --sidebar-primary: 32 90% 55%;
+    --sidebar-primary-foreground: 220 15% 8%;
+    --sidebar-accent: 220 15% 15%;
+    --sidebar-accent-foreground: 220 10% 95%;
+    --sidebar-border: 220 15% 18%;
+    --sidebar-ring: 32 90% 55%;
   }
 }
 
@@ -132,56 +128,45 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Poppins', system-ui, sans-serif;
+    font-family: 'Inter', system-ui, sans-serif;
   }
 
-  .sanskrit {
+  .font-sanskrit {
     font-family: 'Noto Sans Devanagari', sans-serif;
   }
   
-  .serif {
-    font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  .font-serif {
+    font-family: 'Playfair Display', Georgia, serif;
   }
 }
 
 @layer components {
-  /* Traditional ornate card with border pattern */
-  .card-ornate {
-    @apply bg-card border-2 border-border rounded-lg relative overflow-hidden;
+  /* Modern clean card */
+  .card-modern {
+    @apply bg-card border border-border rounded-2xl relative overflow-hidden;
+    box-shadow: var(--shadow-md);
+  }
+  
+  .card-modern:hover {
     box-shadow: var(--shadow-lg);
-    background-image: 
-      linear-gradient(135deg, hsl(var(--gold) / 0.03) 0%, transparent 50%),
-      linear-gradient(225deg, hsl(var(--primary) / 0.02) 0%, transparent 50%);
   }
   
-  .card-ornate::before {
-    content: '';
-    @apply absolute inset-0 pointer-events-none;
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c4632a' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    opacity: 0.5;
+  /* Glass card effect */
+  .card-glass {
+    @apply bg-white/70 backdrop-blur-xl border border-white/60 rounded-2xl;
+    box-shadow: var(--shadow-lg);
   }
   
-  /* Card with traditional border */
-  .card-traditional {
-    @apply bg-card rounded-lg relative;
-    border: 3px solid transparent;
-    background: 
-      linear-gradient(hsl(var(--card)), hsl(var(--card))) padding-box,
-      linear-gradient(135deg, hsl(var(--gold)), hsl(var(--primary)), hsl(var(--gold))) border-box;
-    box-shadow: var(--shadow-md), var(--shadow-glow);
-  }
-  
-  /* Premium elevated card */
+  /* Elevated card */
   .card-elevated {
     @apply bg-card border border-border rounded-xl relative overflow-hidden;
-    box-shadow: var(--shadow-lg);
-    background-image: linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted) / 0.3) 100%);
+    box-shadow: var(--shadow-md);
   }
   
   .card-elevated::after {
     content: '';
-    @apply absolute top-0 left-0 right-0 h-1;
-    background: linear-gradient(90deg, hsl(var(--gold)), hsl(var(--primary)), hsl(var(--gold)));
+    @apply absolute top-0 left-0 right-0 h-0.5;
+    background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--gold)), hsl(var(--primary)));
   }
   
   /* Surface card */
@@ -190,104 +175,73 @@
     box-shadow: var(--shadow-sm);
   }
   
-  /* Traditional button with gradient */
+  /* Keep traditional cards for compatibility */
+  .card-ornate {
+    @apply bg-card border border-border rounded-xl relative overflow-hidden;
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .card-traditional {
+    @apply bg-card rounded-xl relative border border-border;
+    box-shadow: var(--shadow-md);
+  }
+  
+  /* Modern button */
   .btn-primary {
-    @apply text-primary-foreground font-semibold px-6 py-3 rounded-lg;
-    @apply transition-all duration-300 ease-out;
+    @apply text-primary-foreground font-semibold px-6 py-3 rounded-xl;
+    @apply transition-all duration-200 ease-out;
     @apply hover:scale-[1.02] active:scale-[0.98];
     background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--saffron-dark)) 100%);
-    box-shadow: 0 4px 14px -3px hsl(var(--primary) / 0.5);
+    box-shadow: 0 4px 14px -3px hsl(var(--primary) / 0.4);
   }
   
   .btn-primary:hover {
-    box-shadow: 0 6px 20px -3px hsl(var(--primary) / 0.6);
+    box-shadow: 0 6px 20px -3px hsl(var(--primary) / 0.5);
   }
   
-  /* Gold accent button */
-  .btn-gold {
-    @apply text-foreground font-semibold px-6 py-3 rounded-lg;
-    @apply transition-all duration-300 ease-out;
-    background: linear-gradient(135deg, hsl(var(--gold)) 0%, hsl(var(--gold-dark)) 100%);
-    box-shadow: 0 4px 14px -3px hsl(var(--gold) / 0.4);
+  /* Clean tag/badge */
+  .tag {
+    @apply inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-full;
+    @apply bg-primary/10 text-primary border border-primary/20;
   }
   
-  /* Traditional divider with ornament */
+  .tag-gold {
+    @apply inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-full;
+    @apply bg-amber-100 text-amber-700 border border-amber-200;
+  }
+  
+  .tag-outline {
+    @apply inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-full;
+    @apply border border-border text-muted-foreground bg-background;
+  }
+  
+  /* Modern divider */
   .divider {
-    @apply h-px w-full relative;
+    @apply h-px w-full;
     background: linear-gradient(90deg, transparent, hsl(var(--border)), transparent);
   }
   
   .divider-ornate {
     @apply h-px w-full relative my-8;
-    background: linear-gradient(90deg, transparent, hsl(var(--gold) / 0.5), hsl(var(--primary) / 0.5), hsl(var(--gold) / 0.5), transparent);
+    background: linear-gradient(90deg, transparent, hsl(var(--primary) / 0.3), transparent);
   }
   
   .divider-ornate::before {
     content: '◆';
-    @apply absolute left-1/2 -translate-x-1/2 -translate-y-1/2 text-primary text-xs;
+    @apply absolute left-1/2 -translate-x-1/2 -translate-y-1/2 text-primary/50 text-xs;
     background: hsl(var(--background));
     padding: 0 8px;
   }
   
-  /* Section with traditional pattern background */
+  /* Section pattern */
   .section-pattern {
     @apply relative;
     background-color: hsl(var(--muted) / 0.3);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%23c4632a' fill-opacity='0.03'%3E%3Cpath d='M0 0h80v80H0V0zm20 20v40h40V20H20zm20 35a15 15 0 1 1 0-30 15 15 0 0 1 0 30z' fill-rule='evenodd'/%3E%3C/g%3E%3C/svg%3E");
   }
   
-  /* Tag/badge styles - Traditional */
-  .tag {
-    @apply inline-flex items-center px-4 py-1.5 text-xs font-semibold rounded-full;
-    background: linear-gradient(135deg, hsl(var(--primary) / 0.15) 0%, hsl(var(--gold) / 0.1) 100%);
-    color: hsl(var(--primary));
-    border: 1px solid hsl(var(--primary) / 0.2);
-  }
-  
-  .tag-gold {
-    @apply inline-flex items-center px-4 py-1.5 text-xs font-semibold rounded-full;
-    background: linear-gradient(135deg, hsl(var(--gold) / 0.2) 0%, hsl(var(--gold) / 0.1) 100%);
-    color: hsl(var(--gold-dark));
-    border: 1px solid hsl(var(--gold) / 0.3);
-  }
-  
-  .tag-outline {
-    @apply inline-flex items-center px-4 py-1.5 text-xs font-medium rounded-full;
-    @apply border border-border text-muted-foreground bg-background/50;
-  }
-  
-  /* Traditional corner ornaments */
-  .corner-ornament {
-    @apply absolute w-8 h-8;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M0 0 Q16 0 16 16 Q0 16 0 0' fill='%23c4632a' fill-opacity='0.1'/%3E%3C/svg%3E") no-repeat;
-  }
-  
-  .corner-ornament.top-left { top: 0; left: 0; }
-  .corner-ornament.top-right { top: 0; right: 0; transform: rotate(90deg); }
-  .corner-ornament.bottom-left { bottom: 0; left: 0; transform: rotate(-90deg); }
-  .corner-ornament.bottom-right { bottom: 0; right: 0; transform: rotate(180deg); }
-  
-  /* Traditional mandala decoration */
-  .mandala-bg {
-    @apply absolute pointer-events-none;
-    background: radial-gradient(circle, hsl(var(--primary) / 0.05) 0%, transparent 70%);
-    border-radius: 50%;
-  }
-  
-  /* Input field - Traditional */
-  .input-field {
-    @apply w-full px-4 py-3 rounded-lg border-2 border-border bg-card;
-    @apply text-foreground placeholder:text-muted-foreground;
-    @apply focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary;
-    @apply transition-all duration-200;
-    background-image: linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted) / 0.2) 100%);
-  }
-  
-  /* Progress bar with traditional styling */
+  /* Progress bar */
   .progress-traditional {
-    @apply h-2 rounded-full overflow-hidden;
-    background: linear-gradient(180deg, hsl(var(--muted)) 0%, hsl(var(--muted) / 0.7) 100%);
-    border: 1px solid hsl(var(--border));
+    @apply h-2 rounded-full overflow-hidden bg-muted;
   }
   
   .progress-traditional .fill {
@@ -295,70 +249,15 @@
     background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--gold)), hsl(var(--primary)));
   }
   
-  /* Sanskrit text highlight */
-  .sanskrit-highlight {
-    @apply relative inline-block;
+  /* Input field */
+  .input-field {
+    @apply w-full px-4 py-3 rounded-xl border border-border bg-card;
+    @apply text-foreground placeholder:text-muted-foreground;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary;
+    @apply transition-all duration-200;
   }
   
-  .sanskrit-highlight::after {
-    content: '';
-    @apply absolute -bottom-1 left-0 right-0 h-0.5;
-    background: linear-gradient(90deg, hsl(var(--gold)), hsl(var(--primary)), hsl(var(--gold)));
-  }
-}
-
-@layer utilities {
-  /* Animations */
-  .animate-fade-in {
-    animation: fadeIn 0.5s ease-out forwards;
-  }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
-  .animate-slide-up {
-    animation: slideUp 0.5s ease-out forwards;
-  }
-  
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
-  .animate-scale-in {
-    animation: scaleIn 0.4s ease-out forwards;
-  }
-  
-  @keyframes scaleIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
-  }
-  
-  .animate-glow {
-    animation: glow 2s ease-in-out infinite alternate;
-  }
-  
-  @keyframes glow {
-    from { box-shadow: 0 0 15px hsl(var(--gold) / 0.2); }
-    to { box-shadow: 0 0 25px hsl(var(--gold) / 0.4); }
-  }
-  
-  /* Stagger delays */
-  .stagger > *:nth-child(1) { animation-delay: 0ms; }
-  .stagger > *:nth-child(2) { animation-delay: 80ms; }
-  .stagger > *:nth-child(3) { animation-delay: 160ms; }
-  .stagger > *:nth-child(4) { animation-delay: 240ms; }
-  .stagger > *:nth-child(5) { animation-delay: 320ms; }
-  .stagger > *:nth-child(6) { animation-delay: 400ms; }
-  
-  /* Text utilities */
-  .text-balance {
-    text-wrap: balance;
-  }
-  
-  /* Decorative accent line */
+  /* Sanskrit text decoration */
   .line-accent {
     @apply relative;
   }
@@ -368,16 +267,55 @@
     @apply absolute -bottom-2 left-0 w-12 h-0.5 rounded-full;
     background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--gold)));
   }
-  
-  /* Traditional border pattern */
-  .border-pattern {
-    border-image: linear-gradient(90deg, hsl(var(--gold)), hsl(var(--primary)), hsl(var(--gold))) 1;
+}
+
+@layer utilities {
+  /* Animations */
+  .animate-fade-in {
+    animation: fadeIn 0.4s ease-out forwards;
   }
   
-  /* Texture overlay */
-  .texture-paper {
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-    background-blend-mode: overlay;
-    opacity: 0.03;
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out forwards;
+  }
+  
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out forwards;
+  }
+  
+  @keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+  
+  @keyframes glow {
+    from { box-shadow: 0 0 15px hsl(var(--primary) / 0.2); }
+    to { box-shadow: 0 0 25px hsl(var(--primary) / 0.4); }
+  }
+  
+  /* Stagger delays */
+  .stagger > *:nth-child(1) { animation-delay: 0ms; }
+  .stagger > *:nth-child(2) { animation-delay: 60ms; }
+  .stagger > *:nth-child(3) { animation-delay: 120ms; }
+  .stagger > *:nth-child(4) { animation-delay: 180ms; }
+  .stagger > *:nth-child(5) { animation-delay: 240ms; }
+  .stagger > *:nth-child(6) { animation-delay: 300ms; }
+  
+  .text-balance {
+    text-wrap: balance;
   }
 }

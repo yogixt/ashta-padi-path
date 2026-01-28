@@ -1,7 +1,16 @@
 import { motion } from 'framer-motion';
-import { ArrowLeft, Home, BookOpen } from 'lucide-react';
+import { ArrowLeft, Home, BarChart3, LogOut, User } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useLearningStore, Screen } from '@/store/learningStore';
+import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 interface HeaderProps {
   showBack?: boolean;
@@ -10,6 +19,8 @@ interface HeaderProps {
 
 export function Header({ showBack = false, backTo = 'home' }: HeaderProps) {
   const { setScreen, resetProgress } = useLearningStore();
+  const { user, role, signOut } = useAuth();
+  const navigate = useNavigate();
 
   const handleBack = () => {
     setScreen(backTo);
@@ -20,15 +31,17 @@ export function Header({ showBack = false, backTo = 'home' }: HeaderProps) {
     setScreen('home');
   };
 
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/auth');
+  };
+
   return (
     <motion.header
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="w-full py-3 px-4 md:px-6 border-b-2 border-border bg-card/90 backdrop-blur-md sticky top-0 z-50"
+      className="w-full py-3 px-4 md:px-6 border-b border-border bg-card/90 backdrop-blur-xl sticky top-0 z-50"
     >
-      {/* Top accent line */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-primary" />
-      
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Left side */}
         <div className="flex items-center gap-4">
@@ -49,11 +62,11 @@ export function Header({ showBack = false, backTo = 'home' }: HeaderProps) {
             onClick={handleHome}
             className="flex items-center gap-3 group"
           >
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-primary-foreground font-sanskrit text-xl font-bold shadow-md group-hover:shadow-lg transition-shadow">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-primary-foreground font-sanskrit text-xl font-bold shadow-md group-hover:shadow-lg transition-shadow">
               अ
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-base font-serif font-bold text-foreground group-hover:text-primary transition-colors">
+              <h1 className="text-base font-semibold text-foreground group-hover:text-primary transition-colors">
                 Ashta Padi
               </h1>
               <p className="text-xs text-muted-foreground font-sanskrit -mt-0.5">
@@ -64,7 +77,17 @@ export function Header({ showBack = false, backTo = 'home' }: HeaderProps) {
         </div>
 
         {/* Right side */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setScreen('analytics')}
+            className="gap-2 text-muted-foreground hover:text-primary hover:bg-primary/10"
+          >
+            <BarChart3 className="w-4 h-4" />
+            <span className="hidden sm:inline">Analytics</span>
+          </Button>
+          
           <Button
             variant="ghost"
             size="sm"
@@ -74,6 +97,48 @@ export function Header({ showBack = false, backTo = 'home' }: HeaderProps) {
             <Home className="w-4 h-4" />
             <span className="hidden sm:inline">Home</span>
           </Button>
+
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="gap-2 ml-2"
+                >
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-primary-foreground text-xs font-bold">
+                    {user.email?.charAt(0).toUpperCase()}
+                  </div>
+                  <span className="hidden md:inline text-sm font-medium">
+                    {role === 'teacher' ? 'Teacher' : 'Student'}
+                  </span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48 bg-card border-border">
+                <DropdownMenuItem className="gap-2 text-muted-foreground">
+                  <User className="w-4 h-4" />
+                  <span className="truncate">{user.email}</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={handleSignOut}
+                  className="gap-2 text-destructive focus:text-destructive"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button
+              variant="default"
+              size="sm"
+              onClick={() => navigate('/auth')}
+              className="ml-2 bg-primary hover:bg-primary/90"
+            >
+              Sign In
+            </Button>
+          )}
         </div>
       </div>
     </motion.header>
