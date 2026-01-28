@@ -5,7 +5,7 @@ import { ProgressTracker } from '@/components/ProgressTracker';
 import { AshtaPadiSteps } from '@/components/AshtaPadiSteps';
 import { useLearningStore } from '@/store/learningStore';
 import { useAuth } from '@/contexts/AuthContext';
-import { BookOpen, GraduationCap, Sparkles, Users, ArrowRight, Star, ChevronRight } from 'lucide-react';
+import { BookOpen, GraduationCap, Sparkles, Users, ArrowRight, Star, ChevronRight, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import heroImage from '@/assets/hero-patanjali.jpg';
 import mandalaElegant from '@/assets/mandala-elegant.png';
@@ -165,8 +165,10 @@ export function HomeScreen() {
               <Button
                 variant="outline"
                 size="lg"
-                className="h-12 px-8 border-border"
+                className="h-12 px-8 border-border gap-2"
+                onClick={() => document.getElementById('demo-video')?.scrollIntoView({ behavior: 'smooth' })}
               >
+                <Play className="w-4 h-4" />
                 Watch Demo
               </Button>
             </div>
@@ -215,6 +217,49 @@ export function HomeScreen() {
               this gap by connecting Sanskrit learning with learners' professional contexts, lowering entry 
               barriers while preserving grammatical rigor.
             </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Demo Video Section */}
+      <section id="demo-video" className="py-20 px-4 bg-gradient-to-b from-background to-muted/20">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-10"
+          >
+            <span className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">
+              <Play className="w-4 h-4" />
+              प्रदर्शनम् (Demo)
+            </span>
+            <h3 className="text-3xl md:text-4xl font-serif font-bold text-foreground">
+              Watch Demo
+            </h3>
+            <p className="text-muted-foreground mt-3 max-w-xl mx-auto">
+              See Ashta Padi in action — learn how profession-based Sanskrit learning works
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="relative rounded-2xl overflow-hidden shadow-2xl shadow-primary/10 border border-border bg-card"
+          >
+            <div className="aspect-video">
+              <iframe
+                width="100%"
+                height="100%"
+                src="https://www.youtube.com/embed/qvM56Yg29AM"
+                title="Ashta Padi Demo"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                className="w-full h-full"
+              />
+            </div>
           </motion.div>
         </div>
       </section>
