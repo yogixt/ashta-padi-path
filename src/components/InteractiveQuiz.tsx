@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, X, ChevronLeft, ChevronRight, RotateCcw, Home, Trophy, Target, Zap, Clock } from 'lucide-react';
+import { Check, X, ChevronLeft, ChevronRight, RotateCcw, Home, Trophy, Target, Zap, Clock, Sparkles } from 'lucide-react';
 import { quizQuestions } from '@/data/yogaSutrasData';
 import { useLearningStore } from '@/store/learningStore';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import confetti from 'canvas-confetti';
+
+const optionLabels = ['A', 'B', 'C', 'D'];
 
 export function InteractiveQuiz() {
   const { 
@@ -69,7 +71,6 @@ export function InteractiveQuiz() {
       calculateScore(correctAnswers);
       setIsComplete(true);
       
-      // Celebration for good scores
       setTimeout(() => {
         const score = Object.entries(correctAnswers).filter(
           ([id]) => quizAnswers[parseInt(id)] === correctAnswers[parseInt(id)]
@@ -102,16 +103,16 @@ export function InteractiveQuiz() {
   };
 
   // Calculate progress percentage
-  const progressPercent = ((currentQuestion) / totalQuestions) * 100;
+  const progressPercent = ((currentQuestion + 1) / totalQuestions) * 100;
 
   // Results screen
   if (isComplete && quizScore !== null) {
     const percentage = Math.round((quizScore / totalQuestions) * 100);
     const getMessage = () => {
-      if (percentage >= 90) return { text: "Outstanding", subtext: "You have truly mastered the material", badge: "Master Scholar" };
-      if (percentage >= 70) return { text: "Excellent Progress", subtext: "Your understanding is impressive", badge: "Advanced Learner" };
-      if (percentage >= 50) return { text: "Good Foundation", subtext: "Keep building your knowledge", badge: "Dedicated Student" };
-      return { text: "Keep Learning", subtext: "Practice makes perfect", badge: "Aspiring Scholar" };
+      if (percentage >= 90) return { text: "Outstanding!", subtext: "You have truly mastered the Yoga Sutras", badge: "Master Scholar", icon: "🏆" };
+      if (percentage >= 70) return { text: "Excellent Progress!", subtext: "Your understanding is impressive", badge: "Advanced Learner", icon: "🌟" };
+      if (percentage >= 50) return { text: "Good Foundation!", subtext: "Keep building your knowledge", badge: "Dedicated Student", icon: "📚" };
+      return { text: "Keep Learning!", subtext: "Practice makes perfect", badge: "Aspiring Scholar", icon: "🌱" };
     };
     const message = getMessage();
 
@@ -121,7 +122,7 @@ export function InteractiveQuiz() {
         animate={{ opacity: 1, scale: 1 }}
         className="w-full max-w-lg mx-auto px-4"
       >
-        <div className="card-elevated rounded-2xl p-8 md:p-10 text-center relative overflow-hidden">
+        <div className="bg-background rounded-3xl shadow-xl border border-border/50 p-8 md:p-10 text-center relative overflow-hidden">
           {/* Background decoration */}
           <div className="absolute inset-0 opacity-5 pointer-events-none">
             <div className="absolute top-0 right-0 w-40 h-40 bg-primary rounded-full blur-3xl" />
@@ -134,25 +135,26 @@ export function InteractiveQuiz() {
               initial={{ scale: 0, rotate: -180 }}
               animate={{ scale: 1, rotate: 0 }}
               transition={{ type: "spring", duration: 0.8 }}
-              className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center"
+              className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center shadow-lg"
             >
-              <Trophy className="w-10 h-10 text-primary-foreground" />
+              <Trophy className="w-12 h-12 text-primary-foreground" />
             </motion.div>
 
-            <span className="inline-block px-3 py-1 bg-accent/20 text-foreground rounded-full text-xs font-semibold mb-4">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-semibold mb-4">
+              <Sparkles className="w-4 h-4" />
               {message.badge}
             </span>
             
             {/* Score circle */}
-            <div className="relative w-36 h-36 mx-auto mb-6">
+            <div className="relative w-40 h-40 mx-auto mb-6">
               <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
                 <circle
                   cx="50"
                   cy="50"
                   r="42"
                   fill="none"
-                  stroke="hsl(var(--border))"
-                  strokeWidth="6"
+                  stroke="hsl(var(--muted))"
+                  strokeWidth="8"
                 />
                 <motion.circle
                   cx="50"
@@ -160,7 +162,7 @@ export function InteractiveQuiz() {
                   r="42"
                   fill="none"
                   stroke="hsl(var(--primary))"
-                  strokeWidth="6"
+                  strokeWidth="8"
                   strokeLinecap="round"
                   strokeDasharray={264}
                   initial={{ strokeDashoffset: 264 }}
@@ -190,21 +192,21 @@ export function InteractiveQuiz() {
             </p>
 
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-4 mb-8">
-              <div className="p-3 bg-muted/50 rounded-xl">
-                <Target className="w-5 h-5 text-primary mx-auto mb-1" />
-                <p className="text-lg font-bold text-foreground">{quizScore}</p>
+            <div className="grid grid-cols-3 gap-3 mb-8">
+              <div className="p-4 bg-muted/30 rounded-2xl border border-border/50">
+                <Target className="w-5 h-5 text-primary mx-auto mb-2" />
+                <p className="text-xl font-bold text-foreground">{quizScore}</p>
                 <p className="text-xs text-muted-foreground">Correct</p>
               </div>
-              <div className="p-3 bg-muted/50 rounded-xl">
-                <Zap className="w-5 h-5 text-primary mx-auto mb-1" />
-                <p className="text-lg font-bold text-foreground">{bestStreak}</p>
+              <div className="p-4 bg-muted/30 rounded-2xl border border-border/50">
+                <Zap className="w-5 h-5 text-primary mx-auto mb-2" />
+                <p className="text-xl font-bold text-foreground">{bestStreak}</p>
                 <p className="text-xs text-muted-foreground">Best Streak</p>
               </div>
-              <div className="p-3 bg-muted/50 rounded-xl">
-                <Clock className="w-5 h-5 text-primary mx-auto mb-1" />
-                <p className="text-lg font-bold text-foreground">{totalQuestions}</p>
-                <p className="text-xs text-muted-foreground">Attempted</p>
+              <div className="p-4 bg-muted/30 rounded-2xl border border-border/50">
+                <Clock className="w-5 h-5 text-primary mx-auto mb-2" />
+                <p className="text-xl font-bold text-foreground">{totalQuestions}</p>
+                <p className="text-xs text-muted-foreground">Questions</p>
               </div>
             </div>
 
@@ -213,14 +215,14 @@ export function InteractiveQuiz() {
               <Button
                 variant="outline"
                 onClick={handleRetake}
-                className="gap-2"
+                className="gap-2 h-12 px-6 rounded-xl border-2"
               >
                 <RotateCcw className="w-4 h-4" />
                 Retake Quiz
               </Button>
               <Button
                 onClick={handleBackToHome}
-                className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
+                className="gap-2 h-12 px-6 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90"
               >
                 <Home className="w-4 h-4" />
                 Back to Home
@@ -233,29 +235,47 @@ export function InteractiveQuiz() {
   }
 
   return (
-    <div className="w-full max-w-3xl mx-auto px-4">
-      {/* Header */}
+    <div className="w-full max-w-2xl mx-auto px-4">
+      {/* Header with progress */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center mb-8"
+        className="mb-8"
       >
-        <p className="text-muted-foreground mb-6">
-          Test your understanding of vocabulary and grammar
-        </p>
-        
-        {/* Question counter */}
-        <p className="text-foreground font-medium mb-4">
-          Question {currentQuestion + 1} of {totalQuestions}
-        </p>
+        {/* Progress info */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+              <span className="text-primary font-bold">{currentQuestion + 1}</span>
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Question</p>
+              <p className="text-foreground font-semibold">{currentQuestion + 1} of {totalQuestions}</p>
+            </div>
+          </div>
+          
+          {/* Streak badge */}
+          {currentStreak > 0 && (
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              className="flex items-center gap-2 px-3 py-1.5 bg-primary/10 rounded-full"
+            >
+              <Zap className="w-4 h-4 text-primary" />
+              <span className="text-sm font-medium text-primary">{currentStreak} streak</span>
+            </motion.div>
+          )}
+          
+          <div className="text-right">
+            <p className="text-sm text-muted-foreground">Progress</p>
+            <p className="text-foreground font-semibold">{Math.round(progressPercent)}%</p>
+          </div>
+        </div>
         
         {/* Progress bar */}
-        <div className="max-w-md mx-auto h-2 bg-muted rounded-full overflow-hidden">
+        <div className="h-2 bg-muted rounded-full overflow-hidden">
           <motion.div
-            className="h-full rounded-full"
-            style={{ 
-              background: 'linear-gradient(90deg, hsl(var(--primary)), hsl(var(--primary)/0.7))'
-            }}
+            className="h-full rounded-full bg-primary"
             initial={{ width: 0 }}
             animate={{ width: `${progressPercent}%` }}
             transition={{ duration: 0.3 }}
@@ -267,19 +287,27 @@ export function InteractiveQuiz() {
       <AnimatePresence mode="wait">
         <motion.div
           key={currentQuestion}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -20 }}
           transition={{ duration: 0.3 }}
-          className="card-elevated rounded-2xl p-8 md:p-10"
+          className="bg-background rounded-3xl shadow-xl border border-border/50 p-6 md:p-8"
         >
+          {/* Category tag */}
+          <div className="flex items-center justify-between mb-6">
+            <span className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium">
+              <Target className="w-3 h-3" />
+              Vocabulary & Grammar
+            </span>
+          </div>
+
           {/* Question text */}
-          <h3 className="text-xl md:text-2xl font-semibold text-primary text-center mb-8">
+          <h3 className="text-xl md:text-2xl font-serif font-semibold text-foreground mb-8 leading-relaxed">
             {question.question}
           </h3>
 
           {/* Options */}
-          <div className="space-y-4">
+          <div className="space-y-3">
             {question.options.map((option, index) => {
               const isSelected = selectedAnswer === index;
               const isCorrectOption = index === question.correctAnswer;
@@ -292,40 +320,59 @@ export function InteractiveQuiz() {
                   whileHover={!showFeedback ? { scale: 1.01 } : {}}
                   whileTap={!showFeedback ? { scale: 0.99 } : {}}
                   className={cn(
-                    "w-full p-5 rounded-xl text-center border-2 transition-all duration-200",
-                    "flex items-center justify-center gap-3",
+                    "w-full p-4 rounded-2xl text-left transition-all duration-200",
+                    "flex items-center gap-4 group",
+                    "border-2",
                     showFeedback 
                       ? isCorrectOption 
                         ? "bg-green-50 border-green-400 dark:bg-green-900/20" 
                         : isSelected && !isCorrectOption
                           ? "bg-red-50 border-red-300 dark:bg-red-900/20"
-                          : "bg-muted/30 border-border/50"
+                          : "bg-muted/20 border-border/50"
                       : isSelected 
-                        ? "bg-primary/10 border-primary"
-                        : "bg-muted/20 border-border hover:bg-muted/40 hover:border-primary/30",
+                        ? "bg-primary/10 border-primary shadow-sm"
+                        : "bg-muted/10 border-border/50 hover:bg-muted/30 hover:border-primary/40",
                     showFeedback ? "cursor-default" : "cursor-pointer"
                   )}
                 >
-                  <span className="font-medium text-foreground text-base md:text-lg">
+                  {/* Option label */}
+                  <div className={cn(
+                    "w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm shrink-0 transition-colors",
+                    showFeedback
+                      ? isCorrectOption
+                        ? "bg-green-500 text-white"
+                        : isSelected && !isCorrectOption
+                          ? "bg-red-500 text-white"
+                          : "bg-muted text-muted-foreground"
+                      : isSelected
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted text-muted-foreground group-hover:bg-primary/20 group-hover:text-primary"
+                  )}>
+                    {optionLabels[index]}
+                  </div>
+                  
+                  {/* Option text */}
+                  <span className="font-medium text-foreground flex-1">
                     {option}
                   </span>
                   
+                  {/* Feedback icons */}
                   {showFeedback && isCorrectOption && (
                     <motion.div
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center shrink-0"
+                      className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center shrink-0"
                     >
-                      <Check className="w-4 h-4 text-white" />
+                      <Check className="w-5 h-5 text-white" />
                     </motion.div>
                   )}
                   {showFeedback && isSelected && !isCorrectOption && (
                     <motion.div
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      className="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center shrink-0"
+                      className="w-8 h-8 rounded-full bg-red-500 flex items-center justify-center shrink-0"
                     >
-                      <X className="w-4 h-4 text-white" />
+                      <X className="w-5 h-5 text-white" />
                     </motion.div>
                   )}
                 </motion.button>
@@ -333,38 +380,40 @@ export function InteractiveQuiz() {
             })}
           </div>
 
-          {/* Feedback */}
+          {/* Feedback panel */}
           <AnimatePresence>
             {showFeedback && (
               <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className={cn(
-                  "mt-6 p-5 rounded-xl border-l-4",
-                  isCorrect 
-                    ? "bg-green-50 border-green-500 dark:bg-green-900/10" 
-                    : "bg-muted/50 border-muted-foreground/30"
-                )}
+                initial={{ opacity: 0, y: 10, height: 0 }}
+                animate={{ opacity: 1, y: 0, height: 'auto' }}
+                exit={{ opacity: 0, y: -10, height: 0 }}
+                className="mt-6 overflow-hidden"
               >
-                <div className="flex items-start gap-3">
-                  <div className={cn(
-                    "w-8 h-8 rounded-full flex items-center justify-center shrink-0",
-                    isCorrect ? "bg-green-100 dark:bg-green-900/30" : "bg-muted"
-                  )}>
-                    {isCorrect ? (
-                      <Check className="w-4 h-4 text-green-600" />
-                    ) : (
-                      <X className="w-4 h-4 text-red-500" />
-                    )}
-                  </div>
-                  <div>
-                    <p className="font-semibold text-foreground mb-1">
-                      {isCorrect ? 'Excellent!' : 'Not quite right'}
-                    </p>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {question.explanation}
-                    </p>
+                <div className={cn(
+                  "p-5 rounded-2xl",
+                  isCorrect 
+                    ? "bg-green-50 border border-green-200 dark:bg-green-900/10 dark:border-green-800" 
+                    : "bg-muted/50 border border-border"
+                )}>
+                  <div className="flex items-start gap-4">
+                    <div className={cn(
+                      "w-10 h-10 rounded-xl flex items-center justify-center shrink-0",
+                      isCorrect ? "bg-green-100 dark:bg-green-900/30" : "bg-muted"
+                    )}>
+                      {isCorrect ? (
+                        <Check className="w-5 h-5 text-green-600" />
+                      ) : (
+                        <X className="w-5 h-5 text-red-500" />
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-semibold text-foreground mb-1">
+                        {isCorrect ? 'Excellent! That\'s correct.' : 'Not quite right'}
+                      </p>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        {question.explanation}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -377,7 +426,7 @@ export function InteractiveQuiz() {
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="flex gap-4 mt-8"
+        className="flex gap-4 mt-6"
       >
         <Button
           variant="outline"
@@ -399,24 +448,34 @@ export function InteractiveQuiz() {
               : "bg-muted text-muted-foreground cursor-not-allowed"
           )}
         >
-          {currentQuestion < totalQuestions - 1 ? 'Next' : 'View Results'}
+          {currentQuestion < totalQuestions - 1 ? 'Next Question' : 'View Results'}
           <ChevronRight className="w-5 h-5" />
         </Button>
       </motion.div>
 
-      {/* Streak indicator */}
-      {currentStreak > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mt-6 text-center"
-        >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full">
-            <Zap className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium text-primary">{currentStreak} correct in a row!</span>
-          </div>
-        </motion.div>
-      )}
+      {/* Question dots */}
+      <div className="flex justify-center gap-2 mt-6">
+        {quizQuestions.map((_, index) => {
+          const isAnswered = quizAnswers[quizQuestions[index].id] !== undefined;
+          const wasCorrect = quizAnswers[quizQuestions[index].id] === quizQuestions[index].correctAnswer;
+          
+          return (
+            <div
+              key={index}
+              className={cn(
+                "w-2.5 h-2.5 rounded-full transition-all",
+                index === currentQuestion
+                  ? "w-6 bg-primary"
+                  : isAnswered
+                    ? wasCorrect
+                      ? "bg-green-500"
+                      : "bg-red-400"
+                    : "bg-muted-foreground/30"
+              )}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 }
