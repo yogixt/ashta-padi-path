@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useLearningStore } from '@/store/learningStore';
 import { HomeScreen } from '@/components/screens/HomeScreen';
 import { VocabularyScreen } from '@/components/screens/VocabularyScreen';
@@ -8,13 +9,20 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 const Index = () => {
   const { currentScreen } = useLearningStore();
+  const [chatQuery, setChatQuery] = useState<string | undefined>();
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
+  const handleOpenChatWithQuery = (query: string) => {
+    setChatQuery(query);
+    setIsChatOpen(true);
+  };
 
   const renderScreen = () => {
     switch (currentScreen) {
       case 'home':
         return <HomeScreen />;
       case 'vocabulary':
-        return <VocabularyScreen />;
+        return <VocabularyScreen onOpenChatWithQuery={handleOpenChatWithQuery} />;
       case 'learning':
         return <LearningScreen />;
       case 'quiz':
@@ -41,7 +49,14 @@ const Index = () => {
       </AnimatePresence>
       
       {/* Floating Chatbot */}
-      <SanskritChatbot />
+      <SanskritChatbot 
+        initialQuery={chatQuery}
+        isOpenExternal={isChatOpen}
+        onClose={() => {
+          setIsChatOpen(false);
+          setChatQuery(undefined);
+        }}
+      />
     </>
   );
 };
