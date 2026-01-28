@@ -1,18 +1,29 @@
+import { motion } from 'framer-motion';
 import { Header } from '@/components/Header';
 import { InteractiveQuiz } from '@/components/InteractiveQuiz';
-import mandalaImage from '@/assets/mandala-pattern.jpg';
+import mandalaDecorative from '@/assets/mandala-decorative.png';
 
 export function QuizScreen() {
   return (
     <div className="min-h-screen bg-background relative">
-      {/* Background decorations */}
+      {/* Background decorations with rotating mandalas */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute -top-24 -right-24 w-80 h-80 opacity-[0.04]">
-          <img src={mandalaImage} alt="" className="w-full h-full object-cover rounded-full" />
-        </div>
-        <div className="absolute -bottom-24 -left-24 w-80 h-80 opacity-[0.04]">
-          <img src={mandalaImage} alt="" className="w-full h-full object-cover rounded-full" />
-        </div>
+        <motion.div 
+          initial={{ opacity: 0, rotate: 0 }}
+          animate={{ opacity: 0.05, rotate: 360 }}
+          transition={{ duration: 100, repeat: Infinity, ease: "linear" }}
+          className="absolute -top-24 -right-24 w-80 h-80"
+        >
+          <img src={mandalaDecorative} alt="" className="w-full h-full object-contain" />
+        </motion.div>
+        <motion.div 
+          initial={{ opacity: 0, rotate: 0 }}
+          animate={{ opacity: 0.04, rotate: -360 }}
+          transition={{ duration: 130, repeat: Infinity, ease: "linear" }}
+          className="absolute -bottom-24 -left-24 w-80 h-80"
+        >
+          <img src={mandalaDecorative} alt="" className="w-full h-full object-contain" />
+        </motion.div>
         {/* Subtle pattern */}
         <div className="absolute inset-0 section-pattern opacity-20" />
       </div>
