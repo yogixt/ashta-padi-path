@@ -2,13 +2,13 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ProfessionSelector } from '@/components/ProfessionSelector';
 import { ProgressTracker } from '@/components/ProgressTracker';
+import { AshtaPadiSteps } from '@/components/AshtaPadiSteps';
 import { useLearningStore } from '@/store/learningStore';
 import { useAuth } from '@/contexts/AuthContext';
 import { BookOpen, GraduationCap, Sparkles, Users, ArrowRight, Star, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import heroImage from '@/assets/hero-patanjali.jpg';
 import mandalaElegant from '@/assets/mandala-elegant.png';
-import ashtaPadiFramework from '@/assets/ashta-padi-framework.jpg';
 
 // Author data from the research paper
 const authors = [
@@ -140,14 +140,14 @@ export function HomeScreen() {
 
             {/* Title */}
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-foreground leading-tight mb-6">
-              Master the
-              <span className="block text-primary">Yoga Sutras</span>
-              of Patanjali
+              Learn
+              <span className="block text-primary">Sanskrit Scriptures</span>
+              Through Your Profession
             </h2>
             
             <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-8 max-w-2xl">
               A comprehensive eight-step learning framework with profession-based personalization. 
-              Learn Sanskrit through the timeless wisdom of ancient texts.
+              Master Yoga Sūtras, Bhagavad Gītā, Arthaśāstra, and more through the wisdom of ancient texts.
             </p>
 
             {/* CTA Buttons */}
@@ -174,9 +174,9 @@ export function HomeScreen() {
             {/* Stats */}
             <div className="flex items-center gap-8 mt-12 pt-8 border-t border-border/50">
               {[
-                { value: "196", label: "Sutras" },
-                { value: "4", label: "Chapters" },
-                { value: "8", label: "Learning Steps" }
+                { value: "8", label: "Learning Steps" },
+                { value: "5+", label: "Scriptures" },
+                { value: "22", label: "Grammar Lessons" }
               ].map((stat, i) => (
                 <motion.div
                   key={stat.label}
@@ -274,37 +274,8 @@ export function HomeScreen() {
           <img src={mandalaElegant} alt="" className="w-full h-full object-contain" />
         </motion.div>
         
-        <div className="max-w-5xl mx-auto relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-10"
-          >
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">
-              अष्टपदी
-            </span>
-            <h3 className="text-3xl md:text-4xl font-serif font-bold text-foreground">
-              The 8-Step Learning Framework
-            </h3>
-            <p className="text-muted-foreground mt-3 max-w-2xl mx-auto">
-              A university-integrated progression from profession selection to advanced scholarship
-            </p>
-          </motion.div>
-          
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="relative rounded-2xl overflow-hidden shadow-2xl border border-border"
-          >
-            <img 
-              src={ashtaPadiFramework} 
-              alt="Ashta Padi 8-Step Learning Framework" 
-              className="w-full h-auto"
-            />
-          </motion.div>
+        <div className="max-w-6xl mx-auto relative z-10">
+          <AshtaPadiSteps />
         </div>
       </section>
 
