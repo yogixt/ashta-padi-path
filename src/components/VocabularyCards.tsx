@@ -1,10 +1,99 @@
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, BookOpen, ArrowRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowRight, BookOpen, Settings, Pen, X } from 'lucide-react';
 import { vocabulary } from '@/data/yogaSutrasData';
 import { useLearningStore } from '@/store/learningStore';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+
+function SanskritEcosystemPanel({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const tools = [
+    {
+      name: 'Cologne Dictionary',
+      description: 'Instant definition lookup',
+      status: 'Connected',
+      icon: BookOpen,
+    },
+    {
+      name: 'Sanskrit Heritage',
+      description: 'Morphological Analyzer',
+      status: 'Connected',
+      icon: Settings,
+    },
+    {
+      name: 'Grammar Assist',
+      description: 'Real-time Sandhi checker',
+      status: 'Active',
+      icon: Pen,
+    },
+  ];
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0, x: 20, scale: 0.95 }}
+          animate={{ opacity: 1, x: 0, scale: 1 }}
+          exit={{ opacity: 0, x: 20, scale: 0.95 }}
+          transition={{ duration: 0.2 }}
+          className="absolute right-0 top-0 w-80 bg-background rounded-2xl shadow-xl border border-border/50 overflow-hidden z-20"
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between p-4 border-b border-border/50">
+            <h3 className="font-semibold text-primary">Sanskrit Ecosystem</h3>
+            <button
+              onClick={onClose}
+              className="p-1 hover:bg-muted rounded-lg transition-colors"
+            >
+              <X className="w-4 h-4 text-muted-foreground" />
+            </button>
+          </div>
+
+          {/* Tools list */}
+          <div className="p-4 space-y-3">
+            {tools.map((tool, idx) => (
+              <div
+                key={idx}
+                className="flex items-start gap-3 p-3 rounded-xl bg-muted/30 border border-border/30"
+              >
+                <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center shrink-0">
+                  <tool.icon className="w-5 h-5 text-muted-foreground" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium text-foreground text-sm">{tool.name}</p>
+                  <p className="text-xs text-muted-foreground">{tool.description}</p>
+                  <span className={cn(
+                    "inline-block text-xs font-medium mt-1 px-2 py-0.5 rounded",
+                    tool.status === 'Active' 
+                      ? "bg-primary/10 text-primary" 
+                      : "bg-green-500/10 text-green-600"
+                  )}>
+                    {tool.status}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Footer note */}
+          <div className="p-4 pt-0">
+            <div className="bg-accent/30 rounded-xl p-3 text-center">
+              <p className="text-sm text-muted-foreground italic">
+                Like "Grammarly for Sanskrit"
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">
+                Context-aware assistance enabled across all learning modules.
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
 
 export function VocabularyCards() {
+  const [showEcosystem, setShowEcosystem] = useState(false);
   const { 
     currentVocabIndex, 
     nextVocab, 
@@ -17,153 +106,195 @@ export function VocabularyCards() {
   const isFirst = currentVocabIndex === 0;
   const isLast = currentVocabIndex === vocabulary.length - 1;
 
-  const handleContinue = () => {
-    if (isLast) {
-      completeVocab();
-      setScreen('learning');
-    } else {
-      nextVocab();
+  const handleStartLearning = () => {
+    completeVocab();
+    setScreen('learning');
+  };
+
+  const goToIndex = (index: number) => {
+    const store = useLearningStore.getState();
+    if (index < currentVocabIndex) {
+      for (let i = currentVocabIndex; i > index; i--) {
+        store.prevVocab();
+      }
+    } else if (index > currentVocabIndex) {
+      for (let i = currentVocabIndex; i < index; i++) {
+        store.nextVocab();
+      }
     }
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto px-4">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-center mb-10"
-      >
-        <div className="inline-flex items-center gap-2 tag mb-4">
-          <BookOpen className="w-3.5 h-3.5" />
-          Vocabulary
-        </div>
-        <h2 className="text-3xl md:text-4xl font-serif font-semibold text-foreground mb-3">
-          Master Key Terms
-        </h2>
-        <p className="text-muted-foreground">
-          Learn essential Sanskrit vocabulary before studying the sutras
-        </p>
-      </motion.div>
+    <div className="w-full max-w-3xl mx-auto px-4 relative">
+      {/* Sanskrit Ecosystem Panel */}
+      <SanskritEcosystemPanel 
+        isOpen={showEcosystem} 
+        onClose={() => setShowEcosystem(false)} 
+      />
 
-      {/* Progress dots */}
-      <div className="flex justify-center gap-1.5 mb-10">
-        {vocabulary.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => {
-              const store = useLearningStore.getState();
-              if (index < currentVocabIndex) {
-                for (let i = currentVocabIndex; i > index; i--) {
-                  store.prevVocab();
-                }
-              } else if (index > currentVocabIndex) {
-                for (let i = currentVocabIndex; i < index; i++) {
-                  store.nextVocab();
-                }
-              }
-            }}
-            className={`
-              progress-dot
-              ${index === currentVocabIndex ? 'active' : ''}
-              ${index < currentVocabIndex ? 'completed' : ''}
-              ${index > currentVocabIndex ? 'inactive' : ''}
-            `}
-          />
-        ))}
-      </div>
-
-      {/* Flashcard */}
+      {/* Main Card */}
       <AnimatePresence mode="wait">
         <motion.div
           key={currentVocabIndex}
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -40 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.3 }}
-          className="card-elevated rounded-2xl p-8 md:p-10"
+          className="card-elevated rounded-2xl overflow-hidden"
         >
-          {/* Sanskrit term */}
-          <div className="text-center mb-8">
-            <h3 className="font-sanskrit text-5xl md:text-6xl text-foreground mb-3">
-              {currentTerm.term}
-            </h3>
-            <p className="text-xl text-muted-foreground font-serif italic">
-              {currentTerm.transliteration}
-            </p>
+          {/* Card Header */}
+          <div className="bg-muted/30 px-6 py-4 border-b border-border/50 flex items-center justify-between">
+            <span className="text-sm text-muted-foreground font-medium">
+              Term {currentVocabIndex + 1} of {vocabulary.length}
+            </span>
+            <button
+              onClick={() => setShowEcosystem(!showEcosystem)}
+              className={cn(
+                "text-xs font-medium px-3 py-1.5 rounded-full transition-colors",
+                showEcosystem 
+                  ? "bg-primary text-primary-foreground" 
+                  : "bg-muted hover:bg-muted/80 text-muted-foreground"
+              )}
+            >
+              Sanskrit Ecosystem
+            </button>
           </div>
 
-          <div className="divider-accent w-16 mx-auto mb-8 rounded-full" />
-
-          {/* Root etymology */}
-          <div className="bg-muted/50 rounded-xl p-4 mb-6 border border-border/50">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1.5">Dhātu (Root)</p>
-            <p className="font-medium text-foreground">{currentTerm.root}</p>
-          </div>
-
-          {/* Meanings */}
-          <div className="mb-6">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground mb-3">Meanings</p>
-            <div className="flex flex-wrap gap-2">
-              {currentTerm.meanings.map((meaning, idx) => (
-                <span
-                  key={idx}
-                  className="px-3 py-1.5 bg-primary/8 text-primary border border-primary/15 rounded-full text-sm font-medium"
-                >
-                  {meaning}
-                </span>
-              ))}
+          {/* Card Content */}
+          <div className="p-8 md:p-12">
+            {/* Sanskrit term */}
+            <div className="text-center mb-8">
+              <h3 className="font-sanskrit text-5xl md:text-6xl lg:text-7xl text-foreground mb-3">
+                {currentTerm.term}
+              </h3>
+              <p className="text-xl md:text-2xl text-muted-foreground font-serif italic">
+                {currentTerm.transliteration}
+              </p>
             </div>
-          </div>
 
-          {/* Part of speech */}
-          <div className="text-sm text-muted-foreground mb-5">
-            <span className="font-medium text-foreground">Part of Speech:</span> {currentTerm.partOfSpeech}
-          </div>
-
-          {/* Example usage */}
-          {currentTerm.exampleUsage && (
-            <div className="bg-card rounded-xl p-4 border-l-2 border-primary">
-              <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1.5">Example in Sutras</p>
-              <p className="font-sanskrit text-foreground text-lg">{currentTerm.exampleUsage}</p>
+            {/* Root Section */}
+            <div className="mb-8">
+              <h4 className="text-sm font-semibold text-primary uppercase tracking-wide mb-3 text-center">
+                Root
+              </h4>
+              <p className="text-center text-foreground font-medium">
+                {currentTerm.root}
+              </p>
             </div>
-          )}
+
+            {/* Meanings Section */}
+            <div className="mb-8">
+              <h4 className="text-sm font-semibold text-primary uppercase tracking-wide mb-4 text-center">
+                Meanings
+              </h4>
+              <ul className="space-y-2 max-w-md mx-auto">
+                {currentTerm.meanings.map((meaning, idx) => (
+                  <li key={idx} className="flex items-center gap-3">
+                    <span className="w-2 h-2 rounded-full bg-primary/60 shrink-0" />
+                    <span className="text-foreground text-center flex-1">{meaning}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Example Usage Section */}
+            {currentTerm.exampleUsage && (
+              <div className="mb-4">
+                <h4 className="text-sm font-semibold text-primary uppercase tracking-wide mb-4 text-center">
+                  Example Usage
+                </h4>
+                <div className="bg-accent/40 rounded-xl p-6 border-l-4 border-primary/40">
+                  <p className="font-sanskrit text-foreground text-xl md:text-2xl text-center mb-3">
+                    {currentTerm.exampleUsage.split(' (')[0]}
+                  </p>
+                  <p className="text-muted-foreground text-center italic">
+                    {getExampleTranslation(currentTerm.id)}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Navigation Buttons */}
+          <div className="px-6 pb-6 flex gap-4">
+            <Button
+              variant="outline"
+              onClick={prevVocab}
+              disabled={isFirst}
+              className="flex-1 h-14 text-base gap-2 rounded-xl border-2"
+            >
+              <ChevronLeft className="w-5 h-5" />
+              Previous
+            </Button>
+
+            <Button
+              onClick={handleStartLearning}
+              className="flex-1 h-14 text-base gap-2 rounded-xl bg-primary hover:bg-primary/90"
+            >
+              Start Learning Sutras
+              <ArrowRight className="w-5 h-5" />
+            </Button>
+          </div>
+
+          {/* Progress Dots */}
+          <div className="flex justify-center gap-2 pb-6">
+            {vocabulary.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToIndex(index)}
+                className={cn(
+                  "w-3 h-3 rounded-full transition-all duration-300",
+                  index === currentVocabIndex 
+                    ? "bg-primary scale-110" 
+                    : index < currentVocabIndex 
+                      ? "bg-primary/40" 
+                      : "bg-muted-foreground/30"
+                )}
+                aria-label={`Go to term ${index + 1}`}
+              />
+            ))}
+          </div>
         </motion.div>
       </AnimatePresence>
 
-      {/* Navigation */}
-      <div className="flex items-center justify-between mt-8">
-        <Button
-          variant="ghost"
-          onClick={prevVocab}
-          disabled={isFirst}
-          className="gap-2"
-        >
-          <ChevronLeft className="w-4 h-4" />
-          Previous
-        </Button>
-
-        <span className="text-sm text-muted-foreground font-medium">
-          {currentVocabIndex + 1} / {vocabulary.length}
-        </span>
-
-        <Button
-          onClick={handleContinue}
-          className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
-        >
-          {isLast ? (
-            <>
-              Continue to Sutras
-              <ArrowRight className="w-4 h-4" />
-            </>
-          ) : (
-            <>
-              Next
-              <ChevronRight className="w-4 h-4" />
-            </>
-          )}
-        </Button>
+      {/* Quick Navigation */}
+      <div className="flex justify-center mt-6 gap-2">
+        {!isFirst && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={prevVocab}
+            className="text-muted-foreground"
+          >
+            <ChevronLeft className="w-4 h-4 mr-1" />
+            Back
+          </Button>
+        )}
+        {!isLast && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={nextVocab}
+            className="text-muted-foreground"
+          >
+            Next Term
+            <ChevronRight className="w-4 h-4 ml-1" />
+          </Button>
+        )}
       </div>
     </div>
   );
+}
+
+// Helper function to get translations for examples
+function getExampleTranslation(termId: string): string {
+  const translations: Record<string, string> = {
+    yoga: 'Yoga is the cessation of mental fluctuations',
+    chitta: 'The cessation of mental fluctuations',
+    vritti: 'The fluctuations are of five kinds',
+    nirodha: 'Yoga is the cessation of fluctuations',
+    abhyasa: 'That cessation is achieved through practice and non-attachment',
+    vairagya: 'That cessation is achieved through practice and non-attachment',
+  };
+  return translations[termId] || 'From the Yoga Sutras of Patanjali';
 }
