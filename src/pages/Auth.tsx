@@ -167,10 +167,10 @@ export default function AuthPage() {
                 className="p-8"
               >
                 <h2 className="text-xl font-semibold text-slate-900 text-center mb-2">
-                  I am a...
+                  अहं अस्मि...
                 </h2>
                 <p className="text-slate-500 text-center text-sm mb-8">
-                  Choose your role to personalize your experience
+                  Choose your path to personalize your learning journey
                 </p>
 
                 <div className="grid grid-cols-2 gap-4">
@@ -181,7 +181,8 @@ export default function AuthPage() {
                     <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mx-auto mb-3 group-hover:scale-105 transition-transform shadow-lg shadow-blue-500/25">
                       <BookOpen className="w-7 h-7 text-white" />
                     </div>
-                    <h3 className="font-semibold text-slate-900">Student</h3>
+                    <h3 className="font-semibold text-slate-900 font-sanskrit text-lg">शिष्य</h3>
+                    <p className="text-xs text-slate-600 mt-0.5">Śiṣya</p>
                     <p className="text-xs text-slate-500 mt-1">Learn & practice</p>
                   </button>
 
@@ -192,7 +193,8 @@ export default function AuthPage() {
                     <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center mx-auto mb-3 group-hover:scale-105 transition-transform shadow-lg shadow-amber-500/25">
                       <GraduationCap className="w-7 h-7 text-white" />
                     </div>
-                    <h3 className="font-semibold text-slate-900">Teacher</h3>
+                    <h3 className="font-semibold text-slate-900 font-sanskrit text-lg">गुरु</h3>
+                    <p className="text-xs text-slate-600 mt-0.5">Guru</p>
                     <p className="text-xs text-slate-500 mt-1">Guide & instruct</p>
                   </button>
                 </div>
@@ -223,7 +225,7 @@ export default function AuthPage() {
                 )}
 
                 <h2 className="text-xl font-semibold text-slate-900 mb-1">
-                  {mode === 'signin' ? 'Welcome back' : `Sign up as ${selectedRole}`}
+                  {mode === 'signin' ? 'स्वागतम्' : `Sign up as ${selectedRole === 'student' ? 'Śiṣya (शिष्य)' : 'Guru (गुरु)'}`}
                 </h2>
                 <p className="text-slate-500 text-sm mb-6">
                   {mode === 'signin' 

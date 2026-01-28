@@ -70,10 +70,10 @@ export function HomeScreen() {
           <div className="flex items-center gap-3">
             {user ? (
               <div className="flex items-center gap-2 px-3 py-1.5 bg-card border border-border rounded-full">
-                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-primary-foreground text-xs font-bold">
-                  {user.email?.charAt(0).toUpperCase()}
+                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-primary-foreground text-xs font-bold font-sanskrit">
+                  {role === 'teacher' ? 'गु' : 'शि'}
                 </div>
-                <span className="text-sm font-medium text-foreground capitalize">{role}</span>
+                <span className="text-sm font-medium text-foreground">{role === 'teacher' ? 'Guru' : 'Śiṣya'}</span>
               </div>
             ) : (
               <Button
