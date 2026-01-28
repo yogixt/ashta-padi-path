@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, X, ChevronRight, RotateCcw, Home, Trophy, Target, Zap, Clock } from 'lucide-react';
+import { Check, X, ChevronLeft, ChevronRight, RotateCcw, Home, Trophy, Target, Zap, Clock } from 'lucide-react';
 import { quizQuestions } from '@/data/yogaSutrasData';
 import { useLearningStore } from '@/store/learningStore';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import confetti from 'canvas-confetti';
 
 export function InteractiveQuiz() {
@@ -19,39 +20,13 @@ export function InteractiveQuiz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showFeedback, setShowFeedback] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
-  const [streak, setStreak] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(30);
-  const [isTimerActive, setIsTimerActive] = useState(true);
-  const [showHint, setShowHint] = useState(false);
+  const [bestStreak, setBestStreak] = useState(0);
+  const [currentStreak, setCurrentStreak] = useState(0);
 
   const question = quizQuestions[currentQuestion];
   const selectedAnswer = quizAnswers[question.id];
   const isCorrect = selectedAnswer === question.correctAnswer;
   const totalQuestions = quizQuestions.length;
-
-  // Timer effect
-  useEffect(() => {
-    if (!isTimerActive || showFeedback || isComplete) return;
-    
-    const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev <= 1) {
-          // Time's up - auto-select wrong answer
-          handleAnswer(-1);
-          return 30;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [isTimerActive, showFeedback, isComplete, currentQuestion]);
-
-  // Reset timer on new question
-  useEffect(() => {
-    setTimeLeft(30);
-    setShowHint(false);
-  }, [currentQuestion]);
 
   const triggerConfetti = () => {
     confetti({
@@ -66,24 +41,25 @@ export function InteractiveQuiz() {
     if (showFeedback) return;
     setQuizAnswer(question.id, answerIndex);
     setShowFeedback(true);
-    setIsTimerActive(false);
 
     const correct = answerIndex === question.correctAnswer;
     if (correct) {
-      setStreak(prev => prev + 1);
-      if (streak >= 2) {
+      const newStreak = currentStreak + 1;
+      setCurrentStreak(newStreak);
+      if (newStreak > bestStreak) {
+        setBestStreak(newStreak);
+      }
+      if (newStreak >= 3) {
         triggerConfetti();
       }
     } else {
-      setStreak(0);
+      setCurrentStreak(0);
     }
   };
 
   const handleNext = () => {
-    setShowFeedback(false);
-    setIsTimerActive(true);
-    
     if (currentQuestion < totalQuestions - 1) {
+      setShowFeedback(false);
       setCurrentQuestion(prev => prev + 1);
     } else {
       const correctAnswers: Record<number, number> = {};
@@ -93,7 +69,7 @@ export function InteractiveQuiz() {
       calculateScore(correctAnswers);
       setIsComplete(true);
       
-      // Big celebration for good scores
+      // Celebration for good scores
       setTimeout(() => {
         const score = Object.entries(correctAnswers).filter(
           ([id]) => quizAnswers[parseInt(id)] === correctAnswers[parseInt(id)]
@@ -105,19 +81,28 @@ export function InteractiveQuiz() {
     }
   };
 
+  const handlePrevious = () => {
+    if (currentQuestion > 0) {
+      setShowFeedback(false);
+      setCurrentQuestion(prev => prev - 1);
+    }
+  };
+
   const handleRetake = () => {
     resetQuiz();
     setCurrentQuestion(0);
     setShowFeedback(false);
     setIsComplete(false);
-    setStreak(0);
-    setTimeLeft(30);
-    setIsTimerActive(true);
+    setCurrentStreak(0);
+    setBestStreak(0);
   };
 
   const handleBackToHome = () => {
     setScreen('home');
   };
+
+  // Calculate progress percentage
+  const progressPercent = ((currentQuestion) / totalQuestions) * 100;
 
   // Results screen
   if (isComplete && quizScore !== null) {
@@ -138,7 +123,7 @@ export function InteractiveQuiz() {
       >
         <div className="card-elevated rounded-2xl p-8 md:p-10 text-center relative overflow-hidden">
           {/* Background decoration */}
-          <div className="absolute inset-0 opacity-5">
+          <div className="absolute inset-0 opacity-5 pointer-events-none">
             <div className="absolute top-0 right-0 w-40 h-40 bg-primary rounded-full blur-3xl" />
             <div className="absolute bottom-0 left-0 w-40 h-40 bg-accent rounded-full blur-3xl" />
           </div>
@@ -154,7 +139,7 @@ export function InteractiveQuiz() {
               <Trophy className="w-10 h-10 text-primary-foreground" />
             </motion.div>
 
-            <span className="inline-block px-3 py-1 bg-accent/20 text-accent rounded-full text-xs font-semibold mb-4">
+            <span className="inline-block px-3 py-1 bg-accent/20 text-foreground rounded-full text-xs font-semibold mb-4">
               {message.badge}
             </span>
             
@@ -212,8 +197,8 @@ export function InteractiveQuiz() {
                 <p className="text-xs text-muted-foreground">Correct</p>
               </div>
               <div className="p-3 bg-muted/50 rounded-xl">
-                <Zap className="w-5 h-5 text-accent mx-auto mb-1" />
-                <p className="text-lg font-bold text-foreground">{streak}</p>
+                <Zap className="w-5 h-5 text-primary mx-auto mb-1" />
+                <p className="text-lg font-bold text-foreground">{bestStreak}</p>
                 <p className="text-xs text-muted-foreground">Best Streak</p>
               </div>
               <div className="p-3 bg-muted/50 rounded-xl">
@@ -247,65 +232,34 @@ export function InteractiveQuiz() {
     );
   }
 
-  const timerColor = timeLeft > 20 ? 'text-sage' : timeLeft > 10 ? 'text-accent' : 'text-destructive';
-
   return (
-    <div className="w-full max-w-2xl mx-auto px-4">
-      {/* Header with timer and streak */}
+    <div className="w-full max-w-3xl mx-auto px-4">
+      {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mb-8"
+        className="text-center mb-8"
       >
-        <div className="flex items-center justify-between mb-4">
-          <span className="tag">
-            {question.type === 'vocabulary' ? 'Vocabulary' : 'Grammar'}
-          </span>
-          
-          <div className="flex items-center gap-4">
-            {/* Streak indicator */}
-            {streak > 0 && (
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                className="flex items-center gap-1 px-3 py-1 bg-accent/20 rounded-full"
-              >
-                <Zap className="w-4 h-4 text-accent" />
-                <span className="text-sm font-bold text-accent">{streak}</span>
-              </motion.div>
-            )}
-            
-            {/* Timer */}
-            <div className={`flex items-center gap-1 font-mono text-lg font-bold ${timerColor}`}>
-              <Clock className="w-4 h-4" />
-              {timeLeft}s
-            </div>
-          </div>
-        </div>
-
-        <h2 className="text-3xl md:text-4xl font-serif font-semibold text-foreground text-center mb-4">
-          Practice Quiz
-        </h2>
+        <p className="text-muted-foreground mb-6">
+          Test your understanding of vocabulary and grammar
+        </p>
+        
+        {/* Question counter */}
+        <p className="text-foreground font-medium mb-4">
+          Question {currentQuestion + 1} of {totalQuestions}
+        </p>
         
         {/* Progress bar */}
-        <div className="flex gap-1 max-w-md mx-auto">
-          {quizQuestions.map((q, index) => {
-            const answered = quizAnswers[q.id] !== undefined;
-            const wasCorrect = answered && quizAnswers[q.id] === q.correctAnswer;
-            
-            return (
-              <div
-                key={index}
-                className={`h-2 flex-1 rounded-full transition-all duration-300 ${
-                  index < currentQuestion 
-                    ? wasCorrect ? 'bg-sage' : 'bg-destructive/50'
-                    : index === currentQuestion 
-                      ? 'bg-primary/40' 
-                      : 'bg-border'
-                }`}
-              />
-            );
-          })}
+        <div className="max-w-md mx-auto h-2 bg-muted rounded-full overflow-hidden">
+          <motion.div
+            className="h-full rounded-full"
+            style={{ 
+              background: 'linear-gradient(90deg, hsl(var(--primary)), hsl(var(--primary)/0.7))'
+            }}
+            initial={{ width: 0 }}
+            animate={{ width: `${progressPercent}%` }}
+            transition={{ duration: 0.3 }}
+          />
         </div>
       </motion.div>
 
@@ -313,112 +267,65 @@ export function InteractiveQuiz() {
       <AnimatePresence mode="wait">
         <motion.div
           key={currentQuestion}
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -50 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.3 }}
-          className="card-elevated rounded-2xl p-6 md:p-8 relative overflow-hidden"
+          className="card-elevated rounded-2xl p-8 md:p-10"
         >
-          {/* Timer bar */}
-          <div className="absolute top-0 left-0 right-0 h-1 bg-muted overflow-hidden">
-            <motion.div
-              className="h-full bg-primary"
-              initial={{ width: '100%' }}
-              animate={{ width: `${(timeLeft / 30) * 100}%` }}
-              transition={{ duration: 0.5 }}
-            />
-          </div>
-
-          {/* Question number */}
-          <p className="text-sm text-muted-foreground mb-4 font-medium pt-2">
-            Question {currentQuestion + 1} of {totalQuestions}
-          </p>
-
           {/* Question text */}
-          <h3 className="text-xl font-semibold text-foreground mb-6">
+          <h3 className="text-xl md:text-2xl font-semibold text-primary text-center mb-8">
             {question.question}
           </h3>
 
-          {/* Hint button */}
-          {!showFeedback && !showHint && (
-            <button
-              onClick={() => setShowHint(true)}
-              className="text-sm text-primary hover:underline mb-4"
-            >
-              Need a hint?
-            </button>
-          )}
-
-          {showHint && !showFeedback && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              className="mb-4 p-3 bg-primary/5 rounded-lg border border-primary/20"
-            >
-              <p className="text-sm text-muted-foreground">
-                Think about the Sanskrit root and its core meaning...
-              </p>
-            </motion.div>
-          )}
-
           {/* Options */}
-          <div className="space-y-3">
+          <div className="space-y-4">
             {question.options.map((option, index) => {
               const isSelected = selectedAnswer === index;
               const isCorrectOption = index === question.correctAnswer;
               
-              let optionClass = 'bg-background hover:bg-muted/50 border-border';
-              let iconClass = '';
-              
-              if (showFeedback) {
-                if (isCorrectOption) {
-                  optionClass = 'bg-sage/10 border-sage/50 ring-2 ring-sage/30';
-                  iconClass = 'bg-sage/20';
-                } else if (isSelected && !isCorrectOption) {
-                  optionClass = 'bg-destructive/5 border-destructive/30';
-                  iconClass = 'bg-destructive/10';
-                }
-              } else if (isSelected) {
-                optionClass = 'bg-primary/5 border-primary/40 ring-2 ring-primary/20';
-              }
-
               return (
                 <motion.button
                   key={index}
                   onClick={() => handleAnswer(index)}
                   disabled={showFeedback}
-                  whileHover={!showFeedback ? { scale: 1.01, x: 4 } : {}}
+                  whileHover={!showFeedback ? { scale: 1.01 } : {}}
                   whileTap={!showFeedback ? { scale: 0.99 } : {}}
-                  className={`
-                    w-full p-4 rounded-xl text-left border-2 transition-all duration-200
-                    flex items-center justify-between gap-4
-                    ${optionClass}
-                    ${showFeedback ? 'cursor-default' : 'cursor-pointer'}
-                  `}
+                  className={cn(
+                    "w-full p-5 rounded-xl text-center border-2 transition-all duration-200",
+                    "flex items-center justify-center gap-3",
+                    showFeedback 
+                      ? isCorrectOption 
+                        ? "bg-green-50 border-green-400 dark:bg-green-900/20" 
+                        : isSelected && !isCorrectOption
+                          ? "bg-red-50 border-red-300 dark:bg-red-900/20"
+                          : "bg-muted/30 border-border/50"
+                      : isSelected 
+                        ? "bg-primary/10 border-primary"
+                        : "bg-muted/20 border-border hover:bg-muted/40 hover:border-primary/30",
+                    showFeedback ? "cursor-default" : "cursor-pointer"
+                  )}
                 >
-                  <div className="flex items-center gap-3">
-                    <span className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center text-sm font-semibold text-muted-foreground">
-                      {String.fromCharCode(65 + index)}
-                    </span>
-                    <span className="font-medium text-foreground">{option}</span>
-                  </div>
+                  <span className="font-medium text-foreground text-base md:text-lg">
+                    {option}
+                  </span>
                   
                   {showFeedback && isCorrectOption && (
-                    <motion.div 
+                    <motion.div
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      className={`w-8 h-8 rounded-full flex items-center justify-center ${iconClass}`}
+                      className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center shrink-0"
                     >
-                      <Check className="w-5 h-5 text-sage" />
+                      <Check className="w-4 h-4 text-white" />
                     </motion.div>
                   )}
                   {showFeedback && isSelected && !isCorrectOption && (
-                    <motion.div 
+                    <motion.div
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      className={`w-8 h-8 rounded-full flex items-center justify-center ${iconClass}`}
+                      className="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center shrink-0"
                     >
-                      <X className="w-5 h-5 text-destructive" />
+                      <X className="w-4 h-4 text-white" />
                     </motion.div>
                   )}
                 </motion.button>
@@ -433,22 +340,22 @@ export function InteractiveQuiz() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className={`
-                  mt-6 p-5 rounded-xl border-l-4
-                  ${isCorrect 
-                    ? 'bg-sage/5 border-sage' 
-                    : 'bg-muted/50 border-muted-foreground/30'
-                  }
-                `}
+                className={cn(
+                  "mt-6 p-5 rounded-xl border-l-4",
+                  isCorrect 
+                    ? "bg-green-50 border-green-500 dark:bg-green-900/10" 
+                    : "bg-muted/50 border-muted-foreground/30"
+                )}
               >
                 <div className="flex items-start gap-3">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
-                    isCorrect ? 'bg-sage/20' : 'bg-muted'
-                  }`}>
+                  <div className={cn(
+                    "w-8 h-8 rounded-full flex items-center justify-center shrink-0",
+                    isCorrect ? "bg-green-100 dark:bg-green-900/30" : "bg-muted"
+                  )}>
                     {isCorrect ? (
-                      <Check className="w-4 h-4 text-sage" />
+                      <Check className="w-4 h-4 text-green-600" />
                     ) : (
-                      <X className="w-4 h-4 text-destructive" />
+                      <X className="w-4 h-4 text-red-500" />
                     )}
                   </div>
                   <div>
@@ -463,25 +370,53 @@ export function InteractiveQuiz() {
               </motion.div>
             )}
           </AnimatePresence>
-
-          {/* Next button */}
-          {showFeedback && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="mt-6 flex justify-end"
-            >
-              <Button
-                onClick={handleNext}
-                className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
-              >
-                {currentQuestion < totalQuestions - 1 ? 'Next Question' : 'View Results'}
-                <ChevronRight className="w-4 h-4" />
-              </Button>
-            </motion.div>
-          )}
         </motion.div>
       </AnimatePresence>
+
+      {/* Navigation buttons */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="flex gap-4 mt-8"
+      >
+        <Button
+          variant="outline"
+          onClick={handlePrevious}
+          disabled={currentQuestion === 0}
+          className="flex-1 h-14 text-base gap-2 rounded-xl border-2"
+        >
+          <ChevronLeft className="w-5 h-5" />
+          Previous
+        </Button>
+
+        <Button
+          onClick={handleNext}
+          disabled={!showFeedback}
+          className={cn(
+            "flex-1 h-14 text-base gap-2 rounded-xl",
+            showFeedback 
+              ? "bg-primary hover:bg-primary/90 text-primary-foreground" 
+              : "bg-muted text-muted-foreground cursor-not-allowed"
+          )}
+        >
+          {currentQuestion < totalQuestions - 1 ? 'Next' : 'View Results'}
+          <ChevronRight className="w-5 h-5" />
+        </Button>
+      </motion.div>
+
+      {/* Streak indicator */}
+      {currentStreak > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-6 text-center"
+        >
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full">
+            <Zap className="w-4 h-4 text-primary" />
+            <span className="text-sm font-medium text-primary">{currentStreak} correct in a row!</span>
+          </div>
+        </motion.div>
+      )}
     </div>
   );
 }
