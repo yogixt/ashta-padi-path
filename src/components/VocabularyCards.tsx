@@ -191,56 +191,60 @@ export function VocabularyCards({ onOpenChatWithQuery }: VocabularyCardsProps) {
           </div>
 
           {/* Card Content */}
-          <div className="p-8 md:p-12 bg-card">
+          <div className="p-8 md:p-10 bg-card">
             {/* Sanskrit term */}
-            <div className="text-center mb-10">
-              <h3 className="font-sanskrit text-5xl md:text-6xl lg:text-7xl text-foreground mb-4 sanskrit-highlight inline-block">
+            <div className="text-center mb-8">
+              <h3 className="font-sanskrit text-5xl md:text-6xl text-primary mb-3">
                 {currentTerm.term}
               </h3>
-              <p className="text-xl md:text-2xl text-muted-foreground font-serif italic">
+              <p className="text-xl text-muted-foreground font-serif italic">
                 {currentTerm.transliteration}
               </p>
             </div>
 
             {/* Root Section */}
             <div className="mb-8">
-              <h4 className="text-xs font-bold text-primary uppercase tracking-widest mb-3 text-center">
+              <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3">
                 Root
               </h4>
-              <p className="text-center text-foreground font-medium text-lg">
-                {currentTerm.root}
+              <p className="text-foreground font-medium text-lg font-serif">
+                <span className="font-sanskrit text-primary">{currentTerm.root.split('(')[0].trim()}</span>
+                {currentTerm.root.includes('(') && (
+                  <span className="text-muted-foreground ml-2">
+                    - "{currentTerm.root.split('(')[1]?.replace(')', '').replace('"', '').replace('"', '')}"
+                  </span>
+                )}
               </p>
             </div>
 
-            {/* Divider */}
-            <div className="divider-ornate" />
-
             {/* Meanings Section */}
             <div className="mb-8">
-              <h4 className="text-xs font-bold text-primary uppercase tracking-widest mb-5 text-center">
+              <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-4">
                 Meanings
               </h4>
-              <ul className="space-y-3 max-w-md mx-auto">
+              <div className="flex flex-wrap gap-3">
                 {currentTerm.meanings.map((meaning, idx) => (
-                  <li key={idx} className="flex items-center gap-4 p-3 bg-muted/30 rounded-lg border border-border/50">
-                    <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-br from-primary to-accent shrink-0" />
-                    <span className="text-foreground">{meaning}</span>
-                  </li>
+                  <span 
+                    key={idx} 
+                    className="px-4 py-2 bg-muted/50 text-foreground rounded-full text-sm font-medium border border-border"
+                  >
+                    {meaning.toLowerCase()}
+                  </span>
                 ))}
-              </ul>
+              </div>
             </div>
 
             {/* Example Usage Section */}
             {currentTerm.exampleUsage && (
-              <div className="mb-4">
-                <h4 className="text-xs font-bold text-primary uppercase tracking-widest mb-5 text-center">
+              <div>
+                <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-4">
                   Example Usage
                 </h4>
-                <div className="bg-gradient-to-r from-accent/20 via-primary/10 to-accent/20 rounded-xl p-6 border-l-4 border-primary">
-                  <p className="font-sanskrit text-foreground text-xl md:text-2xl text-center mb-3">
+                <div className="bg-accent/20 rounded-xl p-5 border border-accent/30">
+                  <p className="font-sanskrit text-primary text-lg md:text-xl mb-2">
                     {currentTerm.exampleUsage.split(' (')[0]}
                   </p>
-                  <p className="text-muted-foreground text-center italic font-serif">
+                  <p className="text-muted-foreground text-sm italic">
                     {getExampleTranslation(currentTerm.id)}
                   </p>
                 </div>
