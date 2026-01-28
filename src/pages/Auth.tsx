@@ -77,9 +77,10 @@ export default function AuthPage() {
           }
         } else {
           toast({
-            title: 'Check your email',
-            description: 'We sent you a verification link. Please check your inbox.',
+            title: 'Welcome!',
+            description: 'Your account has been created successfully.',
           });
+          navigate('/');
         }
       } else {
         const result = signInSchema.safeParse({ email, password });
