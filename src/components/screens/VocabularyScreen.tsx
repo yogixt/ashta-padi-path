@@ -2,7 +2,11 @@ import { Header } from '@/components/Header';
 import { VocabularyCards } from '@/components/VocabularyCards';
 import manuscriptImage from '@/assets/sanskrit-manuscript.jpg';
 
-export function VocabularyScreen() {
+interface VocabularyScreenProps {
+  onOpenChatWithQuery?: (query: string) => void;
+}
+
+export function VocabularyScreen({ onOpenChatWithQuery }: VocabularyScreenProps) {
   return (
     <div className="min-h-screen bg-background relative">
       {/* Background decoration */}
@@ -15,7 +19,7 @@ export function VocabularyScreen() {
       <Header showBack backTo="home" />
       
       <main className="py-10 md:py-14 relative z-10">
-        <VocabularyCards />
+        <VocabularyCards onOpenChatWithQuery={onOpenChatWithQuery} />
       </main>
     </div>
   );

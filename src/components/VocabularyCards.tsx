@@ -6,25 +6,35 @@ import { useLearningStore } from '@/store/learningStore';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-function SanskritEcosystemPanel({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+interface SanskritEcosystemPanelProps {
+  isOpen: boolean;
+  onClose: () => void;
+  currentTerm: { term: string; transliteration: string };
+  onToolClick: (toolType: string, query: string) => void;
+}
+
+function SanskritEcosystemPanel({ isOpen, onClose, currentTerm, onToolClick }: SanskritEcosystemPanelProps) {
   const tools = [
     {
       name: 'Cologne Dictionary',
       description: 'Instant definition lookup',
       status: 'Connected',
       icon: BookOpen,
+      action: () => onToolClick('dictionary', `Define the Sanskrit word "${currentTerm.term}" (${currentTerm.transliteration}). Give its etymology, root, and various meanings.`),
     },
     {
       name: 'Sanskrit Heritage',
       description: 'Morphological Analyzer',
       status: 'Connected',
       icon: Settings,
+      action: () => onToolClick('morphology', `Analyze the morphology of "${currentTerm.term}" (${currentTerm.transliteration}). Break down its root (dhātu), prefixes, suffixes, and grammatical form.`),
     },
     {
       name: 'Grammar Assist',
       description: 'Real-time Sandhi checker',
       status: 'Active',
       icon: Pen,
+      action: () => onToolClick('grammar', `Explain any sandhi rules that apply to "${currentTerm.term}" (${currentTerm.transliteration}). Show how it would combine with other words.`),
     },
   ];
 
@@ -52,12 +62,13 @@ function SanskritEcosystemPanel({ isOpen, onClose }: { isOpen: boolean; onClose:
           {/* Tools list */}
           <div className="p-4 space-y-3">
             {tools.map((tool, idx) => (
-              <div
+              <button
                 key={idx}
-                className="flex items-start gap-3 p-3 rounded-xl bg-muted/30 border border-border/30"
+                onClick={tool.action}
+                className="w-full flex items-start gap-3 p-3 rounded-xl bg-muted/30 border border-border/30 hover:bg-muted/50 hover:border-primary/30 transition-all text-left group"
               >
-                <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center shrink-0">
-                  <tool.icon className="w-5 h-5 text-muted-foreground" />
+                <div className="w-10 h-10 rounded-xl bg-muted group-hover:bg-primary/10 flex items-center justify-center shrink-0 transition-colors">
+                  <tool.icon className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-medium text-foreground text-sm">{tool.name}</p>
@@ -71,7 +82,7 @@ function SanskritEcosystemPanel({ isOpen, onClose }: { isOpen: boolean; onClose:
                     {tool.status}
                   </span>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
 
@@ -92,7 +103,11 @@ function SanskritEcosystemPanel({ isOpen, onClose }: { isOpen: boolean; onClose:
   );
 }
 
-export function VocabularyCards() {
+interface VocabularyCardsProps {
+  onOpenChatWithQuery?: (query: string) => void;
+}
+
+export function VocabularyCards({ onOpenChatWithQuery }: VocabularyCardsProps) {
   const [showEcosystem, setShowEcosystem] = useState(false);
   const { 
     currentVocabIndex, 
@@ -101,6 +116,13 @@ export function VocabularyCards() {
     completeVocab,
     setScreen 
   } = useLearningStore();
+
+  const handleToolClick = (toolType: string, query: string) => {
+    setShowEcosystem(false);
+    if (onOpenChatWithQuery) {
+      onOpenChatWithQuery(query);
+    }
+  };
 
   const currentTerm = vocabulary[currentVocabIndex];
   const isFirst = currentVocabIndex === 0;
@@ -129,7 +151,9 @@ export function VocabularyCards() {
       {/* Sanskrit Ecosystem Panel */}
       <SanskritEcosystemPanel 
         isOpen={showEcosystem} 
-        onClose={() => setShowEcosystem(false)} 
+        onClose={() => setShowEcosystem(false)}
+        currentTerm={currentTerm}
+        onToolClick={handleToolClick}
       />
 
       {/* Main Card */}

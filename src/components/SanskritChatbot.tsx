@@ -10,7 +10,13 @@ interface Message {
   content: string;
 }
 
-export function SanskritChatbot() {
+interface SanskritChatbotProps {
+  initialQuery?: string;
+  isOpenExternal?: boolean;
+  onClose?: () => void;
+}
+
+export function SanskritChatbot({ initialQuery, isOpenExternal, onClose }: SanskritChatbotProps = {}) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -20,8 +26,35 @@ export function SanskritChatbot() {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [pendingQuery, setPendingQuery] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Handle external open state
+  useEffect(() => {
+    if (isOpenExternal !== undefined) {
+      setIsOpen(isOpenExternal);
+    }
+  }, [isOpenExternal]);
+
+  // Handle initial query from tools
+  useEffect(() => {
+    if (initialQuery && isOpen && !pendingQuery) {
+      setPendingQuery(initialQuery);
+      setInput(initialQuery);
+    }
+  }, [initialQuery, isOpen]);
+
+  // Auto-send pending query
+  useEffect(() => {
+    if (pendingQuery && isOpen && !isLoading) {
+      const timer = setTimeout(() => {
+        sendMessageWithContent(pendingQuery);
+        setPendingQuery(null);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [pendingQuery, isOpen, isLoading]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -33,10 +66,10 @@ export function SanskritChatbot() {
     }
   }, [isOpen]);
 
-  const sendMessage = async () => {
-    if (!input.trim() || isLoading) return;
+  const sendMessageWithContent = async (content: string) => {
+    if (!content.trim() || isLoading) return;
 
-    const userMessage: Message = { role: 'user', content: input.trim() };
+    const userMessage: Message = { role: 'user', content: content.trim() };
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
@@ -128,6 +161,11 @@ export function SanskritChatbot() {
     }
   };
 
+  const sendMessage = async () => {
+    if (!input.trim() || isLoading) return;
+    await sendMessageWithContent(input.trim());
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -135,11 +173,18 @@ export function SanskritChatbot() {
     }
   };
 
+  const handleToggle = () => {
+    if (isOpen && onClose) {
+      onClose();
+    }
+    setIsOpen(!isOpen);
+  };
+
   return (
     <>
       {/* Chat toggle button */}
       <motion.button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleToggle}
         className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
