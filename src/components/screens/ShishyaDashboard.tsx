@@ -1,13 +1,16 @@
 import { motion } from 'framer-motion';
 import { Header } from '@/components/Header';
-import { BookOpen, Target, Flame, Trophy, Clock, ArrowRight, Sparkles, GraduationCap } from 'lucide-react';
+import { BookOpen, Target, Flame, Trophy, ArrowRight, Sparkles, GraduationCap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { useLearningStore } from '@/store/learningStore';
+import { MentorSelection } from '@/components/MentorSelection';
+import { useState } from 'react';
 import mandalaElegant from '@/assets/mandala-elegant.png';
 
 export function ShishyaDashboard() {
   const { setScreen, vocabCompleted, sutrasCompleted, quizScore } = useLearningStore();
+  const [selectedMentor, setSelectedMentor] = useState<string | null>(null);
 
   const learningPath = [
     { 
@@ -219,6 +222,19 @@ export function ShishyaDashboard() {
                   Yoga is the cessation of mind fluctuations
                 </p>
               </div>
+            </motion.div>
+
+            {/* Mentor Selection Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.55 }}
+              className="lg:col-span-3 bg-card border border-border rounded-2xl p-6"
+            >
+              <MentorSelection 
+                onMentorSelect={setSelectedMentor}
+                selectedMentorId={selectedMentor}
+              />
             </motion.div>
           </div>
 
