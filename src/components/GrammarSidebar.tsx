@@ -480,19 +480,19 @@ export function GrammarSidebar() {
 
   return (
     <aside className="w-full lg:w-80 xl:w-96 shrink-0">
-      <div className="card-elevated rounded-2xl p-5 sticky top-4">
+      <div className="card-ornate rounded-xl p-5 sticky top-4">
         {/* Header */}
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-            <Layers className="w-4 h-4 text-primary" />
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/15 to-accent/10 flex items-center justify-center border border-primary/20">
+            <Layers className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h3 className="font-semibold text-foreground">Grammar Reference</h3>
-            <p className="text-xs text-muted-foreground">Vyakarana System</p>
+            <h3 className="font-serif font-semibold text-foreground">Grammar Reference</h3>
+            <p className="text-xs text-muted-foreground font-sanskrit">व्याकरण</p>
           </div>
         </div>
         
-        <p className="text-sm text-muted-foreground mb-5">
+        <p className="text-sm text-muted-foreground mb-5 border-l-2 border-primary/30 pl-3">
           Comprehensive Sanskrit grammar for Yoga Sutra study
         </p>
 

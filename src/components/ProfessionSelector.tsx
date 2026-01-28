@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, Lock } from 'lucide-react';
+import { ArrowRight, Lock, Sparkles } from 'lucide-react';
 import { professions } from '@/data/yogaSutrasData';
 import { useLearningStore } from '@/store/learningStore';
 
@@ -18,18 +18,31 @@ export function ProfessionSelector() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="text-center mb-12"
+        className="text-center mb-14"
       >
-        <span className="tag mb-4">Step 1</span>
-        <h2 className="text-3xl md:text-4xl font-serif font-semibold text-foreground mt-4 mb-4">
+        {/* Step indicator */}
+        <span className="tag-gold mb-6 inline-block">
+          <Sparkles className="w-3.5 h-3.5 mr-1.5" />
+          Step 1 of 8
+        </span>
+        
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-foreground mb-4">
           Select Your Learning Path
         </h2>
+        
         <p className="text-muted-foreground max-w-xl mx-auto text-lg">
           Choose your professional domain for a personalized Sanskrit learning experience
         </p>
+        
+        {/* Decorative line */}
+        <div className="flex items-center justify-center gap-3 mt-6">
+          <div className="h-px w-12 bg-gradient-to-r from-transparent to-primary/50" />
+          <div className="w-2 h-2 rounded-full bg-primary" />
+          <div className="h-px w-12 bg-gradient-to-l from-transparent to-primary/50" />
+        </div>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {professions.map((profession, index) => (
           <motion.button
             key={profession.id}
@@ -41,21 +54,26 @@ export function ProfessionSelector() {
             className={`
               group relative text-left transition-all duration-300 rounded-xl overflow-hidden
               ${profession.available 
-                ? 'card-elevated cursor-pointer hover:shadow-lg hover:border-primary/30' 
-                : 'bg-muted/40 border border-border/30 cursor-not-allowed'
+                ? 'card-ornate cursor-pointer hover:shadow-xl hover:scale-[1.02]' 
+                : 'bg-muted/40 border-2 border-border/30 cursor-not-allowed opacity-75'
               }
             `}
           >
-            <div className="p-6">
+            {/* Top accent bar */}
+            {profession.available && (
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+            )}
+            
+            <div className="p-6 relative z-10">
               {/* Header */}
               <div className="flex items-start justify-between mb-4">
-                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <span className="font-sanskrit text-xl text-primary font-semibold">
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/15 to-accent/10 flex items-center justify-center border border-primary/20 group-hover:from-primary/25 group-hover:to-accent/15 transition-colors">
+                  <span className="font-sanskrit text-2xl text-primary font-bold">
                     {profession.nameHindi.charAt(0)}
                   </span>
                 </div>
                 {!profession.available && (
-                  <span className="flex items-center gap-1.5 text-xs text-muted-foreground bg-muted px-2.5 py-1 rounded-full">
+                  <span className="flex items-center gap-1.5 text-xs text-muted-foreground bg-muted px-3 py-1.5 rounded-full border border-border">
                     <Lock className="w-3 h-3" />
                     Coming Soon
                   </span>
@@ -63,7 +81,7 @@ export function ProfessionSelector() {
               </div>
               
               {/* Title */}
-              <h3 className={`text-lg font-semibold mb-1 transition-colors ${
+              <h3 className={`text-xl font-serif font-semibold mb-1 transition-colors ${
                 profession.available ? 'text-foreground group-hover:text-primary' : 'text-muted-foreground'
               }`}>
                 {profession.name}
@@ -85,16 +103,16 @@ export function ProfessionSelector() {
 
               {/* CTA */}
               {profession.available && (
-                <div className="mt-5 flex items-center gap-2 text-sm font-medium text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="mt-5 flex items-center gap-2 text-sm font-semibold text-primary opacity-0 group-hover:opacity-100 transition-all group-hover:translate-x-1">
                   Begin Learning
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-4 h-4" />
                 </div>
               )}
             </div>
 
-            {/* Bottom accent line */}
+            {/* Bottom gradient accent */}
             {profession.available && (
-              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary/0 via-primary to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
             )}
           </motion.button>
         ))}
