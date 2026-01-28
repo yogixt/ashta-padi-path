@@ -1,14 +1,20 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useLearningStore } from '@/store/learningStore';
+import { useAuth } from '@/contexts/AuthContext';
 import { HomeScreen } from '@/components/screens/HomeScreen';
 import { VocabularyScreen } from '@/components/screens/VocabularyScreen';
 import { LearningScreen } from '@/components/screens/LearningScreen';
 import { QuizScreen } from '@/components/screens/QuizScreen';
+import { AnalyticsScreen } from '@/components/screens/AnalyticsScreen';
 import { SanskritChatbot } from '@/components/SanskritChatbot';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useState } from 'react';
 
 const Index = () => {
   const { currentScreen } = useLearningStore();
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
   const [chatQuery, setChatQuery] = useState<string | undefined>();
   const [isChatOpen, setIsChatOpen] = useState(false);
 
@@ -29,6 +35,8 @@ const Index = () => {
         return <QuizScreen />;
       case 'results':
         return <QuizScreen />; // Results are handled within QuizComponent
+      case 'analytics':
+        return <AnalyticsScreen />;
       default:
         return <HomeScreen />;
     }

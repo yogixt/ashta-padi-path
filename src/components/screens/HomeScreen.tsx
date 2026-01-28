@@ -1,216 +1,162 @@
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { ProfessionSelector } from '@/components/ProfessionSelector';
 import { ProgressTracker } from '@/components/ProgressTracker';
 import { useLearningStore } from '@/store/learningStore';
-import { BookOpen, GraduationCap, Sparkles, Users, ArrowRight, Star } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { BookOpen, GraduationCap, Sparkles, Users, ArrowRight, Star, ChevronRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import heroImage from '@/assets/hero-patanjali.jpg';
-import manuscriptImage from '@/assets/sanskrit-manuscript.jpg';
-import mandalaImage from '@/assets/mandala-pattern.jpg';
 
 export function HomeScreen() {
   const { vocabCompleted, sutrasCompleted } = useLearningStore();
+  const { user, role } = useAuth();
+  const navigate = useNavigate();
   const hasProgress = vocabCompleted || sutrasCompleted > 0;
   
   const features = [
     {
       icon: BookOpen,
       title: "Vocabulary First",
-      description: "Master key terms before sutras"
+      description: "Master key Sanskrit terms before diving into sutras",
+      color: "from-blue-500 to-indigo-600"
     },
     {
       icon: GraduationCap,
       title: "Grammar Reference",
-      description: "Learn Sanskrit grammar alongside"
+      description: "Learn Sanskrit grammar alongside your studies",
+      color: "from-amber-500 to-orange-600"
     },
     {
       icon: Sparkles,
       title: "Interactive Quizzes",
-      description: "Test your understanding"
+      description: "Test and reinforce your understanding",
+      color: "from-emerald-500 to-teal-600"
     },
     {
       icon: Users,
       title: "AI Sanskrit Guide",
-      description: "Chat with an AI tutor"
+      description: "Chat with an AI tutor for personalized help",
+      color: "from-violet-500 to-purple-600"
     }
   ];
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Decorative background elements */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-96 h-96 opacity-[0.04]">
-          <img src={mandalaImage} alt="" className="w-full h-full object-cover rounded-full" />
-        </div>
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 opacity-[0.04]">
-          <img src={mandalaImage} alt="" className="w-full h-full object-cover rounded-full" />
-        </div>
-      </div>
-
       {/* Hero Section */}
       <section className="relative overflow-hidden">
-        {/* Hero background with overlay */}
+        {/* Background */}
         <div className="absolute inset-0">
           <img 
             src={heroImage} 
             alt="Ancient Sanskrit Manuscript" 
-            className="w-full h-full object-cover" 
+            className="w-full h-full object-cover opacity-40" 
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/75 to-background" />
-          {/* Traditional pattern overlay */}
-          <div className="absolute inset-0 opacity-10 section-pattern" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background via-background/90 to-background" />
         </div>
 
-        {/* Decorative top border */}
-        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-transparent via-primary to-transparent" />
+        {/* Navigation */}
+        <nav className="relative max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-primary-foreground font-sanskrit text-2xl font-bold shadow-lg">
+              ॐ
+            </div>
+            <div>
+              <h1 className="text-lg font-semibold text-foreground">Ashta Padi</h1>
+              <p className="text-xs text-muted-foreground font-sanskrit">अष्टपदी</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            {user ? (
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-card border border-border rounded-full">
+                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-primary-foreground text-xs font-bold">
+                  {user.email?.charAt(0).toUpperCase()}
+                </div>
+                <span className="text-sm font-medium text-foreground capitalize">{role}</span>
+              </div>
+            ) : (
+              <Button
+                onClick={() => navigate('/auth')}
+                className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/25"
+              >
+                Get Started
+                <ChevronRight className="w-4 h-4 ml-1" />
+              </Button>
+            )}
+          </div>
+        </nav>
 
-        <div className="relative max-w-5xl mx-auto px-4 py-20 md:py-28 lg:py-36">
+        {/* Hero Content */}
+        <div className="relative max-w-6xl mx-auto px-4 py-16 md:py-24 lg:py-32">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-            className="text-center"
+            transition={{ duration: 0.6 }}
+            className="max-w-3xl"
           >
-            {/* Om symbol decoration */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-              className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary/80 text-primary-foreground text-3xl font-sanskrit mb-6 shadow-lg animate-glow"
-            >
-              ॐ
-            </motion.div>
-
-            {/* Main title */}
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold text-foreground mb-3 tracking-tight">
-              Ashta Padi
-            </h1>
-            
-            {/* Sanskrit subtitle with decorative lines */}
-            <div className="flex items-center justify-center gap-4 mb-8">
-              <div className="h-px w-16 bg-gradient-to-r from-transparent to-primary/50" />
-              <p className="font-sanskrit text-3xl md:text-4xl text-primary">
-                अष्टपदी
-              </p>
-              <div className="h-px w-16 bg-gradient-to-l from-transparent to-primary/50" />
-            </div>
-            
-            {/* Tagline */}
-            <p className="text-lg md:text-xl text-foreground/80 max-w-2xl mx-auto leading-relaxed mb-6 font-serif">
-              A comprehensive eight-step learning framework for Patanjali's Yoga Sutras 
-              with profession-based personalization
-            </p>
-
-            {/* Conference badge */}
+            {/* Badge */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="inline-flex items-center gap-2 tag-gold mt-2"
+              transition={{ delay: 0.2 }}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-amber-100 text-amber-700 rounded-full text-sm font-medium mb-6"
             >
-              <Star className="w-3.5 h-3.5" />
+              <Star className="w-4 h-4" />
               Demo for ISCLS 2026
             </motion.div>
-          </motion.div>
 
-          {/* Features grid */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.6 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16"
-          >
-            {features.map((feature, index) => (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 + index * 0.1 }}
-                className="card-surface p-5 text-center group hover:shadow-lg transition-all duration-300 hover:border-primary/30"
-              >
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center mx-auto mb-3 group-hover:from-primary/20 group-hover:to-accent/20 transition-colors">
-                  <feature.icon className="w-5 h-5 text-primary" />
-                </div>
-                <h3 className="font-semibold text-foreground text-sm mb-1">
-                  {feature.title}
-                </h3>
-                <p className="text-xs text-muted-foreground">
-                  {feature.description}
-                </p>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* Progress tracker (if has progress) */}
-          {hasProgress && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7 }}
-              className="max-w-md mx-auto mt-12"
-            >
-              <ProgressTracker />
-            </motion.div>
-          )}
-        </div>
-
-        {/* Decorative bottom wave */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 60" className="w-full h-12 fill-background">
-            <path d="M0,60 L0,30 Q360,0 720,30 T1440,30 L1440,60 Z" />
-          </svg>
-        </div>
-      </section>
-
-      {/* About Section */}
-      <section className="py-20 px-4 relative overflow-hidden">
-        {/* Background decoration */}
-        <div className="absolute right-0 top-0 w-1/3 h-full opacity-[0.06]">
-          <img 
-            src={manuscriptImage} 
-            alt="" 
-            className="w-full h-full object-cover" 
-          />
-        </div>
-        
-        <div className="max-w-5xl mx-auto relative">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-2xl"
-          >
-            {/* Section tag */}
-            <span className="tag mb-4 inline-block">About the Framework</span>
-            
-            <h2 className="text-3xl md:text-4xl font-serif font-bold text-foreground mb-6 line-accent">
-              Ancient Wisdom, Modern Learning
+            {/* Title */}
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-foreground leading-tight mb-6">
+              Master the
+              <span className="block text-primary">Yoga Sutras</span>
+              of Patanjali
             </h2>
             
-            <p className="text-muted-foreground leading-relaxed mb-8 text-lg">
-              The Yoga Sutras of Patanjali, composed over 2,000 years ago, remain one of the most profound 
-              texts on the science of consciousness. Our platform makes this timeless wisdom accessible 
-              through structured, personalized learning paths.
+            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-8 max-w-2xl">
+              A comprehensive eight-step learning framework with profession-based personalization. 
+              Learn Sanskrit through the timeless wisdom of ancient texts.
             </p>
-            
+
+            {/* CTA Buttons */}
+            <div className="flex flex-wrap items-center gap-4">
+              {!user && (
+                <Button
+                  onClick={() => navigate('/auth')}
+                  size="lg"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/25 h-12 px-8"
+                >
+                  Start Learning
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              )}
+              <Button
+                variant="outline"
+                size="lg"
+                className="h-12 px-8 border-border"
+              >
+                Watch Demo
+              </Button>
+            </div>
+
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-4">
+            <div className="flex items-center gap-8 mt-12 pt-8 border-t border-border/50">
               {[
-                { value: "196", label: "Sutras in 4 Chapters" },
-                { value: "8", label: "Step Learning Path" },
-                { value: "∞", label: "Depth of Wisdom" }
+                { value: "196", label: "Sutras" },
+                { value: "4", label: "Chapters" },
+                { value: "8", label: "Learning Steps" }
               ].map((stat, i) => (
                 <motion.div
                   key={stat.label}
                   initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  className="text-center p-4 card-surface"
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 + i * 0.1 }}
+                  className="text-center"
                 >
-                  <p className="text-2xl md:text-3xl font-serif font-bold text-primary mb-1">
+                  <p className="text-2xl md:text-3xl font-serif font-bold text-foreground">
                     {stat.value}
                   </p>
-                  <p className="text-xs text-muted-foreground">{stat.label}</p>
+                  <p className="text-sm text-muted-foreground">{stat.label}</p>
                 </motion.div>
               ))}
             </div>
@@ -218,8 +164,60 @@ export function HomeScreen() {
         </div>
       </section>
 
-      {/* Divider */}
-      <div className="divider-ornate max-w-md mx-auto" />
+      {/* Features Section */}
+      <section className="py-20 px-4 bg-muted/30">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <span className="tag mb-4 inline-block">Features</span>
+            <h3 className="text-3xl md:text-4xl font-serif font-bold text-foreground mt-4">
+              Everything you need to learn Sanskrit
+            </h3>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {features.map((feature, index) => (
+              <motion.div
+                key={feature.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="group bg-card border border-border rounded-2xl p-6 hover:shadow-lg transition-all duration-300 hover:border-primary/30"
+              >
+                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 group-hover:scale-105 transition-transform shadow-lg`}>
+                  <feature.icon className="w-6 h-6 text-white" />
+                </div>
+                <h4 className="text-lg font-semibold text-foreground mb-2">
+                  {feature.title}
+                </h4>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {feature.description}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Progress Section */}
+      {hasProgress && (
+        <section className="py-16 px-4">
+          <div className="max-w-md mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <ProgressTracker />
+            </motion.div>
+          </div>
+        </section>
+      )}
 
       {/* Profession Selection Section */}
       <section className="py-20 px-4 section-pattern">
@@ -229,21 +227,16 @@ export function HomeScreen() {
       </section>
 
       {/* Footer */}
-      <footer className="py-16 px-4 border-t-2 border-border bg-card/50 relative overflow-hidden">
-        {/* Decorative mandala */}
-        <div className="absolute right-0 bottom-0 w-64 h-64 opacity-[0.03] translate-x-1/2 translate-y-1/2">
-          <img src={mandalaImage} alt="" className="w-full h-full object-cover rounded-full" />
-        </div>
-        
-        <div className="max-w-5xl mx-auto relative">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-            {/* Sanskrit quote */}
+      <footer className="py-12 px-4 border-t border-border bg-card/50">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            {/* Logo & Quote */}
             <div className="text-center md:text-left">
               <div className="inline-flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-sanskrit text-lg font-bold">
+                <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground font-sanskrit text-lg font-bold">
                   अ
                 </div>
-                <span className="font-serif font-semibold text-lg text-foreground">Ashta Padi</span>
+                <span className="font-semibold text-lg text-foreground">Ashta Padi</span>
               </div>
               <p className="font-sanskrit text-xl text-primary mb-1">
                 योगः कर्मसु कौशलम्
@@ -261,11 +254,6 @@ export function HomeScreen() {
               <p className="text-xs text-muted-foreground">
                 Built for Sanskrit computational linguistics research
               </p>
-              <div className="flex items-center justify-center md:justify-end gap-2 mt-3">
-                <span className="w-2 h-2 rounded-full bg-primary" />
-                <span className="w-2 h-2 rounded-full bg-accent" />
-                <span className="w-2 h-2 rounded-full bg-primary" />
-              </div>
             </div>
           </div>
         </div>
