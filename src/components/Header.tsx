@@ -106,11 +106,11 @@ export function Header({ showBack = false, backTo = 'home' }: HeaderProps) {
                   size="sm"
                   className="gap-2 ml-2"
                 >
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-primary-foreground text-xs font-bold">
-                    {user.email?.charAt(0).toUpperCase()}
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-primary-foreground text-xs font-bold font-sanskrit">
+                    {role === 'teacher' ? 'गु' : 'शि'}
                   </div>
                   <span className="hidden md:inline text-sm font-medium">
-                    {role === 'teacher' ? 'Teacher' : 'Student'}
+                    {role === 'teacher' ? 'Guru' : 'Śiṣya'}
                   </span>
                 </Button>
               </DropdownMenuTrigger>
