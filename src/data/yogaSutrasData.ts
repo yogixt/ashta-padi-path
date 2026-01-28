@@ -337,7 +337,6 @@ export const professions = [
     name: "Yoga Practitioner",
     nameHindi: "योग साधक",
     description: "Explore sutras with focus on practice, meditation, and spiritual growth",
-    icon: "🧘",
     available: true
   },
   {
@@ -345,7 +344,6 @@ export const professions = [
     name: "Economist / Accountant",
     nameHindi: "अर्थशास्त्री",
     description: "Connect Sanskrit wisdom with economic principles from Arthashastra",
-    icon: "📊",
     available: false
   },
   {
@@ -353,7 +351,6 @@ export const professions = [
     name: "Philosopher",
     nameHindi: "दार्शनिक",
     description: "Deep dive into metaphysical concepts and logical analysis",
-    icon: "📚",
     available: false
   },
   {
@@ -361,7 +358,6 @@ export const professions = [
     name: "Psychologist",
     nameHindi: "मनोवैज्ञानिक",
     description: "Explore mind sciences through ancient wisdom traditions",
-    icon: "🧠",
     available: false
   },
   {
@@ -369,7 +365,6 @@ export const professions = [
     name: "Wellness Coach",
     nameHindi: "कल्याण प्रशिक्षक",
     description: "Integrate holistic health principles into modern coaching",
-    icon: "💚",
     available: false
   }
 ];

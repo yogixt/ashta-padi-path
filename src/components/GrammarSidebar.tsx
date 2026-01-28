@@ -8,11 +8,13 @@ export function GrammarSidebar() {
 
   return (
     <aside className="w-full lg:w-80 xl:w-96 shrink-0">
-      <div className="glass-card rounded-2xl p-5 sticky top-4">
+      <div className="card-elevated rounded-2xl p-5 sticky top-4">
         {/* Header */}
-        <div className="flex items-center gap-2 text-primary mb-4">
-          <BookText className="w-5 h-5" />
-          <h3 className="font-semibold">Grammar Reference</h3>
+        <div className="flex items-center gap-2 mb-4">
+          <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+            <BookText className="w-4 h-4 text-primary" />
+          </div>
+          <h3 className="font-semibold text-foreground">Grammar Reference</h3>
         </div>
         
         <p className="text-sm text-muted-foreground mb-5">
@@ -27,18 +29,18 @@ export function GrammarSidebar() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
-              className="rounded-lg overflow-hidden bg-muted/30"
+              className="rounded-xl overflow-hidden border border-border/50 bg-background"
             >
               {/* Accordion header */}
               <button
                 onClick={() => setExpandedGrammar(lesson.id)}
-                className="w-full flex items-center justify-between p-4 text-left hover:bg-muted/50 transition-colors"
+                className="w-full flex items-center justify-between p-4 text-left hover:bg-muted/30 transition-colors"
               >
-                <div>
-                  <span className="font-sanskrit text-primary text-sm mr-2">
+                <div className="flex items-center gap-3">
+                  <span className="font-sanskrit text-primary text-base font-medium">
                     {lesson.titleSanskrit}
                   </span>
-                  <span className="font-medium text-foreground text-sm">
+                  <span className="text-foreground text-sm font-medium">
                     {lesson.title}
                   </span>
                 </div>
@@ -66,13 +68,13 @@ export function GrammarSidebar() {
                       </p>
 
                       {/* Examples */}
-                      <div className="space-y-3">
+                      <div className="space-y-2">
                         {lesson.examples.map((example, idx) => (
                           <div
                             key={idx}
-                            className="bg-background/50 rounded-lg p-3 border border-border/50"
+                            className="bg-muted/30 rounded-lg p-3 border border-border/30"
                           >
-                            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
+                            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1.5">
                               {example.rule}
                             </p>
                             <p className="text-sm font-medium text-foreground font-sanskrit">

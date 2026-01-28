@@ -1,9 +1,9 @@
 import { useLearningStore } from '@/store/learningStore';
 import { vocabulary, sutras } from '@/data/yogaSutrasData';
-import { BookOpen, GraduationCap, CheckCircle } from 'lucide-react';
+import { BookOpen, GraduationCap } from 'lucide-react';
 
 export function ProgressTracker() {
-  const { vocabCompleted, sutrasCompleted, currentSutraIndex } = useLearningStore();
+  const { vocabCompleted, sutrasCompleted } = useLearningStore();
 
   const vocabProgress = vocabCompleted ? vocabulary.length : 0;
   const sutraProgress = sutrasCompleted;
@@ -14,21 +14,18 @@ export function ProgressTracker() {
       value: vocabProgress,
       total: vocabulary.length,
       icon: BookOpen,
-      color: 'text-primary'
     },
     {
       label: 'Sutras',
       value: sutraProgress,
       total: sutras.length,
       icon: GraduationCap,
-      color: 'text-accent'
     }
   ];
 
   return (
-    <div className="glass-card rounded-xl p-4">
-      <h4 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
-        <CheckCircle className="w-4 h-4 text-primary" />
+    <div className="card-elevated rounded-xl p-5">
+      <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
         Your Progress
       </h4>
       
@@ -41,16 +38,16 @@ export function ProgressTracker() {
             <div key={stat.label}>
               <div className="flex items-center justify-between text-sm mb-2">
                 <div className="flex items-center gap-2">
-                  <Icon className={`w-4 h-4 ${stat.color}`} />
+                  <Icon className="w-4 h-4 text-primary" />
                   <span className="text-muted-foreground">{stat.label}</span>
                 </div>
                 <span className="font-medium text-foreground">
                   {stat.value}/{stat.total}
                 </span>
               </div>
-              <div className="h-2 bg-muted rounded-full overflow-hidden">
+              <div className="h-1.5 bg-muted rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-gradient-saffron rounded-full transition-all duration-500"
+                  className="h-full bg-primary rounded-full transition-all duration-500"
                   style={{ width: `${percentage}%` }}
                 />
               </div>
