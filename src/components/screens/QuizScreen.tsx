@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Header } from '@/components/Header';
 import { InteractiveQuiz } from '@/components/InteractiveQuiz';
-import mandalaDecorative from '@/assets/mandala-decorative.png';
+import mandalaElegant from '@/assets/mandala-elegant.png';
 
 export function QuizScreen() {
   return (
@@ -14,7 +14,7 @@ export function QuizScreen() {
           transition={{ duration: 100, repeat: Infinity, ease: "linear" }}
           className="absolute -top-24 -right-24 w-80 h-80"
         >
-          <img src={mandalaDecorative} alt="" className="w-full h-full object-contain" />
+          <img src={mandalaElegant} alt="" className="w-full h-full object-contain" />
         </motion.div>
         <motion.div 
           initial={{ opacity: 0, rotate: 0 }}
@@ -22,7 +22,7 @@ export function QuizScreen() {
           transition={{ duration: 130, repeat: Infinity, ease: "linear" }}
           className="absolute -bottom-24 -left-24 w-80 h-80"
         >
-          <img src={mandalaDecorative} alt="" className="w-full h-full object-contain" />
+          <img src={mandalaElegant} alt="" className="w-full h-full object-contain" />
         </motion.div>
         {/* Subtle pattern */}
         <div className="absolute inset-0 section-pattern opacity-20" />

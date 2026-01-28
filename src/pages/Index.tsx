@@ -7,13 +7,15 @@ import { VocabularyScreen } from '@/components/screens/VocabularyScreen';
 import { LearningScreen } from '@/components/screens/LearningScreen';
 import { QuizScreen } from '@/components/screens/QuizScreen';
 import { AnalyticsScreen } from '@/components/screens/AnalyticsScreen';
+import { GuruDashboard } from '@/components/screens/GuruDashboard';
+import { ShishyaDashboard } from '@/components/screens/ShishyaDashboard';
 import { SanskritChatbot } from '@/components/SanskritChatbot';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 
 const Index = () => {
   const { currentScreen } = useLearningStore();
-  const { user, loading } = useAuth();
+  const { user, loading, role } = useAuth();
   const navigate = useNavigate();
   const [chatQuery, setChatQuery] = useState<string | undefined>();
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -37,6 +39,10 @@ const Index = () => {
         return <QuizScreen />; // Results are handled within QuizComponent
       case 'analytics':
         return <AnalyticsScreen />;
+      case 'guru-dashboard':
+        return <GuruDashboard />;
+      case 'shishya-dashboard':
+        return <ShishyaDashboard />;
       default:
         return <HomeScreen />;
     }

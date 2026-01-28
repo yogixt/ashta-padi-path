@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Header } from '@/components/Header';
 import { VocabularyCards } from '@/components/VocabularyCards';
-import mandalaDecorative from '@/assets/mandala-decorative.png';
+import mandalaElegant from '@/assets/mandala-elegant.png';
 
 interface VocabularyScreenProps {
   onOpenChatWithQuery?: (query: string) => void;
@@ -18,7 +18,7 @@ export function VocabularyScreen({ onOpenChatWithQuery }: VocabularyScreenProps)
           transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
           className="absolute -top-32 -right-32 w-96 h-96"
         >
-          <img src={mandalaDecorative} alt="" className="w-full h-full object-contain" />
+          <img src={mandalaElegant} alt="" className="w-full h-full object-contain" />
         </motion.div>
         <motion.div 
           initial={{ opacity: 0, rotate: 0 }}
@@ -26,7 +26,7 @@ export function VocabularyScreen({ onOpenChatWithQuery }: VocabularyScreenProps)
           transition={{ duration: 150, repeat: Infinity, ease: "linear" }}
           className="absolute -bottom-32 -left-32 w-96 h-96"
         >
-          <img src={mandalaDecorative} alt="" className="w-full h-full object-contain" />
+          <img src={mandalaElegant} alt="" className="w-full h-full object-contain" />
         </motion.div>
         {/* Subtle pattern overlay */}
         <div className="absolute inset-0 section-pattern opacity-20" />

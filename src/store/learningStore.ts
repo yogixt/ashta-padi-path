@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export type Screen = 'home' | 'vocabulary' | 'learning' | 'quiz' | 'results' | 'analytics';
+export type Screen = 'home' | 'vocabulary' | 'learning' | 'quiz' | 'results' | 'analytics' | 'guru-dashboard' | 'shishya-dashboard';
 
 interface LearningState {
   // Navigation
