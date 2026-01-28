@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, BookOpen, Check } from 'lucide-react';
+import { ChevronLeft, ChevronRight, BookOpen, ArrowRight } from 'lucide-react';
 import { vocabulary } from '@/data/yogaSutrasData';
 import { useLearningStore } from '@/store/learningStore';
 import { Button } from '@/components/ui/button';
@@ -27,29 +27,27 @@ export function VocabularyCards() {
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto px-4">
+    <div className="w-full max-w-2xl mx-auto px-4">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center mb-8"
+        className="text-center mb-10"
       >
-        <div className="flex items-center justify-center gap-2 text-primary mb-2">
-          <BookOpen className="w-5 h-5" />
-          <span className="text-sm font-medium uppercase tracking-wide">
-            Vocabulary Pre-Learning
-          </span>
+        <div className="inline-flex items-center gap-2 tag mb-4">
+          <BookOpen className="w-3.5 h-3.5" />
+          Vocabulary
         </div>
-        <h2 className="text-2xl md:text-3xl font-serif font-semibold text-foreground">
+        <h2 className="text-3xl md:text-4xl font-serif font-semibold text-foreground mb-3">
           Master Key Terms
         </h2>
-        <p className="text-muted-foreground mt-2">
-          Learn these essential Sanskrit terms before studying the sutras
+        <p className="text-muted-foreground">
+          Learn essential Sanskrit vocabulary before studying the sutras
         </p>
       </motion.div>
 
       {/* Progress dots */}
-      <div className="flex justify-center gap-2 mb-8">
+      <div className="flex justify-center gap-1.5 mb-10">
         {vocabulary.map((_, index) => (
           <button
             key={index}
@@ -79,38 +77,38 @@ export function VocabularyCards() {
       <AnimatePresence mode="wait">
         <motion.div
           key={currentVocabIndex}
-          initial={{ opacity: 0, x: 50 }}
+          initial={{ opacity: 0, x: 40 }}
           animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -50 }}
+          exit={{ opacity: 0, x: -40 }}
           transition={{ duration: 0.3 }}
-          className="glass-card rounded-2xl p-8 md:p-10"
+          className="card-elevated rounded-2xl p-8 md:p-10"
         >
           {/* Sanskrit term */}
           <div className="text-center mb-8">
-            <h3 className="font-sanskrit text-5xl md:text-6xl text-primary mb-3">
+            <h3 className="font-sanskrit text-5xl md:text-6xl text-foreground mb-3">
               {currentTerm.term}
             </h3>
-            <p className="text-xl text-muted-foreground italic">
+            <p className="text-xl text-muted-foreground font-serif italic">
               {currentTerm.transliteration}
             </p>
           </div>
 
-          <div className="decorative-line w-24 mx-auto mb-8" />
+          <div className="divider-accent w-16 mx-auto mb-8 rounded-full" />
 
           {/* Root etymology */}
-          <div className="bg-secondary/10 rounded-lg p-4 mb-6">
-            <p className="text-sm text-muted-foreground mb-1">Root (Dhātu)</p>
+          <div className="bg-muted/50 rounded-xl p-4 mb-6 border border-border/50">
+            <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1.5">Dhātu (Root)</p>
             <p className="font-medium text-foreground">{currentTerm.root}</p>
           </div>
 
           {/* Meanings */}
           <div className="mb-6">
-            <p className="text-sm text-muted-foreground mb-3">Meanings</p>
+            <p className="text-xs uppercase tracking-wide text-muted-foreground mb-3">Meanings</p>
             <div className="flex flex-wrap gap-2">
               {currentTerm.meanings.map((meaning, idx) => (
                 <span
                   key={idx}
-                  className="px-3 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-medium"
+                  className="px-3 py-1.5 bg-primary/8 text-primary border border-primary/15 rounded-full text-sm font-medium"
                 >
                   {meaning}
                 </span>
@@ -119,15 +117,15 @@ export function VocabularyCards() {
           </div>
 
           {/* Part of speech */}
-          <div className="text-sm text-muted-foreground mb-4">
-            <span className="font-medium">Part of Speech:</span> {currentTerm.partOfSpeech}
+          <div className="text-sm text-muted-foreground mb-5">
+            <span className="font-medium text-foreground">Part of Speech:</span> {currentTerm.partOfSpeech}
           </div>
 
           {/* Example usage */}
           {currentTerm.exampleUsage && (
-            <div className="bg-muted/50 rounded-lg p-4 border-l-4 border-primary">
-              <p className="text-sm text-muted-foreground mb-1">Example in Sutras</p>
-              <p className="font-sanskrit text-foreground">{currentTerm.exampleUsage}</p>
+            <div className="bg-card rounded-xl p-4 border-l-2 border-primary">
+              <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1.5">Example in Sutras</p>
+              <p className="font-sanskrit text-foreground text-lg">{currentTerm.exampleUsage}</p>
             </div>
           )}
         </motion.div>
@@ -145,8 +143,8 @@ export function VocabularyCards() {
           Previous
         </Button>
 
-        <span className="text-sm text-muted-foreground">
-          {currentVocabIndex + 1} of {vocabulary.length}
+        <span className="text-sm text-muted-foreground font-medium">
+          {currentVocabIndex + 1} / {vocabulary.length}
         </span>
 
         <Button
@@ -155,8 +153,8 @@ export function VocabularyCards() {
         >
           {isLast ? (
             <>
-              Start Learning
-              <Check className="w-4 h-4" />
+              Continue to Sutras
+              <ArrowRight className="w-4 h-4" />
             </>
           ) : (
             <>

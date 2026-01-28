@@ -23,11 +23,11 @@ export function LearningScreen() {
   }, [nextSutra, prevSutra]);
 
   return (
-    <div className="min-h-screen bg-gradient-warm">
+    <div className="min-h-screen bg-background">
       <Header showBack backTo="vocabulary" />
       
-      <main className="max-w-7xl mx-auto px-4 py-6 md:py-10">
-        <div className="flex flex-col lg:flex-row gap-6">
+      <main className="max-w-7xl mx-auto px-4 py-8 md:py-12">
+        <div className="flex flex-col lg:flex-row gap-8">
           {/* Main content */}
           <SutraPanel />
           
@@ -48,10 +48,10 @@ export function LearningScreen() {
         </div>
 
         {/* Keyboard hint */}
-        <div className="hidden md:block text-center mt-8">
+        <div className="hidden md:block text-center mt-10">
           <p className="text-xs text-muted-foreground">
-            💡 Use <kbd className="px-1.5 py-0.5 bg-muted rounded text-[10px]">←</kbd> 
-            <kbd className="px-1.5 py-0.5 bg-muted rounded text-[10px] ml-1">→</kbd> arrow keys to navigate sutras
+            Use <kbd className="px-1.5 py-0.5 bg-muted border border-border rounded text-[10px] font-mono mx-1">←</kbd> 
+            <kbd className="px-1.5 py-0.5 bg-muted border border-border rounded text-[10px] font-mono mx-1">→</kbd> arrow keys to navigate
           </p>
         </div>
       </main>

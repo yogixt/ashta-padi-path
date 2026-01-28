@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { ProfessionSelector } from '@/components/ProfessionSelector';
 import { ProgressTracker } from '@/components/ProgressTracker';
 import { useLearningStore } from '@/store/learningStore';
-import { BookOpen, GraduationCap, Sparkles, Users } from 'lucide-react';
+import { BookOpen, GraduationCap, Sparkles, Users, ArrowRight } from 'lucide-react';
 
 export function HomeScreen() {
   const { vocabCompleted, sutrasCompleted } = useLearningStore();
@@ -12,87 +12,101 @@ export function HomeScreen() {
     {
       icon: BookOpen,
       title: "Vocabulary First",
-      description: "Master key terms before diving into sutras"
+      description: "Master key terms before sutras"
     },
     {
       icon: GraduationCap,
       title: "Grammar Reference",
-      description: "Learn Sanskrit grammar alongside your studies"
+      description: "Learn Sanskrit grammar alongside"
     },
     {
       icon: Sparkles,
       title: "Interactive Quizzes",
-      description: "Test your understanding with practice questions"
+      description: "Test your understanding"
     },
     {
       icon: Users,
       title: "Profession-Based",
-      description: "Personalized learning for your field"
+      description: "Personalized for your field"
     }
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-warm">
+    <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative overflow-hidden">
-        {/* Background decoration */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute top-20 left-10 w-64 h-64 rounded-full bg-primary blur-3xl" />
-          <div className="absolute bottom-20 right-10 w-96 h-96 rounded-full bg-accent blur-3xl" />
+      <section className="relative overflow-hidden border-b border-border/50">
+        {/* Subtle background pattern */}
+        <div className="absolute inset-0 opacity-[0.02]">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)`,
+            backgroundSize: '32px 32px'
+          }} />
         </div>
 
-        <div className="relative max-w-6xl mx-auto px-4 py-16 md:py-24">
+        <div className="relative max-w-5xl mx-auto px-4 py-20 md:py-28">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-16"
+            className="text-center"
           >
-            {/* Sanskrit decorative text */}
-            <p className="font-sanskrit text-2xl text-primary/60 mb-4">
+            {/* Sanskrit invocation */}
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="font-sanskrit text-lg text-primary/50 mb-6"
+            >
               ॐ श्री गणेशाय नमः
-            </p>
+            </motion.p>
             
             {/* Main title */}
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif font-bold text-foreground mb-4">
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-semibold text-foreground mb-4 tracking-tight">
               Ashta Padi
             </h1>
             
             {/* Sanskrit subtitle */}
-            <p className="font-sanskrit text-2xl md:text-3xl text-primary mb-6">
+            <p className="font-sanskrit text-2xl md:text-3xl text-primary/80 mb-8">
               अष्टपदी
             </p>
             
             {/* Tagline */}
-            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Eight steps to Sanskrit mastery — A comprehensive learning framework 
-              for Patanjali's Yoga Sutras with profession-based personalization
+            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed mb-4">
+              A comprehensive eight-step learning framework for Patanjali's Yoga Sutras 
+              with profession-based personalization
             </p>
 
-            {/* Decorative line */}
-            <div className="decorative-line w-32 mx-auto mt-8" />
+            {/* Conference badge */}
+            <div className="inline-flex items-center gap-2 tag-outline mt-4">
+              Demo for ISCLS 2026
+            </div>
           </motion.div>
 
           {/* Features grid */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16"
+            transition={{ delay: 0.4, duration: 0.5 }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16"
           >
             {features.map((feature, index) => (
-              <div
+              <motion.div
                 key={feature.title}
-                className="glass-card p-5 rounded-xl text-center"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 + index * 0.1 }}
+                className="card-surface p-5 text-center"
               >
-                <feature.icon className="w-8 h-8 text-primary mx-auto mb-3" />
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-3">
+                  <feature.icon className="w-5 h-5 text-primary" />
+                </div>
                 <h3 className="font-semibold text-foreground text-sm mb-1">
                   {feature.title}
                 </h3>
                 <p className="text-xs text-muted-foreground">
                   {feature.description}
                 </p>
-              </div>
+              </motion.div>
             ))}
           </motion.div>
 
@@ -101,8 +115,8 @@ export function HomeScreen() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="max-w-md mx-auto mb-12"
+              transition={{ delay: 0.6 }}
+              className="max-w-md mx-auto mt-12"
             >
               <ProgressTracker />
             </motion.div>
@@ -111,23 +125,30 @@ export function HomeScreen() {
       </section>
 
       {/* Profession Selection Section */}
-      <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto">
+      <section className="py-20 px-4">
+        <div className="max-w-5xl mx-auto">
           <ProfessionSelector />
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-8 px-4 border-t border-border/50">
-        <div className="max-w-6xl mx-auto text-center">
-          <p className="font-sanskrit text-lg text-primary/60 mb-2">
-            योगः कर्मसु कौशलम्
-          </p>
-          <p className="text-sm text-muted-foreground">
-            "Yoga is skill in action" — Demo for ISCLS 2026
-          </p>
-          <div className="mt-4 text-xs text-muted-foreground/60">
-            Built with 🙏 for Sanskrit computational linguistics
+      <footer className="py-12 px-4 border-t border-border/50 bg-muted/30">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="text-center md:text-left">
+              <p className="font-sanskrit text-lg text-primary/60 mb-1">
+                योगः कर्मसु कौशलम्
+              </p>
+              <p className="text-sm text-muted-foreground">
+                "Yoga is skill in action"
+              </p>
+            </div>
+            <div className="text-center md:text-right text-sm text-muted-foreground">
+              <p>8th International Sanskrit Computational Linguistics Symposium</p>
+              <p className="text-xs mt-1 text-muted-foreground/60">
+                Built for Sanskrit computational linguistics research
+              </p>
+            </div>
           </div>
         </div>
       </footer>

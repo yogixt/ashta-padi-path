@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle2, XCircle, ChevronRight, RotateCcw } from 'lucide-react';
+import { Check, X, ChevronRight, RotateCcw, Home } from 'lucide-react';
 import { quizQuestions } from '@/data/yogaSutrasData';
 import { useLearningStore } from '@/store/learningStore';
 import { Button } from '@/components/ui/button';
@@ -35,7 +35,6 @@ export function QuizComponent() {
     if (currentQuestion < totalQuestions - 1) {
       setCurrentQuestion(prev => prev + 1);
     } else {
-      // Calculate score
       const correctAnswers: Record<number, number> = {};
       quizQuestions.forEach(q => {
         correctAnswers[q.id] = q.correctAnswer;
@@ -60,49 +59,58 @@ export function QuizComponent() {
   if (isComplete && quizScore !== null) {
     const percentage = Math.round((quizScore / totalQuestions) * 100);
     const getMessage = () => {
-      if (percentage >= 90) return { text: "Excellent! शाबाश!", emoji: "🏆" };
-      if (percentage >= 70) return { text: "Great work! बहुत अच्छा!", emoji: "🌟" };
-      if (percentage >= 50) return { text: "Good effort! अच्छा प्रयास!", emoji: "👍" };
-      return { text: "Keep practicing! अभ्यास जारी रखें!", emoji: "📚" };
+      if (percentage >= 90) return { text: "Outstanding Performance", subtext: "शाबाश — You have mastered the material" };
+      if (percentage >= 70) return { text: "Great Progress", subtext: "बहुत अच्छा — Keep refining your understanding" };
+      if (percentage >= 50) return { text: "Solid Foundation", subtext: "अच्छा प्रयास — Continue your practice" };
+      return { text: "Keep Learning", subtext: "अभ्यास जारी रखें — Review and try again" };
     };
     const message = getMessage();
 
     return (
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
+        initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="w-full max-w-xl mx-auto px-4"
+        className="w-full max-w-lg mx-auto px-4"
       >
-        <div className="glass-card rounded-2xl p-8 md:p-10 text-center">
-          <span className="text-6xl mb-6 block">{message.emoji}</span>
+        <div className="card-elevated rounded-2xl p-8 md:p-10 text-center">
+          {/* Score circle */}
+          <div className="relative w-32 h-32 mx-auto mb-8">
+            <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+              <circle
+                cx="50"
+                cy="50"
+                r="42"
+                fill="none"
+                stroke="hsl(var(--border))"
+                strokeWidth="8"
+              />
+              <motion.circle
+                cx="50"
+                cy="50"
+                r="42"
+                fill="none"
+                stroke="hsl(var(--primary))"
+                strokeWidth="8"
+                strokeLinecap="round"
+                strokeDasharray={264}
+                initial={{ strokeDashoffset: 264 }}
+                animate={{ strokeDashoffset: 264 - (percentage / 100) * 264 }}
+                transition={{ duration: 1.2, ease: "easeOut" }}
+              />
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <span className="text-3xl font-bold text-foreground">{percentage}%</span>
+              <span className="text-xs text-muted-foreground">{quizScore}/{totalQuestions}</span>
+            </div>
+          </div>
           
-          <h2 className="text-3xl font-serif font-semibold text-foreground mb-2">
-            Quiz Complete!
+          <h2 className="text-2xl font-serif font-semibold text-foreground mb-2">
+            {message.text}
           </h2>
           
-          <p className="text-lg text-muted-foreground mb-8">
-            {message.text}
+          <p className="text-muted-foreground mb-8 font-sanskrit">
+            {message.subtext}
           </p>
-
-          {/* Score display */}
-          <div className="bg-primary/10 rounded-2xl p-6 mb-8">
-            <div className="text-5xl font-bold text-primary mb-2">
-              {quizScore}/{totalQuestions}
-            </div>
-            <p className="text-muted-foreground">
-              {percentage}% Correct
-            </p>
-          </div>
-
-          {/* Progress bar */}
-          <div className="w-full h-3 bg-muted rounded-full overflow-hidden mb-8">
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: `${percentage}%` }}
-              transition={{ duration: 1, ease: "easeOut" }}
-              className="h-full bg-gradient-saffron rounded-full"
-            />
-          </div>
 
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -118,8 +126,8 @@ export function QuizComponent() {
               onClick={handleBackToHome}
               className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
             >
+              <Home className="w-4 h-4" />
               Back to Home
-              <ChevronRight className="w-4 h-4" />
             </Button>
           </div>
         </div>
@@ -133,26 +141,26 @@ export function QuizComponent() {
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center mb-8"
+        className="text-center mb-10"
       >
-        <span className="inline-block px-3 py-1 bg-primary/10 rounded-full text-primary text-sm font-medium mb-3">
+        <span className="tag mb-4 inline-block">
           {question.type === 'vocabulary' ? 'Vocabulary' : 'Grammar'}
         </span>
-        <h2 className="text-2xl md:text-3xl font-serif font-semibold text-foreground">
+        <h2 className="text-3xl md:text-4xl font-serif font-semibold text-foreground mb-4">
           Practice Quiz
         </h2>
         
         {/* Progress */}
-        <div className="flex gap-1.5 mt-6 max-w-md mx-auto">
+        <div className="flex gap-1 max-w-md mx-auto">
           {quizQuestions.map((_, index) => (
             <div
               key={index}
-              className={`h-1.5 flex-1 rounded-full transition-colors duration-300 ${
+              className={`h-1 flex-1 rounded-full transition-all duration-300 ${
                 index < currentQuestion 
                   ? 'bg-primary' 
                   : index === currentQuestion 
-                    ? 'bg-primary/50' 
-                    : 'bg-muted'
+                    ? 'bg-primary/40' 
+                    : 'bg-border'
               }`}
             />
           ))}
@@ -167,10 +175,10 @@ export function QuizComponent() {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -30 }}
           transition={{ duration: 0.3 }}
-          className="glass-card rounded-2xl p-6 md:p-8"
+          className="card-elevated rounded-2xl p-6 md:p-8"
         >
           {/* Question number */}
-          <p className="text-sm text-muted-foreground mb-4">
+          <p className="text-sm text-muted-foreground mb-4 font-medium">
             Question {currentQuestion + 1} of {totalQuestions}
           </p>
 
@@ -185,15 +193,15 @@ export function QuizComponent() {
               const isSelected = selectedAnswer === index;
               const isCorrectOption = index === question.correctAnswer;
               
-              let optionClass = 'bg-muted/50 hover:bg-muted border-transparent';
+              let optionClass = 'bg-background hover:bg-muted/30 border-border';
               if (showFeedback) {
                 if (isCorrectOption) {
-                  optionClass = 'bg-sage/20 border-sage text-foreground';
+                  optionClass = 'bg-sage/10 border-sage/50';
                 } else if (isSelected && !isCorrectOption) {
-                  optionClass = 'bg-destructive/10 border-destructive text-foreground';
+                  optionClass = 'bg-destructive/5 border-destructive/30';
                 }
               } else if (isSelected) {
-                optionClass = 'bg-primary/10 border-primary text-foreground';
+                optionClass = 'bg-primary/5 border-primary/40';
               }
 
               return (
@@ -210,13 +218,17 @@ export function QuizComponent() {
                     ${showFeedback ? 'cursor-default' : 'cursor-pointer'}
                   `}
                 >
-                  <span className="font-medium">{option}</span>
+                  <span className="font-medium text-foreground">{option}</span>
                   
                   {showFeedback && isCorrectOption && (
-                    <CheckCircle2 className="w-5 h-5 text-sage shrink-0" />
+                    <div className="w-6 h-6 rounded-full bg-sage/20 flex items-center justify-center">
+                      <Check className="w-4 h-4 text-sage" />
+                    </div>
                   )}
                   {showFeedback && isSelected && !isCorrectOption && (
-                    <XCircle className="w-5 h-5 text-destructive shrink-0" />
+                    <div className="w-6 h-6 rounded-full bg-destructive/10 flex items-center justify-center">
+                      <X className="w-4 h-4 text-destructive" />
+                    </div>
                   )}
                 </motion.button>
               );
@@ -231,17 +243,17 @@ export function QuizComponent() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 className={`
-                  mt-6 p-4 rounded-lg border-l-4
+                  mt-6 p-4 rounded-xl border-l-2
                   ${isCorrect 
-                    ? 'bg-sage/10 border-sage' 
-                    : 'bg-destructive/5 border-destructive'
+                    ? 'bg-sage/5 border-sage' 
+                    : 'bg-muted/50 border-muted-foreground/30'
                   }
                 `}
               >
-                <p className="font-semibold text-foreground mb-1">
-                  {isCorrect ? '✓ Correct!' : '✗ Not quite'}
+                <p className="font-semibold text-foreground mb-1 text-sm">
+                  {isCorrect ? 'Correct' : 'Incorrect'}
                 </p>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-muted-foreground leading-relaxed">
                   {question.explanation}
                 </p>
               </motion.div>
@@ -259,7 +271,7 @@ export function QuizComponent() {
                 onClick={handleNext}
                 className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
               >
-                {currentQuestion < totalQuestions - 1 ? 'Next Question' : 'See Results'}
+                {currentQuestion < totalQuestions - 1 ? 'Next Question' : 'View Results'}
                 <ChevronRight className="w-4 h-4" />
               </Button>
             </motion.div>
