@@ -25,16 +25,35 @@ export function LearningScreen() {
 
   return (
     <div className="min-h-screen bg-background relative">
-      {/* Background decoration */}
+      {/* Background decorations */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute bottom-0 left-0 w-64 h-64 opacity-5">
-          <img src={mandalaImage} alt="" className="w-full h-full object-cover" />
+        <div className="absolute bottom-0 left-0 w-72 h-72 opacity-[0.04]">
+          <img src={mandalaImage} alt="" className="w-full h-full object-cover rounded-full" />
         </div>
+        <div className="absolute top-20 right-0 w-56 h-56 opacity-[0.03]">
+          <img src={mandalaImage} alt="" className="w-full h-full object-cover rounded-full" />
+        </div>
+        {/* Subtle pattern */}
+        <div className="absolute inset-0 section-pattern opacity-20" />
       </div>
       
       <Header showBack backTo="vocabulary" />
       
       <main className="max-w-7xl mx-auto px-4 py-8 md:py-12 relative z-10">
+        {/* Section header */}
+        <div className="text-center mb-8">
+          <span className="tag mb-3 inline-block">Step 3 of 8</span>
+          <h2 className="text-2xl md:text-3xl font-serif font-bold text-foreground">
+            Study the Sutras
+          </h2>
+          {/* Decorative line */}
+          <div className="flex items-center justify-center gap-3 mt-4">
+            <div className="h-px w-8 bg-gradient-to-r from-transparent to-primary/50" />
+            <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+            <div className="h-px w-8 bg-gradient-to-l from-transparent to-primary/50" />
+          </div>
+        </div>
+        
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Main content */}
           <SutraPanel />
@@ -58,8 +77,8 @@ export function LearningScreen() {
         {/* Keyboard hint */}
         <div className="hidden md:block text-center mt-10">
           <p className="text-xs text-muted-foreground">
-            Use <kbd className="px-1.5 py-0.5 bg-muted border border-border rounded text-[10px] font-mono mx-1">←</kbd> 
-            <kbd className="px-1.5 py-0.5 bg-muted border border-border rounded text-[10px] font-mono mx-1">→</kbd> arrow keys to navigate
+            Use <kbd className="px-2 py-1 bg-card border-2 border-border rounded text-[10px] font-mono mx-1 shadow-sm">←</kbd> 
+            <kbd className="px-2 py-1 bg-card border-2 border-border rounded text-[10px] font-mono mx-1 shadow-sm">→</kbd> arrow keys to navigate
           </p>
         </div>
       </main>

@@ -1,6 +1,6 @@
 import { useLearningStore } from '@/store/learningStore';
 import { vocabulary, sutras } from '@/data/yogaSutrasData';
-import { BookOpen, GraduationCap } from 'lucide-react';
+import { BookOpen, GraduationCap, Award } from 'lucide-react';
 
 export function ProgressTracker() {
   const { vocabCompleted, sutrasCompleted } = useLearningStore();
@@ -23,12 +23,34 @@ export function ProgressTracker() {
     }
   ];
 
+  const totalProgress = Math.round(
+    ((vocabProgress / vocabulary.length) * 50 + (sutraProgress / sutras.length) * 50)
+  );
+
   return (
-    <div className="card-elevated rounded-xl p-5">
-      <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
-        Your Progress
-      </h4>
+    <div className="card-ornate rounded-xl p-6 relative overflow-hidden">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center gap-2">
+          <Award className="w-4 h-4 text-accent" />
+          <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+            Your Progress
+          </h4>
+        </div>
+        <span className="text-sm font-bold text-primary">{totalProgress}%</span>
+      </div>
       
+      {/* Overall progress bar */}
+      <div className="mb-5">
+        <div className="progress-traditional">
+          <div 
+            className="fill transition-all duration-700 ease-out"
+            style={{ width: `${totalProgress}%` }}
+          />
+        </div>
+      </div>
+      
+      {/* Individual stats */}
       <div className="space-y-4">
         {stats.map((stat) => {
           const percentage = Math.round((stat.value / stat.total) * 100);
@@ -38,17 +60,22 @@ export function ProgressTracker() {
             <div key={stat.label}>
               <div className="flex items-center justify-between text-sm mb-2">
                 <div className="flex items-center gap-2">
-                  <Icon className="w-4 h-4 text-primary" />
-                  <span className="text-muted-foreground">{stat.label}</span>
+                  <div className="w-7 h-7 rounded-md bg-primary/10 flex items-center justify-center">
+                    <Icon className="w-3.5 h-3.5 text-primary" />
+                  </div>
+                  <span className="text-muted-foreground font-medium">{stat.label}</span>
                 </div>
-                <span className="font-medium text-foreground">
+                <span className="font-semibold text-foreground">
                   {stat.value}/{stat.total}
                 </span>
               </div>
-              <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+              <div className="h-1.5 bg-muted rounded-full overflow-hidden border border-border/50">
                 <div
-                  className="h-full bg-primary rounded-full transition-all duration-500"
-                  style={{ width: `${percentage}%` }}
+                  className="h-full rounded-full transition-all duration-500"
+                  style={{ 
+                    width: `${percentage}%`,
+                    background: 'linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)))'
+                  }}
                 />
               </div>
             </div>
