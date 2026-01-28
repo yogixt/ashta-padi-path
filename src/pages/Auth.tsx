@@ -8,6 +8,8 @@ import { Label } from '@/components/ui/label';
 import { BookOpen, GraduationCap, ArrowLeft, Mail, Lock, User, Loader2 } from 'lucide-react';
 import { z } from 'zod';
 import { useToast } from '@/hooks/use-toast';
+import mandalaDecorative from '@/assets/mandala-decorative.png';
+import mandalaCorner from '@/assets/mandala-corner.png';
 
 const signUpSchema = z.object({
   fullName: z.string().min(2, 'Name must be at least 2 characters').max(100),
@@ -134,11 +136,42 @@ export default function AuthPage() {
   const showRoleSelection = mode === 'signup' && !selectedRole;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center p-4">
-      {/* Background decoration */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-amber-100/40 via-orange-50/20 to-transparent rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-tr from-blue-100/30 via-indigo-50/20 to-transparent rounded-full blur-3xl" />
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50/30 to-amber-100/50 flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Mandala background decorations */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        {/* Large center mandala - very subtle */}
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.8, rotate: 0 }}
+          animate={{ opacity: 0.06, scale: 1, rotate: 360 }}
+          transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px]"
+        >
+          <img src={mandalaDecorative} alt="" className="w-full h-full object-contain" />
+        </motion.div>
+        
+        {/* Top-right corner mandala */}
+        <motion.div 
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 0.15, x: 0 }}
+          transition={{ duration: 1 }}
+          className="absolute -top-20 -right-20 w-64 h-64"
+        >
+          <img src={mandalaCorner} alt="" className="w-full h-full object-contain" />
+        </motion.div>
+        
+        {/* Bottom-left corner mandala */}
+        <motion.div 
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 0.15, x: 0 }}
+          transition={{ duration: 1, delay: 0.2 }}
+          className="absolute -bottom-20 -left-20 w-64 h-64 rotate-180"
+        >
+          <img src={mandalaCorner} alt="" className="w-full h-full object-contain" />
+        </motion.div>
+        
+        {/* Decorative gradient overlays */}
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-amber-200/20 via-orange-100/10 to-transparent rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-tr from-amber-200/20 via-orange-100/10 to-transparent rounded-full blur-3xl" />
       </div>
 
       <motion.div

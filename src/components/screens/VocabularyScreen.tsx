@@ -1,6 +1,7 @@
+import { motion } from 'framer-motion';
 import { Header } from '@/components/Header';
 import { VocabularyCards } from '@/components/VocabularyCards';
-import mandalaImage from '@/assets/mandala-pattern.jpg';
+import mandalaDecorative from '@/assets/mandala-decorative.png';
 
 interface VocabularyScreenProps {
   onOpenChatWithQuery?: (query: string) => void;
@@ -9,16 +10,26 @@ interface VocabularyScreenProps {
 export function VocabularyScreen({ onOpenChatWithQuery }: VocabularyScreenProps) {
   return (
     <div className="min-h-screen bg-background relative">
-      {/* Background decorations */}
+      {/* Background decorations with mandala */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute -top-32 -right-32 w-80 h-80 opacity-[0.04]">
-          <img src={mandalaImage} alt="" className="w-full h-full object-cover rounded-full" />
-        </div>
-        <div className="absolute -bottom-32 -left-32 w-80 h-80 opacity-[0.04]">
-          <img src={mandalaImage} alt="" className="w-full h-full object-cover rounded-full" />
-        </div>
+        <motion.div 
+          initial={{ opacity: 0, rotate: 0 }}
+          animate={{ opacity: 0.05, rotate: 360 }}
+          transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
+          className="absolute -top-32 -right-32 w-96 h-96"
+        >
+          <img src={mandalaDecorative} alt="" className="w-full h-full object-contain" />
+        </motion.div>
+        <motion.div 
+          initial={{ opacity: 0, rotate: 0 }}
+          animate={{ opacity: 0.04, rotate: -360 }}
+          transition={{ duration: 150, repeat: Infinity, ease: "linear" }}
+          className="absolute -bottom-32 -left-32 w-96 h-96"
+        >
+          <img src={mandalaDecorative} alt="" className="w-full h-full object-contain" />
+        </motion.div>
         {/* Subtle pattern overlay */}
-        <div className="absolute inset-0 section-pattern opacity-30" />
+        <div className="absolute inset-0 section-pattern opacity-20" />
       </div>
       
       <Header showBack backTo="home" />

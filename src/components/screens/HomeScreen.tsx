@@ -7,6 +7,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { BookOpen, GraduationCap, Sparkles, Users, ArrowRight, Star, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import heroImage from '@/assets/hero-patanjali.jpg';
+import mandalaDecorative from '@/assets/mandala-decorative.png';
+import ashtaPadiFramework from '@/assets/ashta-padi-framework.jpg';
 
 export function HomeScreen() {
   const { vocabCompleted, sutrasCompleted } = useLearningStore();
@@ -50,9 +52,28 @@ export function HomeScreen() {
           <img 
             src={heroImage} 
             alt="Ancient Sanskrit Manuscript" 
-            className="w-full h-full object-cover opacity-40" 
+            className="w-full h-full object-cover opacity-30" 
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-background via-background/90 to-background" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background" />
+          
+          {/* Mandala decorations */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 0.08, scale: 1, rotate: 360 }}
+            transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
+            className="absolute top-1/4 right-0 w-[500px] h-[500px] translate-x-1/3"
+          >
+            <img src={mandalaDecorative} alt="" className="w-full h-full object-contain" />
+          </motion.div>
+          
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 0.06, scale: 1, rotate: -360 }}
+            transition={{ duration: 150, repeat: Infinity, ease: "linear" }}
+            className="absolute bottom-0 left-0 w-[400px] h-[400px] -translate-x-1/3 translate-y-1/4"
+          >
+            <img src={mandalaDecorative} alt="" className="w-full h-full object-contain" />
+          </motion.div>
         </div>
 
         {/* Navigation */}
@@ -204,6 +225,52 @@ export function HomeScreen() {
         </div>
       </section>
 
+      {/* 8-Step Framework Section */}
+      <section className="py-20 px-4 bg-gradient-to-b from-muted/20 to-background relative overflow-hidden">
+        {/* Subtle mandala background */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 0.04 }}
+          viewport={{ once: true }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px]"
+        >
+          <img src={mandalaDecorative} alt="" className="w-full h-full object-contain" />
+        </motion.div>
+        
+        <div className="max-w-5xl mx-auto relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-10"
+          >
+            <span className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">
+              अष्टपदी
+            </span>
+            <h3 className="text-3xl md:text-4xl font-serif font-bold text-foreground">
+              The 8-Step Learning Framework
+            </h3>
+            <p className="text-muted-foreground mt-3 max-w-2xl mx-auto">
+              A university-integrated progression from profession selection to advanced scholarship
+            </p>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="relative rounded-2xl overflow-hidden shadow-2xl border border-border"
+          >
+            <img 
+              src={ashtaPadiFramework} 
+              alt="Ashta Padi 8-Step Learning Framework" 
+              className="w-full h-auto"
+            />
+          </motion.div>
+        </div>
+      </section>
+
       {/* Progress Section */}
       {hasProgress && (
         <section className="py-16 px-4">
@@ -220,8 +287,16 @@ export function HomeScreen() {
       )}
 
       {/* Profession Selection Section */}
-      <section className="py-20 px-4 section-pattern">
-        <div className="max-w-5xl mx-auto">
+      <section className="py-20 px-4 section-pattern relative overflow-hidden">
+        {/* Corner mandalas */}
+        <div className="absolute -top-32 -right-32 w-80 h-80 opacity-[0.06]">
+          <img src={mandalaDecorative} alt="" className="w-full h-full object-contain" />
+        </div>
+        <div className="absolute -bottom-32 -left-32 w-80 h-80 opacity-[0.06]">
+          <img src={mandalaDecorative} alt="" className="w-full h-full object-contain" />
+        </div>
+        
+        <div className="max-w-5xl mx-auto relative z-10">
           <ProfessionSelector />
         </div>
       </section>
