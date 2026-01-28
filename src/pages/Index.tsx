@@ -3,6 +3,7 @@ import { HomeScreen } from '@/components/screens/HomeScreen';
 import { VocabularyScreen } from '@/components/screens/VocabularyScreen';
 import { LearningScreen } from '@/components/screens/LearningScreen';
 import { QuizScreen } from '@/components/screens/QuizScreen';
+import { SanskritChatbot } from '@/components/SanskritChatbot';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const Index = () => {
@@ -26,17 +27,22 @@ const Index = () => {
   };
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={currentScreen}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        {renderScreen()}
-      </motion.div>
-    </AnimatePresence>
+    <>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentScreen}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          {renderScreen()}
+        </motion.div>
+      </AnimatePresence>
+      
+      {/* Floating Chatbot */}
+      <SanskritChatbot />
+    </>
   );
 };
 
