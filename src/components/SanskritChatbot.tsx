@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, X, Send, Loader2, Bot, User } from 'lucide-react';
+import { MessageCircle, X, Send, Loader2, Bot, User, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import ReactMarkdown from 'react-markdown';
@@ -180,6 +180,15 @@ export function SanskritChatbot({ initialQuery, isOpenExternal, onClose }: Sansk
     setIsOpen(!isOpen);
   };
 
+  const clearHistory = () => {
+    setMessages([
+      {
+        role: 'assistant',
+        content: 'नमस्ते! I am your Sanskrit learning guide. Ask me anything about the Yoga Sutras, Sanskrit grammar, vocabulary, or philosophy. How can I help you today?'
+      }
+    ]);
+  };
+
   return (
     <>
       {/* Chat toggle button */}
@@ -202,16 +211,26 @@ export function SanskritChatbot({ initialQuery, isOpenExternal, onClose }: Sansk
             transition={{ duration: 0.2 }}
             className="fixed bottom-24 right-6 z-50 w-[380px] max-w-[calc(100vw-3rem)] h-[500px] max-h-[70vh] bg-card border border-border rounded-2xl shadow-xl flex flex-col overflow-hidden"
           >
-            {/* Header */}
             <div className="p-4 border-b border-border bg-primary/5">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                  <span className="font-sanskrit text-primary text-lg">ॐ</span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                    <span className="font-sanskrit text-primary text-lg">ॐ</span>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground">Sanskrit Guide</h3>
+                    <p className="text-xs text-muted-foreground">Ask about Yoga Sutras & Sanskrit</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-semibold text-foreground">Sanskrit Guide</h3>
-                  <p className="text-xs text-muted-foreground">Ask about Yoga Sutras & Sanskrit</p>
-                </div>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={clearHistory}
+                  className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                  title="Clear chat history"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </Button>
               </div>
             </div>
 
