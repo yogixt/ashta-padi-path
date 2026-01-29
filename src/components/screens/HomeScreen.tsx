@@ -144,16 +144,14 @@ export function HomeScreen() {
 
             {/* CTA Buttons */}
             <div className="flex flex-wrap items-center gap-4">
-              {!user && (
-                <Button
-                  onClick={() => navigate('/auth')}
-                  size="lg"
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/25 h-12 px-8"
-                >
-                  Start Learning
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-              )}
+              <Button
+                onClick={() => document.getElementById('profession-selector')?.scrollIntoView({ behavior: 'smooth' })}
+                size="lg"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/25 h-12 px-8"
+              >
+                Start Learning
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
               <Button
                 variant="outline"
                 size="lg"
@@ -332,7 +330,7 @@ export function HomeScreen() {
       )}
 
       {/* Profession Selection Section */}
-      <section className="py-20 px-4 section-pattern relative overflow-hidden">
+      <section id="profession-selector" className="py-20 px-4 section-pattern relative overflow-hidden">
         {/* Corner mandalas */}
         <div className="absolute -top-32 -right-32 w-80 h-80 opacity-[0.06]">
           <img src={mandalaElegant} alt="" className="w-full h-full object-contain" />

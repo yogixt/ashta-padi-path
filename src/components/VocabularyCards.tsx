@@ -117,6 +117,8 @@ export function VocabularyCards({ onOpenChatWithQuery }: VocabularyCardsProps) {
     nextVocab, 
     prevVocab, 
     completeVocab,
+    completeCurrentVocabTerm,
+    completedVocabTerms,
     setScreen 
   } = useLearningStore();
 
@@ -130,8 +132,18 @@ export function VocabularyCards({ onOpenChatWithQuery }: VocabularyCardsProps) {
   const currentTerm = vocabulary[currentVocabIndex];
   const isFirst = currentVocabIndex === 0;
   const isLast = currentVocabIndex === vocabulary.length - 1;
+  const isCurrentTermCompleted = completedVocabTerms.has(currentVocabIndex);
+  const allVocabCompleted = completedVocabTerms.size >= vocabulary.length;
+
+  const handleMarkComplete = () => {
+    completeCurrentVocabTerm();
+    if (!isLast) {
+      nextVocab();
+    }
+  };
 
   const handleStartLearning = () => {
+    if (!allVocabCompleted) return;
     completeVocab();
     setScreen('learning');
   };
@@ -253,23 +265,62 @@ export function VocabularyCards({ onOpenChatWithQuery }: VocabularyCardsProps) {
           </div>
 
           {/* Navigation Buttons */}
-          <div className="px-6 py-5 bg-muted/30 border-t-2 border-border flex gap-4">
-            <Button
-              variant="outline"
-              onClick={prevVocab}
-              disabled={isFirst}
-              className="flex-1 h-14 text-base gap-2 rounded-xl border-2 font-semibold"
-            >
-              <ChevronLeft className="w-5 h-5" />
-              Previous
-            </Button>
+          <div className="px-6 py-5 bg-muted/30 border-t-2 border-border space-y-3">
+            {/* Mark Complete / Next Term Button - Always at top */}
+            <div className="flex gap-4">
+              <Button
+                variant="outline"
+                onClick={prevVocab}
+                disabled={isFirst}
+                className="flex-1 h-14 text-base gap-2 rounded-xl border-2 font-semibold"
+              >
+                <ChevronLeft className="w-5 h-5" />
+                Previous
+              </Button>
 
+              {!isCurrentTermCompleted ? (
+                <Button
+                  onClick={handleMarkComplete}
+                  className="flex-1 h-14 text-base gap-2 rounded-xl btn-primary"
+                >
+                  {isLast ? 'Complete Term' : 'Complete & Next'}
+                  <ArrowRight className="w-5 h-5" />
+                </Button>
+              ) : (
+                <Button
+                  onClick={nextVocab}
+                  disabled={isLast}
+                  variant="outline"
+                  className="flex-1 h-14 text-base gap-2 rounded-xl border-2 font-semibold"
+                >
+                  Next Term
+                  <ChevronRight className="w-5 h-5" />
+                </Button>
+              )}
+            </div>
+
+            {/* Start Learning Sutras Button - Only enabled when all vocab completed */}
             <Button
               onClick={handleStartLearning}
-              className="flex-1 h-14 text-base gap-2 rounded-xl btn-primary"
+              disabled={!allVocabCompleted}
+              className={cn(
+                "w-full h-14 text-base gap-2 rounded-xl",
+                allVocabCompleted 
+                  ? "btn-primary" 
+                  : "bg-muted text-muted-foreground cursor-not-allowed"
+              )}
             >
-              Start Learning Sutras
-              <ArrowRight className="w-5 h-5" />
+              {allVocabCompleted ? (
+                <>
+                  Start Learning Sutras
+                  <ArrowRight className="w-5 h-5" />
+                </>
+              ) : (
+                <>
+                  Complete All Terms First ({completedVocabTerms.size}/{vocabulary.length})
+                  <BookOpen className="w-5 h-5" />
+                </>
+              )}
             </Button>
           </div>
 
@@ -281,13 +332,13 @@ export function VocabularyCards({ onOpenChatWithQuery }: VocabularyCardsProps) {
                 onClick={() => goToIndex(index)}
                 className={cn(
                   "w-3 h-3 rounded-full transition-all duration-300 border-2",
-                  index === currentVocabIndex 
-                    ? "bg-primary border-primary scale-110 shadow-md" 
-                    : index < currentVocabIndex 
-                      ? "bg-primary/40 border-primary/40" 
+                  completedVocabTerms.has(index)
+                    ? "bg-primary border-primary"
+                    : index === currentVocabIndex 
+                      ? "bg-primary/40 border-primary/60 scale-110" 
                       : "bg-muted border-border hover:border-primary/40"
                 )}
-                aria-label={`Go to term ${index + 1}`}
+                aria-label={`Go to term ${index + 1}${completedVocabTerms.has(index) ? ' (completed)' : ''}`}
               />
             ))}
           </div>

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export type Screen = 'home' | 'vocabulary' | 'learning' | 'quiz' | 'results' | 'analytics' | 'guru-dashboard' | 'shishya-dashboard' | 'teacher-profile' | 'student-profile' | 'browse-teachers';
+export type Screen = 'home' | 'vocabulary' | 'learning' | 'quiz' | 'results' | 'analytics' | 'guru-dashboard' | 'shishya-dashboard' | 'teacher-profile' | 'student-profile' | 'browse-teachers' | 'mentor-selection';
 
 interface LearningState {
   // Navigation
@@ -11,13 +11,16 @@ interface LearningState {
   selectedProfession: string | null;
   setSelectedProfession: (profession: string) => void;
   
-  // Vocabulary progress
+  // Vocabulary progress - track each term completion
   currentVocabIndex: number;
   vocabCompleted: boolean;
+  completedVocabTerms: Set<number>; // Track which terms have been explicitly completed
   nextVocab: () => void;
   prevVocab: () => void;
   completeVocab: () => void;
+  completeCurrentVocabTerm: () => void; // Mark current term as completed
   resetVocab: () => void;
+  isAllVocabCompleted: () => boolean; // Check if all terms are completed
   
   // Sutra progress
   currentSutraIndex: number;
@@ -32,6 +35,7 @@ interface LearningState {
   setQuizAnswer: (questionId: number, answer: number) => void;
   calculateScore: (correctAnswers: Record<number, number>) => void;
   resetQuiz: () => void;
+  hasPassedQuiz: () => boolean; // Check if score >= 70%
   
   // Grammar sidebar
   expandedGrammar: string | null;
@@ -40,6 +44,8 @@ interface LearningState {
   // Reset all
   resetProgress: () => void;
 }
+
+const TOTAL_VOCAB_TERMS = 6; // Number of vocabulary terms
 
 export const useLearningStore = create<LearningState>((set, get) => ({
   // Navigation
@@ -53,14 +59,28 @@ export const useLearningStore = create<LearningState>((set, get) => ({
   // Vocabulary
   currentVocabIndex: 0,
   vocabCompleted: false,
+  completedVocabTerms: new Set<number>(),
   nextVocab: () => set((state) => ({ 
-    currentVocabIndex: Math.min(state.currentVocabIndex + 1, 5) 
+    currentVocabIndex: Math.min(state.currentVocabIndex + 1, TOTAL_VOCAB_TERMS - 1) 
   })),
   prevVocab: () => set((state) => ({ 
     currentVocabIndex: Math.max(state.currentVocabIndex - 1, 0) 
   })),
+  completeCurrentVocabTerm: () => set((state) => {
+    const newSet = new Set(state.completedVocabTerms);
+    newSet.add(state.currentVocabIndex);
+    const allCompleted = newSet.size >= TOTAL_VOCAB_TERMS;
+    return { 
+      completedVocabTerms: newSet,
+      vocabCompleted: allCompleted
+    };
+  }),
   completeVocab: () => set({ vocabCompleted: true }),
-  resetVocab: () => set({ currentVocabIndex: 0, vocabCompleted: false }),
+  resetVocab: () => set({ currentVocabIndex: 0, vocabCompleted: false, completedVocabTerms: new Set() }),
+  isAllVocabCompleted: () => {
+    const state = get();
+    return state.completedVocabTerms.size >= TOTAL_VOCAB_TERMS;
+  },
   
   // Sutras
   currentSutraIndex: 0,
@@ -96,6 +116,13 @@ export const useLearningStore = create<LearningState>((set, get) => ({
     set({ quizScore: score });
   },
   resetQuiz: () => set({ quizAnswers: {}, quizScore: null }),
+  hasPassedQuiz: () => {
+    const state = get();
+    if (state.quizScore === null) return false;
+    const totalQuestions = Object.keys(state.quizAnswers).length || 5; // Default to 5 questions
+    const percentage = (state.quizScore / totalQuestions) * 100;
+    return percentage >= 70;
+  },
   
   // Grammar
   expandedGrammar: null,
@@ -109,6 +136,7 @@ export const useLearningStore = create<LearningState>((set, get) => ({
     selectedProfession: null,
     currentVocabIndex: 0,
     vocabCompleted: false,
+    completedVocabTerms: new Set(),
     currentSutraIndex: 0,
     sutrasCompleted: 0,
     quizAnswers: {},
