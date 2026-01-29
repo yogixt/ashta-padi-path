@@ -5,6 +5,22 @@ import { professions } from '@/data/yogaSutrasData';
 import { useLearningStore } from '@/store/learningStore';
 import { useAuth } from '@/contexts/AuthContext';
 
+// Import mandala images for each profession
+import mandalaYoga from '@/assets/mandala-yoga.png';
+import mandalaEconomist from '@/assets/mandala-economist.png';
+import mandalaPhilosopher from '@/assets/mandala-philosopher.png';
+import mandalaPsychologist from '@/assets/mandala-psychologist.png';
+import mandalaWellness from '@/assets/mandala-wellness.png';
+
+// Map profession IDs to their mandala images
+const professionMandalas: Record<string, string> = {
+  yoga: mandalaYoga,
+  economist: mandalaEconomist,
+  philosopher: mandalaPhilosopher,
+  psychologist: mandalaPsychologist,
+  wellness: mandalaWellness,
+};
+
 export function ProfessionSelector() {
   const { setSelectedProfession, setScreen } = useLearningStore();
   const { user } = useAuth();
@@ -75,18 +91,50 @@ export function ProfessionSelector() {
               }
             `}
           >
+            {/* Mandala background decoration */}
+            <div className="absolute -right-8 -top-8 w-36 h-36 pointer-events-none">
+              <motion.img 
+                src={professionMandalas[profession.id]} 
+                alt=""
+                className={`w-full h-full object-contain transition-all duration-500 ${
+                  profession.available 
+                    ? 'opacity-20 group-hover:opacity-35 group-hover:scale-110 group-hover:rotate-12' 
+                    : 'opacity-10 grayscale'
+                }`}
+                initial={{ rotate: 0 }}
+                animate={{ rotate: profession.available ? 0 : 0 }}
+              />
+            </div>
+            
+            {/* Secondary mandala glow effect for available cards */}
+            {profession.available && (
+              <div className="absolute -right-12 -bottom-12 w-32 h-32 pointer-events-none opacity-0 group-hover:opacity-15 transition-opacity duration-500">
+                <img 
+                  src={professionMandalas[profession.id]} 
+                  alt=""
+                  className="w-full h-full object-contain blur-sm"
+                />
+              </div>
+            )}
+            
             {/* Top accent bar */}
             {profession.available && (
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-primary opacity-0 group-hover:opacity-100 transition-opacity" />
             )}
             
             <div className="p-6 relative z-10">
-              {/* Header */}
+              {/* Header with mandala icon */}
               <div className="flex items-start justify-between mb-4">
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/15 to-accent/10 flex items-center justify-center border border-primary/20 group-hover:from-primary/25 group-hover:to-accent/15 transition-colors">
-                  <span className="font-sanskrit text-2xl text-primary font-bold">
-                    {profession.nameHindi.charAt(0)}
-                  </span>
+                <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-primary/10 to-accent/5 flex items-center justify-center border border-primary/20 group-hover:from-primary/20 group-hover:to-accent/10 transition-colors overflow-hidden">
+                  <img 
+                    src={professionMandalas[profession.id]} 
+                    alt={`${profession.name} mandala`}
+                    className={`w-12 h-12 object-contain transition-transform duration-300 ${
+                      profession.available 
+                        ? 'group-hover:scale-110' 
+                        : 'grayscale opacity-60'
+                    }`}
+                  />
                 </div>
                 {!profession.available && (
                   <span className="flex items-center gap-1.5 text-xs text-muted-foreground bg-muted px-3 py-1.5 rounded-full border border-border">
