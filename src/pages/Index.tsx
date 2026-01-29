@@ -17,11 +17,20 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 
 const Index = () => {
-  const { currentScreen } = useLearningStore();
+  const { currentScreen, setScreen, selectedProfession } = useLearningStore();
   const { user, loading, role } = useAuth();
   const navigate = useNavigate();
   const [chatQuery, setChatQuery] = useState<string | undefined>();
   const [isChatOpen, setIsChatOpen] = useState(false);
+
+  // Handle post-auth redirect to vocabulary
+  useEffect(() => {
+    const redirect = sessionStorage.getItem('postAuthRedirect');
+    if (redirect === 'vocabulary' && user && selectedProfession) {
+      sessionStorage.removeItem('postAuthRedirect');
+      setScreen('vocabulary');
+    }
+  }, [user, selectedProfession, setScreen]);
 
   const handleOpenChatWithQuery = (query: string) => {
     setChatQuery(query);

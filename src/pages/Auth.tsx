@@ -34,9 +34,21 @@ export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  // Handle post-auth redirect
+  const handlePostAuthRedirect = () => {
+    const redirect = sessionStorage.getItem('postAuthRedirect');
+    if (redirect === 'vocabulary') {
+      sessionStorage.removeItem('postAuthRedirect');
+      // Navigate to home page, which will show the vocabulary screen based on store state
+      navigate('/');
+    } else {
+      navigate('/');
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,7 +92,7 @@ export default function AuthPage() {
             title: 'Welcome!',
             description: 'Your account has been created successfully.',
           });
-          navigate('/');
+          handlePostAuthRedirect();
         }
       } else {
         const result = signInSchema.safeParse({ email, password });
@@ -120,7 +132,7 @@ export default function AuthPage() {
             });
           }
         } else {
-          navigate('/');
+          handlePostAuthRedirect();
         }
       }
     } catch (err) {
