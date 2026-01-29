@@ -1,12 +1,34 @@
 import { motion } from 'framer-motion';
 import { Header } from '@/components/Header';
-import { Users, BookOpen, BarChart3, Calendar, Clock, Award, TrendingUp, FileText } from 'lucide-react';
+import { Users, BookOpen, BarChart3, Calendar, Clock, Award, TrendingUp, FileText, User, Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLearningStore } from '@/store/learningStore';
+import { useEffect, useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
+import { Badge } from '@/components/ui/badge';
 import mandalaElegant from '@/assets/mandala-elegant.png';
 
 export function GuruDashboard() {
   const { setScreen } = useLearningStore();
+  const { user } = useAuth();
+  const [pendingRequests, setPendingRequests] = useState(0);
+
+  useEffect(() => {
+    if (user) {
+      fetchPendingRequests();
+    }
+  }, [user]);
+
+  const fetchPendingRequests = async () => {
+    if (!user) return;
+    const { count } = await supabase
+      .from('connection_requests')
+      .select('*', { count: 'exact', head: true })
+      .eq('teacher_id', user.id)
+      .eq('status', 'pending');
+    setPendingRequests(count || 0);
+  };
 
   const stats = [
     { label: 'Active Śiṣyas', value: '24', icon: Users, color: 'from-blue-500 to-indigo-600' },
@@ -23,9 +45,9 @@ export function GuruDashboard() {
   ];
 
   const quickActions = [
-    { label: 'View All Śiṣyas', icon: Users, action: () => {} },
+    { label: 'My Profile', icon: User, action: () => setScreen('teacher-profile') },
+    { label: 'Student Requests', icon: Users, action: () => setScreen('teacher-profile'), badge: pendingRequests },
     { label: 'Create Assessment', icon: FileText, action: () => {} },
-    { label: 'Schedule Session', icon: Calendar, action: () => {} },
     { label: 'View Analytics', icon: BarChart3, action: () => setScreen('analytics') },
   ];
 
@@ -123,11 +145,14 @@ export function GuruDashboard() {
                   <Button
                     key={index}
                     variant="outline"
-                    className="w-full justify-start gap-3 h-12"
+                    className="w-full justify-start gap-3 h-12 relative"
                     onClick={action.action}
                   >
                     <action.icon className="w-5 h-5" />
                     {action.label}
+                    {action.badge && action.badge > 0 && (
+                      <Badge className="absolute right-3 bg-primary">{action.badge}</Badge>
+                    )}
                   </Button>
                 ))}
               </div>

@@ -97,7 +97,7 @@ export function HomeScreen() {
           </div>
           
           <div className="flex items-center gap-3">
-            {user ? (
+            {user && (
               <Button
                 onClick={() => setScreen(role === 'teacher' ? 'guru-dashboard' : 'shishya-dashboard')}
                 className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/25 gap-2"
@@ -106,14 +106,6 @@ export function HomeScreen() {
                   {role === 'teacher' ? 'गु' : 'शि'}
                 </div>
                 {role === 'teacher' ? 'Guru Dashboard' : 'My Dashboard'}
-              </Button>
-            ) : (
-              <Button
-                onClick={() => navigate('/auth')}
-                className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/25"
-              >
-                Get Started
-                <ChevronRight className="w-4 h-4 ml-1" />
               </Button>
             )}
           </div>
