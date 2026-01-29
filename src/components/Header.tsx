@@ -28,8 +28,14 @@ export function Header({ showBack = false, backTo = 'home' }: HeaderProps) {
   };
 
   const handleHome = () => {
-    resetProgress();
-    setScreen('home');
+    // Navigate to role-specific dashboard instead of landing page
+    if (role === 'teacher') {
+      setScreen('guru-dashboard');
+    } else if (role === 'student') {
+      setScreen('shishya-dashboard');
+    } else {
+      setScreen('home');
+    }
   };
 
   const handleSignOut = async () => {
