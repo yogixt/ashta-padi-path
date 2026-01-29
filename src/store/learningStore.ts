@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export type Screen = 'home' | 'modules' | 'vocabulary' | 'learning' | 'quiz' | 'results' | 'analytics' | 'guru-dashboard' | 'shishya-dashboard' | 'teacher-profile' | 'student-profile' | 'browse-teachers' | 'mentor-selection';
+export type Screen = 'home' | 'modules' | 'vocabulary' | 'learning' | 'quiz' | 'results' | 'analytics' | 'guru-dashboard' | 'shishya-dashboard' | 'teacher-profile' | 'student-profile' | 'browse-teachers' | 'mentor-selection' | 'assessments';
 
 interface LearningState {
   // Navigation
