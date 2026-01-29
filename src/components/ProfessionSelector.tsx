@@ -23,8 +23,13 @@ const professionMandalas: Record<string, string> = {
 
 export function ProfessionSelector() {
   const { setSelectedProfession, setScreen } = useLearningStore();
-  const { user } = useAuth();
+  const { user, role } = useAuth();
   const navigate = useNavigate();
+
+  // Teachers shouldn't use the student learning path
+  if (role === 'teacher') {
+    return null;
+  }
 
   const handleSelect = (professionId: string, available: boolean) => {
     if (!available) return;

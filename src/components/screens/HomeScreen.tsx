@@ -144,14 +144,25 @@ export function HomeScreen() {
 
             {/* CTA Buttons */}
             <div className="flex flex-wrap items-center gap-4">
-              <Button
-                onClick={() => document.getElementById('profession-selector')?.scrollIntoView({ behavior: 'smooth' })}
-                size="lg"
-                className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/25 h-12 px-8"
-              >
-                Start Learning
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
+              {role === 'teacher' ? (
+                <Button
+                  onClick={() => setScreen('guru-dashboard')}
+                  size="lg"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/25 h-12 px-8"
+                >
+                  Go to Dashboard
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => document.getElementById('profession-selector')?.scrollIntoView({ behavior: 'smooth' })}
+                  size="lg"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/25 h-12 px-8"
+                >
+                  Start Learning
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              )}
               <Button
                 variant="outline"
                 size="lg"
@@ -329,20 +340,22 @@ export function HomeScreen() {
         </section>
       )}
 
-      {/* Profession Selection Section */}
-      <section id="profession-selector" className="py-20 px-4 section-pattern relative overflow-hidden">
-        {/* Corner mandalas */}
-        <div className="absolute -top-32 -right-32 w-80 h-80 opacity-[0.06]">
-          <img src={mandalaElegant} alt="" className="w-full h-full object-contain" />
-        </div>
-        <div className="absolute -bottom-32 -left-32 w-80 h-80 opacity-[0.06]">
-          <img src={mandalaElegant} alt="" className="w-full h-full object-contain" />
-        </div>
-        
-        <div className="max-w-5xl mx-auto relative z-10">
-          <ProfessionSelector />
-        </div>
-      </section>
+      {/* Profession Selection Section - only for students */}
+      {role !== 'teacher' && (
+        <section id="profession-selector" className="py-20 px-4 section-pattern relative overflow-hidden">
+          {/* Corner mandalas */}
+          <div className="absolute -top-32 -right-32 w-80 h-80 opacity-[0.06]">
+            <img src={mandalaElegant} alt="" className="w-full h-full object-contain" />
+          </div>
+          <div className="absolute -bottom-32 -left-32 w-80 h-80 opacity-[0.06]">
+            <img src={mandalaElegant} alt="" className="w-full h-full object-contain" />
+          </div>
+          
+          <div className="max-w-5xl mx-auto relative z-10">
+            <ProfessionSelector />
+          </div>
+        </section>
+      )}
 
       {/* Footer */}
       <footer className="py-16 px-4 border-t border-border bg-card/50">
