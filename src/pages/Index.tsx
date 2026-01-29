@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useLearningStore } from '@/store/learningStore';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLearningStore, Screen } from '@/store/learningStore';
 import { useAuth } from '@/contexts/AuthContext';
 import { HomeScreen } from '@/components/screens/HomeScreen';
 import { VocabularyScreen } from '@/components/screens/VocabularyScreen';
@@ -20,8 +20,19 @@ const Index = () => {
   const { currentScreen, setScreen, selectedProfession } = useLearningStore();
   const { user, loading, role } = useAuth();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [chatQuery, setChatQuery] = useState<string | undefined>();
   const [isChatOpen, setIsChatOpen] = useState(false);
+
+  // Handle screen parameter from URL (used after login redirect)
+  useEffect(() => {
+    const screenParam = searchParams.get('screen') as Screen | null;
+    if (screenParam && ['guru-dashboard', 'shishya-dashboard'].includes(screenParam)) {
+      setScreen(screenParam);
+      // Clear the URL parameter
+      setSearchParams({});
+    }
+  }, [searchParams, setScreen, setSearchParams]);
 
   // Handle post-auth redirect to vocabulary
   useEffect(() => {

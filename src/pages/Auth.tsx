@@ -34,19 +34,28 @@ export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   
-  const { signIn, signUp, user } = useAuth();
+  const { signIn, signUp, user, role } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // Handle post-auth redirect
-  const handlePostAuthRedirect = () => {
+  // Handle post-auth redirect based on role
+  const handlePostAuthRedirect = (userRole?: UserRole) => {
     const redirect = sessionStorage.getItem('postAuthRedirect');
+    
     if (redirect === 'vocabulary') {
       sessionStorage.removeItem('postAuthRedirect');
       // Navigate to home page, which will show the vocabulary screen based on store state
       navigate('/');
     } else {
-      navigate('/');
+      // Navigate to role-specific dashboard
+      const roleToUse = userRole || role;
+      if (roleToUse === 'teacher') {
+        navigate('/?screen=guru-dashboard');
+      } else if (roleToUse === 'student') {
+        navigate('/?screen=shishya-dashboard');
+      } else {
+        navigate('/');
+      }
     }
   };
 
@@ -92,7 +101,8 @@ export default function AuthPage() {
             title: 'Welcome!',
             description: 'Your account has been created successfully.',
           });
-          handlePostAuthRedirect();
+          // Pass the selected role for immediate redirect (since role may not be fetched yet)
+          handlePostAuthRedirect(selectedRole!);
         }
       } else {
         const result = signInSchema.safeParse({ email, password });
