@@ -90,7 +90,14 @@ export function Header({ showBack = false, backTo = 'home' }: HeaderProps) {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => setScreen('analytics')}
+            onClick={() => {
+              // Teachers see student analytics on their dashboard, students see personal analytics
+              if (role === 'teacher') {
+                setScreen('guru-dashboard');
+              } else {
+                setScreen('analytics');
+              }
+            }}
             className="gap-2 text-muted-foreground hover:text-primary hover:bg-primary/10"
           >
             <BarChart3 className="w-4 h-4" />
