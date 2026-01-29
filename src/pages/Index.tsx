@@ -11,6 +11,7 @@ import { GuruDashboard } from '@/components/screens/GuruDashboard';
 import { ShishyaDashboard } from '@/components/screens/ShishyaDashboard';
 import { TeacherProfileScreen } from '@/components/screens/TeacherProfileScreen';
 import { StudentProfileScreen } from '@/components/screens/StudentProfileScreen';
+import { MentorSelectionScreen } from '@/components/screens/MentorSelectionScreen';
 import { SanskritChatbot } from '@/components/SanskritChatbot';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
@@ -49,6 +50,8 @@ const Index = () => {
         return <TeacherProfileScreen />;
       case 'student-profile':
         return <StudentProfileScreen />;
+      case 'mentor-selection':
+        return <MentorSelectionScreen />;
       default:
         return <HomeScreen />;
     }

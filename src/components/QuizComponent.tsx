@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, X, ChevronRight, RotateCcw, Home } from 'lucide-react';
+import { Check, X, ChevronRight, RotateCcw, Home, GraduationCap, BookOpen } from 'lucide-react';
 import { quizQuestions } from '@/data/yogaSutrasData';
 import { useLearningStore } from '@/store/learningStore';
 import { Button } from '@/components/ui/button';
@@ -55,14 +55,24 @@ export function QuizComponent() {
     setScreen('home');
   };
 
+  const handleProceedToMentor = () => {
+    setScreen('mentor-selection');
+  };
+
+  const handleReviewContent = () => {
+    setScreen('learning');
+  };
+
   // Results screen
   if (isComplete && quizScore !== null) {
     const percentage = Math.round((quizScore / totalQuestions) * 100);
+    const hasPassed = percentage >= 70;
+    
     const getMessage = () => {
       if (percentage >= 90) return { text: "Outstanding Performance", subtext: "शाबाश — You have mastered the material" };
-      if (percentage >= 70) return { text: "Great Progress", subtext: "बहुत अच्छा — Keep refining your understanding" };
-      if (percentage >= 50) return { text: "Solid Foundation", subtext: "अच्छा प्रयास — Continue your practice" };
-      return { text: "Keep Learning", subtext: "अभ्यास जारी रखें — Review and try again" };
+      if (percentage >= 70) return { text: "Great Progress", subtext: "बहुत अच्छा — You've qualified for mentor selection" };
+      if (percentage >= 50) return { text: "Keep Practicing", subtext: "अभ्यास जारी रखें — Review and try again for 70%+" };
+      return { text: "More Study Needed", subtext: "पुनः प्रयास करें — Review the material and try again" };
     };
     const message = getMessage();
 
@@ -89,7 +99,7 @@ export function QuizComponent() {
                 cy="50"
                 r="42"
                 fill="none"
-                stroke="hsl(var(--primary))"
+                stroke={hasPassed ? "hsl(var(--primary))" : "hsl(var(--destructive))"}
                 strokeWidth="8"
                 strokeLinecap="round"
                 strokeDasharray={264}
@@ -108,27 +118,63 @@ export function QuizComponent() {
             {message.text}
           </h2>
           
-          <p className="text-muted-foreground mb-8 font-sanskrit">
+          <p className="text-muted-foreground mb-4 font-sanskrit">
             {message.subtext}
           </p>
 
+          {/* Pass/Fail message */}
+          <div className={`mb-8 p-4 rounded-xl border ${
+            hasPassed 
+              ? 'bg-sage/10 border-sage/30 text-sage' 
+              : 'bg-destructive/10 border-destructive/30 text-destructive'
+          }`}>
+            <p className="text-sm font-medium">
+              {hasPassed 
+                ? "Congratulations! You've qualified for Mentor Selection." 
+                : "You need 70% or higher to proceed to Mentor Selection. Please review the content and try again."
+              }
+            </p>
+          </div>
+
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button
-              variant="outline"
-              onClick={handleRetake}
-              className="gap-2"
-            >
-              <RotateCcw className="w-4 h-4" />
-              Retake Quiz
-            </Button>
-            <Button
-              onClick={handleBackToHome}
-              className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
-            >
-              <Home className="w-4 h-4" />
-              Back to Home
-            </Button>
+            {hasPassed ? (
+              <>
+                <Button
+                  variant="outline"
+                  onClick={handleRetake}
+                  className="gap-2"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                  Retake Quiz
+                </Button>
+                <Button
+                  onClick={handleProceedToMentor}
+                  className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
+                >
+                  <GraduationCap className="w-4 h-4" />
+                  Select Mentor
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  variant="outline"
+                  onClick={handleRetake}
+                  className="gap-2"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                  Retake Quiz
+                </Button>
+                <Button
+                  onClick={handleReviewContent}
+                  className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
+                >
+                  <BookOpen className="w-4 h-4" />
+                  Review Content
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </motion.div>
