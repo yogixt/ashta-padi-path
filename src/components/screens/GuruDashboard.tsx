@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Header } from '@/components/Header';
-import { Users, BookOpen, BarChart3, Calendar, Clock, Award, TrendingUp, FileText, User, Bell } from 'lucide-react';
+import { Users, BookOpen, Clock, Award, TrendingUp, FileText, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLearningStore } from '@/store/learningStore';
 import { useEffect, useState } from 'react';
@@ -9,46 +9,76 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Badge } from '@/components/ui/badge';
 import mandalaElegant from '@/assets/mandala-elegant.png';
 
+interface ConnectedStudent {
+  student_id: string;
+  student_name: string | null;
+  connected_at: string;
+}
+
 export function GuruDashboard() {
   const { setScreen } = useLearningStore();
   const { user } = useAuth();
   const [pendingRequests, setPendingRequests] = useState(0);
+  const [approvedStudents, setApprovedStudents] = useState<ConnectedStudent[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (user) {
-      fetchPendingRequests();
+      fetchDashboardData();
     }
   }, [user]);
 
-  const fetchPendingRequests = async () => {
+  const fetchDashboardData = async () => {
     if (!user) return;
-    const { count } = await supabase
-      .from('connection_requests')
-      .select('*', { count: 'exact', head: true })
-      .eq('teacher_id', user.id)
-      .eq('status', 'pending');
-    setPendingRequests(count || 0);
+    setLoading(true);
+    
+    try {
+      // Fetch pending requests count
+      const { count: pendingCount } = await supabase
+        .from('connection_requests')
+        .select('*', { count: 'exact', head: true })
+        .eq('teacher_id', user.id)
+        .eq('status', 'pending');
+      setPendingRequests(pendingCount || 0);
+
+      // Fetch approved students with their profiles
+      const { data: connections } = await supabase
+        .from('connection_requests')
+        .select('student_id, created_at')
+        .eq('teacher_id', user.id)
+        .eq('status', 'approved');
+
+      if (connections && connections.length > 0) {
+        const studentIds = connections.map(c => c.student_id);
+        const { data: profiles } = await supabase
+          .from('profiles')
+          .select('user_id, full_name')
+          .in('user_id', studentIds);
+
+        const studentsWithNames = connections.map(conn => ({
+          student_id: conn.student_id,
+          student_name: profiles?.find(p => p.user_id === conn.student_id)?.full_name || null,
+          connected_at: conn.created_at
+        }));
+        setApprovedStudents(studentsWithNames);
+      }
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  // Real stats from database
   const stats = [
-    { label: 'Active Śiṣyas', value: '24', icon: Users, color: 'from-blue-500 to-indigo-600' },
-    { label: 'Sūtras Taught', value: '48', icon: BookOpen, color: 'from-amber-500 to-orange-600' },
-    { label: 'Avg. Progress', value: '67%', icon: TrendingUp, color: 'from-emerald-500 to-teal-600' },
-    { label: 'Certificates', value: '12', icon: Award, color: 'from-violet-500 to-purple-600' },
-  ];
-
-  const recentActivity = [
-    { name: 'Arjun Sharma', action: 'completed Sūtra 1.2', time: '2 hours ago' },
-    { name: 'Priya Patel', action: 'started vocabulary module', time: '4 hours ago' },
-    { name: 'Vikram Singh', action: 'passed grammar assessment', time: '1 day ago' },
-    { name: 'Meera Joshi', action: 'enrolled in course', time: '2 days ago' },
+    { label: 'Connected Śiṣyas', value: approvedStudents.length.toString(), icon: Users, color: 'from-blue-500 to-indigo-600' },
+    { label: 'Pending Requests', value: pendingRequests.toString(), icon: Clock, color: 'from-amber-500 to-orange-600' },
   ];
 
   const quickActions = [
     { label: 'My Profile', icon: User, action: () => setScreen('teacher-profile') },
     { label: 'Student Requests', icon: Users, action: () => setScreen('teacher-profile'), badge: pendingRequests },
     { label: 'Create Assessment', icon: FileText, action: () => {} },
-    { label: 'View Analytics', icon: BarChart3, action: () => setScreen('analytics') },
   ];
 
   return (
@@ -103,7 +133,7 @@ export function GuruDashboard() {
           </div>
 
           <div className="grid lg:grid-cols-3 gap-6">
-            {/* Recent Activity */}
+            {/* Connected Students */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -111,25 +141,39 @@ export function GuruDashboard() {
               className="lg:col-span-2 bg-card border border-border rounded-2xl p-6"
             >
               <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-                <Clock className="w-5 h-5 text-primary" />
-                Recent Śiṣya Activity
+                <Users className="w-5 h-5 text-primary" />
+                Your Connected Śiṣyas
               </h2>
-              <div className="space-y-4">
-                {recentActivity.map((activity, index) => (
-                  <div key={index} className="flex items-center justify-between py-3 border-b border-border last:border-0">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-primary-foreground text-sm font-bold">
-                        {activity.name.split(' ').map(n => n[0]).join('')}
+              {loading ? (
+                <div className="flex items-center justify-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+                </div>
+              ) : approvedStudents.length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  <Users className="w-12 h-12 mx-auto mb-3 opacity-30" />
+                  <p>No students connected yet</p>
+                  <p className="text-sm mt-1">Students will appear here once you approve their connection requests</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {approvedStudents.map((student, index) => (
+                    <div key={student.student_id} className="flex items-center justify-between py-3 border-b border-border last:border-0">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-primary-foreground text-sm font-bold font-sanskrit">
+                          शि
+                        </div>
+                        <div>
+                          <p className="font-medium text-foreground">{student.student_name || 'Student'}</p>
+                          <p className="text-sm text-muted-foreground">
+                            Connected {new Date(student.connected_at).toLocaleDateString()}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="font-medium text-foreground">{activity.name}</p>
-                        <p className="text-sm text-muted-foreground">{activity.action}</p>
-                      </div>
+                      <Badge variant="secondary">Active</Badge>
                     </div>
-                    <span className="text-xs text-muted-foreground">{activity.time}</span>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </motion.div>
 
             {/* Quick Actions */}
