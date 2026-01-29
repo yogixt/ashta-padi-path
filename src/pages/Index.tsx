@@ -13,6 +13,7 @@ import { ShishyaDashboard } from '@/components/screens/ShishyaDashboard';
 import { TeacherProfileScreen } from '@/components/screens/TeacherProfileScreen';
 import { StudentProfileScreen } from '@/components/screens/StudentProfileScreen';
 import { MentorSelectionScreen } from '@/components/screens/MentorSelectionScreen';
+import { AssessmentScreen } from '@/components/screens/AssessmentScreen';
 import { SanskritChatbot } from '@/components/SanskritChatbot';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
@@ -75,6 +76,8 @@ const Index = () => {
         return <StudentProfileScreen />;
       case 'mentor-selection':
         return <MentorSelectionScreen />;
+      case 'assessments':
+        return <AssessmentScreen />;
       default:
         return <HomeScreen />;
     }

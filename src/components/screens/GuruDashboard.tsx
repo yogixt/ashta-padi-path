@@ -78,7 +78,7 @@ export function GuruDashboard() {
   const quickActions = [
     { label: 'My Profile', icon: User, action: () => setScreen('teacher-profile') },
     { label: 'Student Requests', icon: Users, action: () => setScreen('teacher-profile'), badge: pendingRequests },
-    { label: 'Create Assessment', icon: FileText, action: () => {} },
+    { label: 'Create Assessment', icon: FileText, action: () => setScreen('assessments') },
   ];
 
   return (
