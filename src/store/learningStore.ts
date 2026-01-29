@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export type Screen = 'home' | 'vocabulary' | 'learning' | 'quiz' | 'results' | 'analytics' | 'guru-dashboard' | 'shishya-dashboard' | 'teacher-profile' | 'student-profile' | 'browse-teachers' | 'mentor-selection';
+export type Screen = 'home' | 'modules' | 'vocabulary' | 'learning' | 'quiz' | 'results' | 'analytics' | 'guru-dashboard' | 'shishya-dashboard' | 'teacher-profile' | 'student-profile' | 'browse-teachers' | 'mentor-selection';
 
 interface LearningState {
   // Navigation
@@ -10,6 +10,10 @@ interface LearningState {
   // Profession
   selectedProfession: string | null;
   setSelectedProfession: (profession: string) => void;
+  
+  // Module
+  selectedModule: string | null;
+  setSelectedModule: (module: string) => void;
   
   // Vocabulary progress - track each term completion
   currentVocabIndex: number;
@@ -56,11 +60,15 @@ export const useLearningStore = create<LearningState>((set, get) => ({
   selectedProfession: null,
   setSelectedProfession: (profession) => set({ selectedProfession: profession }),
   
+  // Module
+  selectedModule: null,
+  setSelectedModule: (module) => set({ selectedModule: module }),
+  
   // Vocabulary
   currentVocabIndex: 0,
   vocabCompleted: false,
   completedVocabTerms: new Set<number>(),
-  nextVocab: () => set((state) => ({ 
+  nextVocab: () => set((state) => ({
     currentVocabIndex: Math.min(state.currentVocabIndex + 1, TOTAL_VOCAB_TERMS - 1) 
   })),
   prevVocab: () => set((state) => ({ 
@@ -134,6 +142,7 @@ export const useLearningStore = create<LearningState>((set, get) => ({
   resetProgress: () => set({
     currentScreen: 'home',
     selectedProfession: null,
+    selectedModule: null,
     currentVocabIndex: 0,
     vocabCompleted: false,
     completedVocabTerms: new Set(),

@@ -18,14 +18,14 @@ export function ProfessionSelector() {
     
     // If not authenticated, redirect to auth page
     if (!user) {
-      // Store intent to go to vocabulary after auth
-      sessionStorage.setItem('postAuthRedirect', 'vocabulary');
+      // Store intent to go to modules after auth
+      sessionStorage.setItem('postAuthRedirect', 'modules');
       navigate('/auth');
       return;
     }
     
-    // If authenticated, go directly to vocabulary
-    setScreen('vocabulary');
+    // If authenticated, go to modules screen
+    setScreen('modules');
   };
 
   return (

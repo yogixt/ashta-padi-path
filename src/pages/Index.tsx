@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useLearningStore, Screen } from '@/store/learningStore';
 import { useAuth } from '@/contexts/AuthContext';
 import { HomeScreen } from '@/components/screens/HomeScreen';
+import { ModulesScreen } from '@/components/screens/ModulesScreen';
 import { VocabularyScreen } from '@/components/screens/VocabularyScreen';
 import { LearningScreen } from '@/components/screens/LearningScreen';
 import { QuizScreen } from '@/components/screens/QuizScreen';
@@ -34,12 +35,12 @@ const Index = () => {
     }
   }, [searchParams, setScreen, setSearchParams]);
 
-  // Handle post-auth redirect to vocabulary
+  // Handle post-auth redirect to modules
   useEffect(() => {
     const redirect = sessionStorage.getItem('postAuthRedirect');
-    if (redirect === 'vocabulary' && user && selectedProfession) {
+    if (redirect === 'modules' && user && selectedProfession) {
       sessionStorage.removeItem('postAuthRedirect');
-      setScreen('vocabulary');
+      setScreen('modules');
     }
   }, [user, selectedProfession, setScreen]);
 
@@ -52,6 +53,8 @@ const Index = () => {
     switch (currentScreen) {
       case 'home':
         return <HomeScreen />;
+      case 'modules':
+        return <ModulesScreen />;
       case 'vocabulary':
         return <VocabularyScreen onOpenChatWithQuery={handleOpenChatWithQuery} />;
       case 'learning':
