@@ -3,9 +3,10 @@ import { vocabulary, sutras } from '@/data/yogaSutrasData';
 import { BookOpen, GraduationCap, Award } from 'lucide-react';
 
 export function ProgressTracker() {
-  const { vocabCompleted, sutrasCompleted } = useLearningStore();
+  const { completedVocabTerms, sutrasCompleted } = useLearningStore();
 
-  const vocabProgress = vocabCompleted ? vocabulary.length : 0;
+  // Use actual completed terms count, not boolean
+  const vocabProgress = completedVocabTerms.size;
   const sutraProgress = sutrasCompleted;
 
   const stats = [
