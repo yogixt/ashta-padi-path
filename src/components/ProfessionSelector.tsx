@@ -1,14 +1,30 @@
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Lock, Sparkles } from 'lucide-react';
 import { professions } from '@/data/yogaSutrasData';
 import { useLearningStore } from '@/store/learningStore';
+import { useAuth } from '@/contexts/AuthContext';
 
 export function ProfessionSelector() {
   const { setSelectedProfession, setScreen } = useLearningStore();
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const handleSelect = (professionId: string, available: boolean) => {
     if (!available) return;
+    
+    // Store the selected profession
     setSelectedProfession(professionId);
+    
+    // If not authenticated, redirect to auth page
+    if (!user) {
+      // Store intent to go to vocabulary after auth
+      sessionStorage.setItem('postAuthRedirect', 'vocabulary');
+      navigate('/auth');
+      return;
+    }
+    
+    // If authenticated, go directly to vocabulary
     setScreen('vocabulary');
   };
 
