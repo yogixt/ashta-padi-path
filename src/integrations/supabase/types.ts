@@ -14,30 +14,211 @@ export type Database = {
   }
   public: {
     Tables: {
+      connection_requests: {
+        Row: {
+          created_at: string
+          id: string
+          message: string | null
+          status: string
+          student_id: string
+          teacher_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message?: string | null
+          status?: string
+          student_id: string
+          teacher_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string | null
+          status?: string
+          student_id?: string
+          teacher_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
+          bio: string | null
           created_at: string
+          department: string | null
           full_name: string | null
           id: string
+          linkedin_url: string | null
+          university: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
           avatar_url?: string | null
+          bio?: string | null
           created_at?: string
+          department?: string | null
           full_name?: string | null
           id?: string
+          linkedin_url?: string | null
+          university?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
           avatar_url?: string | null
+          bio?: string | null
           created_at?: string
+          department?: string | null
           full_name?: string | null
+          id?: string
+          linkedin_url?: string | null
+          university?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      publications: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          publication_type: string
+          published_year: number | null
+          teacher_id: string
+          title: string
+          url: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          publication_type: string
+          published_year?: number | null
+          teacher_id: string
+          title: string
+          url?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          publication_type?: string
+          published_year?: number | null
+          teacher_id?: string
+          title?: string
+          url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "publications_teacher_id_fkey"
+            columns: ["teacher_id"]
+            isOneToOne: false
+            referencedRelation: "teacher_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      student_profiles: {
+        Row: {
+          academic_level: string | null
+          created_at: string
+          id: string
+          interests: string[] | null
+          qualifications: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          academic_level?: string | null
+          created_at?: string
+          id?: string
+          interests?: string[] | null
+          qualifications?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          academic_level?: string | null
+          created_at?: string
+          id?: string
+          interests?: string[] | null
+          qualifications?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      teacher_blogs: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          teacher_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          teacher_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          teacher_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "teacher_blogs_teacher_id_fkey"
+            columns: ["teacher_id"]
+            isOneToOne: false
+            referencedRelation: "teacher_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      teacher_profiles: {
+        Row: {
+          created_at: string
+          degree: string | null
+          faculty_type: Database["public"]["Enums"]["faculty_type"]
+          gmeet_link: string | null
+          id: string
+          updated_at: string
+          user_id: string
+          zoom_link: string | null
+        }
+        Insert: {
+          created_at?: string
+          degree?: string | null
+          faculty_type?: Database["public"]["Enums"]["faculty_type"]
+          gmeet_link?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+          zoom_link?: string | null
+        }
+        Update: {
+          created_at?: string
+          degree?: string | null
+          faculty_type?: Database["public"]["Enums"]["faculty_type"]
+          gmeet_link?: string | null
           id?: string
           updated_at?: string
           user_id?: string
+          zoom_link?: string | null
         }
         Relationships: []
       }
@@ -81,6 +262,7 @@ export type Database = {
     }
     Enums: {
       app_role: "student" | "teacher"
+      faculty_type: "permanent" | "visiting"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -209,6 +391,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["student", "teacher"],
+      faculty_type: ["permanent", "visiting"],
     },
   },
 } as const
