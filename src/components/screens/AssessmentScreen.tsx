@@ -304,15 +304,26 @@ export function AssessmentScreen() {
 
   return (
     <div className="min-h-screen bg-background relative">
-      {/* Background mandala */}
+      {/* Background decorations with rotating mandalas */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.04 }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px]"
+          initial={{ opacity: 0, rotate: 0 }}
+          animate={{ opacity: 0.05, rotate: 360 }}
+          transition={{ duration: 100, repeat: Infinity, ease: "linear" }}
+          className="absolute -top-24 -right-24 w-80 h-80"
         >
           <img src={mandalaElegant} alt="" className="w-full h-full object-contain" />
         </motion.div>
+        <motion.div 
+          initial={{ opacity: 0, rotate: 0 }}
+          animate={{ opacity: 0.04, rotate: -360 }}
+          transition={{ duration: 130, repeat: Infinity, ease: "linear" }}
+          className="absolute -bottom-24 -left-24 w-80 h-80"
+        >
+          <img src={mandalaElegant} alt="" className="w-full h-full object-contain" />
+        </motion.div>
+        {/* Subtle pattern overlay */}
+        <div className="absolute inset-0 section-pattern opacity-20" />
       </div>
 
       <Header showBack backTo="guru-dashboard" />
