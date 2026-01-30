@@ -200,7 +200,8 @@ export function HomeScreen() {
             {/* Title */}
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-foreground leading-tight mb-6">
               Learn
-              <span className="block text-primary">Sanskrit Scriptures</span>
+              <span className="block text-primary">संस्कृत शास्त्राणि</span>
+              <span className="block text-lg md:text-xl text-muted-foreground font-normal mt-2">(Sanskrit Scriptures)</span>
               Through Your Profession
             </h2>
             
