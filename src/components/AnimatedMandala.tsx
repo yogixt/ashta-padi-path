@@ -6,15 +6,15 @@ interface AnimatedMandalaProps {
 }
 
 export function AnimatedMandala({ className = '', size = 600 }: AnimatedMandalaProps) {
-  // Chakra-inspired colors with HSL values matching our design system
+  // Theme-based colors using the design system
   const layers = [
-    { radius: size * 0.95, color: 'hsl(270, 70%, 60%)', duration: 120, direction: 1, petals: 24 },    // Violet - Sahasrara
-    { radius: size * 0.82, color: 'hsl(234, 70%, 60%)', duration: 100, direction: -1, petals: 20 },   // Indigo - Ajna
-    { radius: size * 0.70, color: 'hsl(200, 70%, 55%)', duration: 80, direction: 1, petals: 16 },     // Blue - Vishuddha
-    { radius: size * 0.58, color: 'hsl(142, 50%, 45%)', duration: 65, direction: -1, petals: 12 },    // Green - Anahata
-    { radius: size * 0.46, color: 'hsl(45, 90%, 55%)', duration: 50, direction: 1, petals: 10 },      // Yellow - Manipura
-    { radius: size * 0.34, color: 'hsl(25, 85%, 55%)', duration: 40, direction: -1, petals: 8 },      // Orange - Svadhisthana
-    { radius: size * 0.22, color: 'hsl(0, 70%, 55%)', duration: 30, direction: 1, petals: 6 },        // Red - Muladhara
+    { radius: size * 0.95, color: 'hsl(32, 95%, 52%)', duration: 120, direction: 1, petals: 24 },     // Primary saffron
+    { radius: size * 0.82, color: 'hsl(45, 93%, 55%)', duration: 100, direction: -1, petals: 20 },    // Gold
+    { radius: size * 0.70, color: 'hsl(38, 95%, 65%)', duration: 80, direction: 1, petals: 16 },      // Saffron light
+    { radius: size * 0.58, color: 'hsl(28, 95%, 42%)', duration: 65, direction: -1, petals: 12 },     // Saffron dark
+    { radius: size * 0.46, color: 'hsl(48, 95%, 65%)', duration: 50, direction: 1, petals: 10 },      // Gold light
+    { radius: size * 0.34, color: 'hsl(42, 90%, 45%)', duration: 40, direction: -1, petals: 8 },      // Gold dark
+    { radius: size * 0.22, color: 'hsl(32, 95%, 52%)', duration: 30, direction: 1, petals: 6 },       // Primary saffron
   ];
 
   // Generate petal path for lotus-like mandala
