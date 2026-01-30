@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, X, Send, Loader2, Bot, User, Trash2 } from 'lucide-react';
+import { MessageCircle, X, Send, Loader2, Bot, User, Trash2, LogIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 import ReactMarkdown from 'react-markdown';
 
 interface Message {
@@ -17,6 +18,7 @@ interface SanskritChatbotProps {
 }
 
 export function SanskritChatbot({ initialQuery, isOpenExternal, onClose }: SanskritChatbotProps = {}) {
+  const { user, session } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -69,6 +71,17 @@ export function SanskritChatbot({ initialQuery, isOpenExternal, onClose }: Sansk
   const sendMessageWithContent = async (content: string) => {
     if (!content.trim() || isLoading) return;
 
+    // Check if user is authenticated
+    if (!session?.access_token) {
+      setMessages(prev => [
+        ...prev,
+        { role: 'user', content: content.trim() },
+        { role: 'assistant', content: 'Please sign in to use the Sanskrit Guide. Authentication is required to protect our AI service.' }
+      ]);
+      setInput('');
+      return;
+    }
+
     const userMessage: Message = { role: 'user', content: content.trim() };
     setMessages(prev => [...prev, userMessage]);
     setInput('');
@@ -83,7 +96,7 @@ export function SanskritChatbot({ initialQuery, isOpenExternal, onClose }: Sansk
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            'Authorization': `Bearer ${session.access_token}`,
           },
           body: JSON.stringify({
             messages: [...messages, userMessage].map(m => ({
@@ -284,26 +297,41 @@ export function SanskritChatbot({ initialQuery, isOpenExternal, onClose }: Sansk
 
             {/* Input */}
             <div className="p-4 border-t border-border bg-background">
-              <div className="flex gap-2">
-                <input
-                  ref={inputRef}
-                  type="text"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Ask about Sanskrit or Yoga Sutras..."
-                  className="flex-1 px-4 py-2.5 rounded-xl border border-border bg-muted/50 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                  disabled={isLoading}
-                />
-                <Button
-                  onClick={sendMessage}
-                  disabled={!input.trim() || isLoading}
-                  size="icon"
-                  className="shrink-0 bg-primary text-primary-foreground hover:bg-primary/90"
-                >
-                  <Send className="w-4 h-4" />
-                </Button>
-              </div>
+              {!session ? (
+                <div className="text-center py-2">
+                  <p className="text-sm text-muted-foreground mb-2">Sign in to chat with the Sanskrit Guide</p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => window.location.href = '/auth'}
+                    className="gap-2"
+                  >
+                    <LogIn className="w-4 h-4" />
+                    Sign In
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex gap-2">
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder="Ask about Sanskrit or Yoga Sutras..."
+                    className="flex-1 px-4 py-2.5 rounded-xl border border-border bg-muted/50 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    disabled={isLoading}
+                  />
+                  <Button
+                    onClick={sendMessage}
+                    disabled={!input.trim() || isLoading}
+                    size="icon"
+                    className="shrink-0 bg-primary text-primary-foreground hover:bg-primary/90"
+                  >
+                    <Send className="w-4 h-4" />
+                  </Button>
+                </div>
+              )}
             </div>
           </motion.div>
         )}
