@@ -149,7 +149,7 @@ export function HomeScreen() {
                 transition={{ duration: 0.6, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 className="block text-primary"
               >
-                Sanskrit Scriptures
+                Sanskrit and Scriptures
               </motion.span>
               Through Your Profession
             </motion.h2>
