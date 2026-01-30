@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ProfessionSelector } from '@/components/ProfessionSelector';
 import { ProgressTracker } from '@/components/ProgressTracker';
 import { AshtaPadiSteps } from '@/components/AshtaPadiSteps';
+import { AnimatedMandala } from '@/components/AnimatedMandala';
 import { useLearningStore } from '@/store/learningStore';
 import { useAuth } from '@/contexts/AuthContext';
 import { BookOpen, GraduationCap, Sparkles, Users, ArrowRight, Star, ChevronRight, Play } from 'lucide-react';
@@ -54,33 +55,34 @@ export function HomeScreen() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden min-h-screen">
         {/* Background */}
         <div className="absolute inset-0">
           <img 
             src={heroImage} 
             alt="Ancient Sanskrit Manuscript" 
-            className="w-full h-full object-cover opacity-30" 
+            className="w-full h-full object-cover opacity-20" 
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background via-background/98 to-background" />
           
-          {/* Mandala decorations */}
+          {/* Animated Mandala - positioned on the right side */}
           <motion.div 
             initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 0.08, scale: 1, rotate: 360 }}
-            transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
-            className="absolute top-1/4 right-0 w-[500px] h-[500px] translate-x-1/3"
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.5, ease: 'easeOut' }}
+            className="absolute top-1/2 right-0 -translate-y-1/2 translate-x-[15%] hidden lg:block"
           >
-            <img src={mandalaElegant} alt="" className="w-full h-full object-contain" />
+            <AnimatedMandala size={700} />
           </motion.div>
-          
+
+          {/* Mobile: Smaller mandala as background */}
           <motion.div 
             initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 0.06, scale: 1, rotate: -360 }}
-            transition={{ duration: 150, repeat: Infinity, ease: "linear" }}
-            className="absolute bottom-0 left-0 w-[400px] h-[400px] -translate-x-1/3 translate-y-1/4"
+            animate={{ opacity: 0.15, scale: 1 }}
+            transition={{ duration: 1.5, ease: 'easeOut' }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 lg:hidden"
           >
-            <img src={mandalaElegant} alt="" className="w-full h-full object-contain" />
+            <AnimatedMandala size={400} />
           </motion.div>
         </div>
 
