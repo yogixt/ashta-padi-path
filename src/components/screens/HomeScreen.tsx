@@ -105,7 +105,7 @@ export function HomeScreen() {
               {/* Sanskrit verse */}
               <div className="text-center mb-3">
                 <p className="font-sanskrit text-lg text-primary leading-relaxed">
-                  गुरुर्ब्रह्मा गुरुर्विष्णु
+                  गुरुर्ब्रह्मा गुरुर्विष्णुः
                 </p>
                 <p className="font-sanskrit text-lg text-primary leading-relaxed">
                   गुरुर्देवो महेश्वरः
@@ -121,7 +121,12 @@ export function HomeScreen() {
               
               {/* Translation */}
               <p className="text-xs text-muted-foreground text-center italic leading-relaxed">
-                "The Guru is Brahma, Vishnu, and Maheshwara — the supreme divine"
+                "The Guru is Brahmā, Viṣṇu, and Maheśvara — the supreme divine"
+              </p>
+              
+              {/* Scripture reference */}
+              <p className="text-[9px] text-muted-foreground/70 text-center mt-1">
+                — गुरु गीता (Guru Gītā)
               </p>
               
               {/* Tag */}
