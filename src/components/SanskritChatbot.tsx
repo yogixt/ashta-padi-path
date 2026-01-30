@@ -77,28 +77,13 @@ export function SanskritChatbot({ initialQuery, isOpenExternal, onClose }: Sansk
     let assistantContent = '';
 
     try {
-      // Get the current session for authentication
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session?.access_token) {
-        setMessages(prev => [
-          ...prev,
-          {
-            role: 'assistant',
-            content: 'Please sign in to use the Sanskrit Guide chat feature.'
-          }
-        ]);
-        setIsLoading(false);
-        return;
-      }
-
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${session.access_token}`,
+            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
           },
           body: JSON.stringify({
             messages: [...messages, userMessage].map(m => ({

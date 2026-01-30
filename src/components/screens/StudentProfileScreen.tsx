@@ -31,22 +31,15 @@ export function StudentProfileScreen() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-8 text-center"
+            className="mb-8"
           >
-            <span className="tag-gold mb-4 inline-block">Student Portal</span>
-            <div className="flex items-center justify-center gap-3 mb-2">
+            <div className="flex items-center gap-3 mb-2">
               <span className="text-3xl font-sanskrit">शिष्य</span>
               <h1 className="text-3xl font-serif font-bold text-foreground">Śiṣya Profile</h1>
             </div>
             <p className="text-muted-foreground">
               Manage your profile and connect with teachers
             </p>
-            {/* Decorative line */}
-            <div className="flex items-center justify-center gap-3 mt-5">
-              <div className="h-px w-10 bg-gradient-to-r from-transparent to-primary/50" />
-              <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-              <div className="h-px w-10 bg-gradient-to-l from-transparent to-primary/50" />
-            </div>
           </motion.div>
 
           {/* Tabs */}

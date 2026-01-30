@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Header } from '@/components/Header';
-import { BookOpen, Target, Flame, Trophy, ArrowRight, Sparkles, GraduationCap, User, FileText, Check } from 'lucide-react';
+import { BookOpen, Target, Flame, Trophy, ArrowRight, Sparkles, GraduationCap, User, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { useLearningStore } from '@/store/learningStore';
@@ -98,22 +98,15 @@ export function ShishyaDashboard() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-8 text-center"
+            className="mb-8"
           >
-            <span className="tag-gold mb-4 inline-block">Student Portal</span>
-            <div className="flex items-center justify-center gap-3 mb-2">
+            <div className="flex items-center gap-3 mb-2">
               <span className="text-3xl font-sanskrit">शिष्य</span>
               <h1 className="text-3xl font-serif font-bold text-foreground">Śiṣya Dashboard</h1>
             </div>
             <p className="text-muted-foreground">
               विद्या ददाति विनयम् — Knowledge gives humility
             </p>
-            {/* Decorative line */}
-            <div className="flex items-center justify-center gap-3 mt-5">
-              <div className="h-px w-10 bg-gradient-to-r from-transparent to-primary/50" />
-              <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-              <div className="h-px w-10 bg-gradient-to-l from-transparent to-primary/50" />
-            </div>
           </motion.div>
 
           {/* Quick Actions */}
@@ -223,11 +216,7 @@ export function ShishyaDashboard() {
                         ? 'bg-primary text-primary-foreground'
                         : 'bg-muted text-muted-foreground'
                     }`}>
-                      {item.status === 'completed' ? (
-                        <Check className="w-4 h-4" />
-                      ) : (
-                        <span className="font-sanskrit">{item.step}</span>
-                      )}
+                      {item.status === 'completed' ? '✓' : item.step}
                     </div>
                     
                     <div className="flex-1">

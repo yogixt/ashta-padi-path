@@ -377,10 +377,6 @@ export type Database = {
         }
         Returns: boolean
       }
-      submit_assessment_answers: {
-        Args: { p_answers: Json; p_assignment_id: string }
-        Returns: Json
-      }
     }
     Enums: {
       app_role: "student" | "teacher"
