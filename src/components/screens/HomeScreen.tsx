@@ -201,6 +201,7 @@ export function HomeScreen() {
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-foreground leading-tight mb-6">
               Learn
               <span className="block text-primary">Sanskrit & Scriptures</span>
+              <span className="block font-sanskrit text-2xl md:text-3xl text-primary/80 mt-1">संस्कृतं च शास्त्राणि</span>
               Through Your Profession
             </h2>
             
