@@ -86,7 +86,67 @@ export function HomeScreen() {
           </motion.div>
         </div>
 
-        {/* Navigation */}
+        {/* Top Right - Guru Shishya Parampara Badge */}
+        <motion.div
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          className="absolute top-24 right-8 hidden md:block z-20"
+        >
+          <div className="relative">
+            {/* Decorative background glow */}
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-gold-light/20 blur-2xl rounded-full" />
+            
+            {/* Main card */}
+            <div className="relative bg-card/80 backdrop-blur-sm border border-primary/20 rounded-2xl p-5 max-w-[200px] shadow-xl">
+              {/* Top accent */}
+              <div className="absolute -top-px left-4 right-4 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent" />
+              
+              {/* Sanskrit verse */}
+              <div className="text-center mb-3">
+                <p className="font-sanskrit text-lg text-primary leading-relaxed">
+                  गुरुर्ब्रह्मा गुरुर्विष्णु
+                </p>
+                <p className="font-sanskrit text-lg text-primary leading-relaxed">
+                  गुरुर्देवो महेश्वरः
+                </p>
+              </div>
+              
+              {/* Divider */}
+              <div className="flex items-center gap-2 mb-3">
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent to-primary/30" />
+                <span className="text-primary/60 text-xs">✦</span>
+                <div className="flex-1 h-px bg-gradient-to-l from-transparent to-primary/30" />
+              </div>
+              
+              {/* Translation */}
+              <p className="text-xs text-muted-foreground text-center italic leading-relaxed">
+                "The Guru is Brahma, Vishnu, and Maheshwara — the supreme divine"
+              </p>
+              
+              {/* Tag */}
+              <div className="mt-3 flex justify-center">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-primary/10 text-primary rounded-full text-[10px] font-medium">
+                  <span className="w-1 h-1 rounded-full bg-primary animate-pulse" />
+                  गुरु-शिष्य परम्परा
+                </span>
+              </div>
+            </div>
+            
+            {/* Floating decorative elements */}
+            <motion.div
+              animate={{ y: [-5, 5, -5] }}
+              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+              className="absolute -right-3 top-1/4 w-6 h-6 rounded-full bg-gradient-to-br from-primary/30 to-primary/10 blur-sm"
+            />
+            <motion.div
+              animate={{ y: [5, -5, 5] }}
+              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+              className="absolute -left-2 bottom-1/4 w-4 h-4 rounded-full bg-gradient-to-br from-amber-400/30 to-amber-400/10 blur-sm"
+            />
+          </div>
+        </motion.div>
+
         <nav className="relative max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-primary-foreground font-sanskrit text-2xl font-bold shadow-lg">
