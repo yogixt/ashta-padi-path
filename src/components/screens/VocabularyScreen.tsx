@@ -346,54 +346,6 @@ function SadhanaDashboard() {
         {/* Activity Calendar */}
         <ActivityCalendar />
 
-        {/* Certification Tiers */}
-        <div className="space-y-2">
-          <h4 className="text-sm font-medium text-foreground flex items-center gap-2 px-1">
-            <GraduationCap className="w-4 h-4 text-primary" />
-            Certification Path
-          </h4>
-          
-          {/* 1 Scripture = Certificate */}
-          <CertificationCard
-            image={certScripture}
-            titleSanskrit="प्रमाणपत्रम्"
-            titleEnglish="Certificate"
-            requirement="Complete 1 Scripture"
-            details={[
-              "Pass all module exams",
-              "Submit assessment",
-              "Complete thesis"
-            ]}
-          />
-
-          {/* 3 Scriptures = Diploma */}
-          <CertificationCard
-            image={certDiploma}
-            titleSanskrit="उपाधिपत्रम्"
-            titleEnglish="Diploma"
-            requirement="Complete 3 Scriptures"
-            details={[
-              "3 scripture certificates",
-              "Combined assessment",
-              "Research thesis"
-            ]}
-          />
-
-          {/* 5 Scriptures = Degree */}
-          <CertificationCard
-            image={certDegree}
-            titleSanskrit="उपाधिः"
-            titleEnglish="Degree"
-            requirement="Complete All 5 Scriptures"
-            details={[
-              "All scripture certificates",
-              "Final examination",
-              "Doctoral thesis"
-            ]}
-            isLocked={true}
-          />
-        </div>
-
         {/* Sanskrit wisdom */}
         <div className="text-center py-3 px-4 bg-muted/30 rounded-xl border border-border">
           <p className="font-sanskrit text-sm text-primary">विद्या ददाति विनयम्</p>
