@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Send, Check, Clock, BookOpen, Linkedin, Building2, GraduationCap, Users, ChevronRight } from 'lucide-react';
+import { Send, Check, Clock, BookOpen, Linkedin, Building2, GraduationCap, Users, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,6 +11,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
+import { useLearningStore } from '@/store/learningStore';
 
 interface TeacherWithProfile {
   user_id: string;
@@ -30,6 +31,9 @@ interface TeacherWithProfile {
 
 export function GuruDiscoveryCard() {
   const { user } = useAuth();
+  const { hasPassedQuiz } = useLearningStore();
+  const quizCompleted = hasPassedQuiz();
+  
   const [loading, setLoading] = useState(true);
   const [teachers, setTeachers] = useState<TeacherWithProfile[]>([]);
   const [stats, setStats] = useState({ total: 0, connected: 0, pending: 0 });
@@ -182,6 +186,14 @@ export function GuruDiscoveryCard() {
           <p className="text-sm text-muted-foreground">
             गुरुशिष्यपरम्परा — The sacred lineage of knowledge transmission
           </p>
+          {!quizCompleted && (
+            <div className="flex items-center gap-2 mt-2 p-2 bg-amber-50 dark:bg-amber-950/30 rounded-lg border border-amber-200 dark:border-amber-800">
+              <Lock className="w-4 h-4 text-amber-600" />
+              <p className="text-xs text-amber-700 dark:text-amber-400">
+                Complete the quiz with 100% to connect with gurus
+              </p>
+            </div>
+          )}
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Stats Row */}
@@ -327,17 +339,29 @@ export function GuruDiscoveryCard() {
                           )}
                         </div>
                       </div>
-                      <Button
-                        size="sm"
-                        onClick={() => {
-                          setSelectedTeacher(teacher);
-                          setShowRequestModal(true);
-                        }}
-                        className="gap-1 text-xs shrink-0"
-                      >
-                        <Send className="w-3 h-3" />
-                        Connect
-                      </Button>
+                      {quizCompleted ? (
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            setSelectedTeacher(teacher);
+                            setShowRequestModal(true);
+                          }}
+                          className="gap-1 text-xs shrink-0"
+                        >
+                          <Send className="w-3 h-3" />
+                          Connect
+                        </Button>
+                      ) : (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          disabled
+                          className="gap-1 text-xs shrink-0 opacity-60"
+                        >
+                          <Lock className="w-3 h-3" />
+                          Complete Quiz
+                        </Button>
+                      )}
                     </motion.div>
                   ))}
                 </div>
