@@ -1,40 +1,16 @@
 import { motion } from 'framer-motion';
 import { Header } from '@/components/Header';
-import { BookOpen, Target, Flame, Trophy, ArrowRight, Sparkles, GraduationCap, User, FileText } from 'lucide-react';
+import { BookOpen, Target, Flame, Trophy, ArrowRight, Sparkles, GraduationCap, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { useLearningStore } from '@/store/learningStore';
-
-import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { GuruDiscoveryCard } from '@/components/shishya/GuruDiscoveryCard';
 import mandalaElegant from '@/assets/mandala-elegant.png';
 
 export function ShishyaDashboard() {
   const { setScreen, vocabCompleted, sutrasCompleted, quizScore } = useLearningStore();
   const { user } = useAuth();
-  const [approvedTeachers, setApprovedTeachers] = useState(0);
-  const [pendingBlogs, setPendingBlogs] = useState(0);
-
-  useEffect(() => {
-    if (user) {
-      fetchConnectionStats();
-    }
-  }, [user]);
-
-  const fetchConnectionStats = async () => {
-    if (!user) return;
-    
-    // Count approved connections
-    const { count: approved } = await supabase
-      .from('connection_requests')
-      .select('*', { count: 'exact', head: true })
-      .eq('student_id', user.id)
-      .eq('status', 'approved');
-    
-    setApprovedTeachers(approved || 0);
-  };
 
   const learningPath = [
     { 
@@ -108,28 +84,17 @@ export function ShishyaDashboard() {
             </p>
           </motion.div>
 
-          {/* Quick Actions */}
-          <div className="grid grid-cols-2 gap-4 mb-8">
+          {/* Quick Action - My Profile Only */}
+          <div className="mb-8">
             <Button
               variant="outline"
-              className="h-16 gap-3"
+              className="h-16 gap-3 w-full sm:w-auto"
               onClick={() => setScreen('student-profile')}
             >
               <User className="w-5 h-5" />
               <div className="text-left">
                 <p className="font-medium">My Profile</p>
                 <p className="text-xs text-muted-foreground">Edit details & interests</p>
-              </div>
-            </Button>
-            <Button
-              variant="outline"
-              className="h-16 gap-3"
-              onClick={() => setScreen('student-profile')}
-            >
-              <GraduationCap className="w-5 h-5" />
-              <div className="text-left">
-                <p className="font-medium">Find Teachers</p>
-                <p className="text-xs text-muted-foreground">{approvedTeachers} connected</p>
               </div>
             </Button>
           </div>
@@ -274,6 +239,15 @@ export function ShishyaDashboard() {
               </div>
             </motion.div>
 
+            {/* Guru Discovery Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.55 }}
+              className="lg:col-span-3"
+            >
+              <GuruDiscoveryCard />
+            </motion.div>
           </div>
 
           {/* Continue Learning CTA */}
