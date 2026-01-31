@@ -1,32 +1,46 @@
-import { useMemo } from 'react';
 import { motion } from 'framer-motion';
-
-const wisdoms = [
-  'मौनं अपि उपदेशः',
-  'अल्पं श्रुतं, गम्भीरं चिन्त्यम्',
-  'स्थितप्रज्ञस्य का भाषा',
-];
+import { Mail, Globe, MapPin } from 'lucide-react';
 
 export function FooterWisdom() {
-  // Pick one wisdom randomly on page load
-  const wisdom = useMemo(() => {
-    const index = Math.floor(Math.random() * wisdoms.length);
-    return wisdoms[index];
-  }, []);
-
   return (
     <motion.footer
       initial={{ opacity: 0 }}
-      animate={{ opacity: 0.6 }}
-      transition={{ delay: 2, duration: 1 }}
-      className="py-10 text-center space-y-4"
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.5, duration: 0.5 }}
+      className="py-8 border-t border-border bg-card/50"
     >
-      <p className="font-sanskrit text-sm text-sandalwood-dark italic">
-        {wisdom}
-      </p>
-      <p className="text-xs text-muted-foreground">
-        © {new Date().getFullYear()} Ashta Padi. All rights reserved.
-      </p>
+      <div className="max-w-4xl mx-auto px-4">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+          {/* Contact Info */}
+          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
+            <a 
+              href="mailto:contact@ashtapadi.org" 
+              className="flex items-center gap-2 hover:text-primary transition-colors"
+            >
+              <Mail className="w-4 h-4" />
+              contact@ashtapadi.org
+            </a>
+            <a 
+              href="https://ashtapadi.org" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 hover:text-primary transition-colors"
+            >
+              <Globe className="w-4 h-4" />
+              ashtapadi.org
+            </a>
+            <span className="flex items-center gap-2">
+              <MapPin className="w-4 h-4" />
+              India
+            </span>
+          </div>
+
+          {/* Copyright */}
+          <p className="text-xs text-muted-foreground">
+            © {new Date().getFullYear()} Ashta Padi. All rights reserved.
+          </p>
+        </div>
+      </div>
     </motion.footer>
   );
 }
