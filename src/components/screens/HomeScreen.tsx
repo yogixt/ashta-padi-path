@@ -240,15 +240,6 @@ export function HomeScreen() {
                 <Play className="w-4 h-4" />
                 Watch Demo
               </Button>
-              <Button
-                variant="ghost"
-                size="lg"
-                className="h-12 px-6 gap-2 text-sandalwood-dark hover:text-earth hover:bg-sandalwood/20"
-                onClick={() => setScreen('gurukul')}
-              >
-                Enter Gurukul
-                <ChevronRight className="w-4 h-4" />
-              </Button>
             </div>
 
             {/* Stats */}
@@ -466,31 +457,19 @@ export function HomeScreen() {
           </motion.div>
 
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 pt-8 border-t border-border">
-            {/* Logo & Quote */}
-            <div className="text-center md:text-left">
-              <div className="inline-flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground font-sanskrit text-lg font-bold">
-                  अ
-                </div>
-                <span className="font-semibold text-lg text-foreground">Ashta Padi</span>
-              </div>
-              <p className="font-sanskrit text-xl text-primary mb-1">
-                योगः कर्मसु कौशलम्
-              </p>
-              <p className="text-sm text-muted-foreground italic">
-                "Yoga is skill in action" — Bhagavad Gita 2.50
-              </p>
-            </div>
-            
             {/* Conference info */}
-            <div className="text-center md:text-right">
+            <div className="text-center md:text-left">
               <p className="text-sm text-foreground font-medium mb-1">
                 8th International Sanskrit Computational Linguistics Symposium
               </p>
-              <p className="text-xs text-muted-foreground mb-2">
+              <p className="text-xs text-muted-foreground">
                 ISCLS 2026 Demo Paper
               </p>
-              <div className="flex items-center justify-center md:justify-end gap-4 text-xs text-muted-foreground">
+            </div>
+            
+            {/* Copyright & links */}
+            <div className="text-center md:text-right">
+              <div className="flex items-center justify-center md:justify-end gap-4 text-xs text-muted-foreground mb-2">
                 <a 
                   href="https://github.com/DivyanganaKothari/Ashta-Padi" 
                   target="_blank" 
@@ -502,6 +481,9 @@ export function HomeScreen() {
                 <span>•</span>
                 <span>Satyam Sadhana Kutir Ashram</span>
               </div>
+              <p className="text-xs text-muted-foreground">
+                © {new Date().getFullYear()} Ashta Padi. All rights reserved.
+              </p>
             </div>
           </div>
         </div>
