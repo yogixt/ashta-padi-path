@@ -1,18 +1,74 @@
 import { motion } from 'framer-motion';
 import { Clock, BookOpen, Lock } from 'lucide-react';
 import { useLearningStore } from '@/store/learningStore';
-import { getModulesForProfession, LearningModule } from '@/data/modulesData';
 import { professions } from '@/data/yogaSutrasData';
 import { Header } from '@/components/Header';
 import gurukulBackground from '@/assets/gurukul-background.jpg';
+
+const sacredTexts = [
+  {
+    id: 'yoga-sutra',
+    title: "Patanjali's Yoga Sutra",
+    titleSanskrit: 'पातञ्जलयोगसूत्रम्',
+    description: 'The foundational text of Raja Yoga, comprising 196 sutras on the philosophy and practice of yoga.',
+    verse: 'योगश्चित्तवृत्तिनिरोधः',
+    duration: '8 weeks',
+    chapters: 4,
+    level: 'beginner',
+    available: true,
+  },
+  {
+    id: 'hatha-yoga-pradipika',
+    title: 'Hatha Yoga Pradipika',
+    titleSanskrit: 'हठयोगप्रदीपिका',
+    description: 'A classic manual on Hatha Yoga, detailing asanas, pranayama, mudras, and samadhi.',
+    verse: 'हठविद्यां हि मत्स्येन्द्रगोरक्षाद्याः विजानते',
+    duration: '6 weeks',
+    chapters: 4,
+    level: 'intermediate',
+    available: true,
+  },
+  {
+    id: 'yoga-taravali',
+    title: 'Yoga Taravali',
+    titleSanskrit: 'योगतरावली',
+    description: 'A poetic treatise by Shankaracharya on the stages of yoga leading to liberation.',
+    verse: 'योगमार्गस्य सोपानं विवृणोति तरङ्गवत्',
+    duration: '4 weeks',
+    chapters: 1,
+    level: 'advanced',
+    available: false,
+  },
+  {
+    id: 'bhagavad-gita',
+    title: 'Bhagavad Gita',
+    titleSanskrit: 'भगवद्गीता',
+    description: 'The divine song of Lord Krishna, teaching the paths of Karma, Bhakti, and Jnana Yoga.',
+    verse: 'योगः कर्मसु कौशलम्',
+    duration: '10 weeks',
+    chapters: 18,
+    level: 'beginner',
+    available: true,
+  },
+  {
+    id: 'yoga-vashistha',
+    title: 'Yoga Vashistha',
+    titleSanskrit: 'योगवासिष्ठः',
+    description: 'Sage Vashistha\'s teachings to Lord Rama on consciousness, liberation, and the nature of reality.',
+    verse: 'चित्तमेव हि संसारः',
+    duration: '12 weeks',
+    chapters: 6,
+    level: 'advanced',
+    available: false,
+  },
+];
 
 export function ModulesScreen() {
   const { selectedProfession, setScreen, setSelectedModule } = useLearningStore();
   
   const profession = professions.find(p => p.id === selectedProfession);
-  const modules = selectedProfession ? getModulesForProfession(selectedProfession) : [];
 
-  const handleSelectModule = (module: LearningModule) => {
+  const handleSelectModule = (module: typeof sacredTexts[0]) => {
     if (!module.available) return;
     setSelectedModule(module.id);
     setScreen('vocabulary');
@@ -110,25 +166,22 @@ export function ModulesScreen() {
             transition={{ duration: 0.6 }}
             className="text-center mb-10"
           >
-            {/* Step indicator */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-sandalwood/20 border border-sandalwood/30 mb-6">
-              <span className="text-sm text-sandalwood-dark">Step 1.5 of 8</span>
-            </div>
-
             {/* Sanskrit title */}
             <h2 className="font-sanskrit text-xl text-ochre mb-2">
-              अध्ययनमार्गं चिनुत
+              शास्त्राध्ययनम्
             </h2>
             
             <h1 className="text-3xl md:text-4xl font-serif font-bold text-earth mb-3">
-              Choose Your Module
+              Sacred Scriptures
             </h1>
             
-            <p className="text-sandalwood-dark">
-              Select a topic to begin your learning journey as a{' '}
-              <span className="text-ochre font-medium">
-                {profession?.name || 'Student'}
-              </span>
+            <p className="text-sandalwood-dark max-w-lg mx-auto">
+              Begin your six-month immersive yogic sadhana through the study of these timeless texts
+              {profession && (
+                <span className="block mt-1">
+                  as a <span className="text-ochre font-medium">{profession.name}</span>
+                </span>
+              )}
             </p>
 
             {/* Decorative divider */}
@@ -139,24 +192,24 @@ export function ModulesScreen() {
               className="flex items-center justify-center gap-4 mt-6"
             >
               <div className="h-px w-12 bg-gradient-to-r from-transparent to-sandalwood/50" />
-              <div className="w-2 h-2 rounded-full bg-ochre/60" />
+              <span className="text-ochre/50 text-sm">॰</span>
               <div className="h-px w-12 bg-gradient-to-l from-transparent to-sandalwood/50" />
             </motion.div>
           </motion.div>
 
-          {/* Modules Grid */}
+          {/* Sacred Texts Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
-            {modules.map((module, index) => (
+            {sacredTexts.map((text, index) => (
               <motion.div
-                key={module.id}
+                key={text.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.15 + index * 0.1, duration: 0.5 }}
-                onClick={() => handleSelectModule(module)}
+                onClick={() => handleSelectModule(text)}
                 className={`
                   group relative rounded-xl overflow-hidden
                   transition-all duration-500
-                  ${module.available 
+                  ${text.available 
                     ? 'cursor-pointer hover:scale-[1.02] hover:-translate-y-1' 
                     : 'cursor-not-allowed opacity-65'
                   }
@@ -165,7 +218,7 @@ export function ModulesScreen() {
                 {/* Card background */}
                 <div className={`
                   absolute inset-0 backdrop-blur-sm transition-all duration-500
-                  ${module.available 
+                  ${text.available 
                     ? 'bg-manuscript/80 group-hover:bg-manuscript/90' 
                     : 'bg-manuscript/60'
                   }
@@ -174,14 +227,14 @@ export function ModulesScreen() {
                 {/* Border */}
                 <div className={`
                   absolute inset-0 rounded-xl border transition-all duration-500
-                  ${module.available 
+                  ${text.available 
                     ? 'border-sandalwood/40 group-hover:border-ochre/50 group-hover:shadow-lg group-hover:shadow-ochre/10' 
                     : 'border-sandalwood/25'
                   }
                 `} />
                 
                 {/* Hover glow */}
-                {module.available && (
+                {text.available && (
                   <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-b from-ochre/5 to-transparent" />
                 )}
                 
@@ -198,11 +251,11 @@ export function ModulesScreen() {
                     <div className="flex items-center gap-2">
                       <span className={`
                         px-3 py-1 rounded-full text-xs font-medium border
-                        ${getLevelStyle(module.level)}
+                        ${getLevelStyle(text.level)}
                       `}>
-                        {getLevelLabel(module.level)}
+                        {getLevelLabel(text.level)}
                       </span>
-                      {!module.available && (
+                      {!text.available && (
                         <Lock className="w-4 h-4 text-sandalwood-dark/50" />
                       )}
                     </div>
@@ -211,73 +264,55 @@ export function ModulesScreen() {
                   {/* Title */}
                   <h3 className={`
                     text-lg font-semibold mb-1 transition-colors duration-300
-                    ${module.available 
+                    ${text.available 
                       ? 'text-earth group-hover:text-ochre' 
                       : 'text-sandalwood-dark/70'
                     }
                   `}>
-                    {module.title}
+                    {text.title}
                   </h3>
                   
-                  {/* Sanskrit subtitle */}
+                  {/* Sanskrit title */}
                   <p className={`
-                    text-sm font-sanskrit mb-3
-                    ${module.available ? 'text-ochre/80' : 'text-sandalwood-dark/50'}
+                    text-base font-sanskrit mb-2
+                    ${text.available ? 'text-ochre/80' : 'text-sandalwood-dark/50'}
                   `}>
-                    {module.titleSanskrit}
+                    {text.titleSanskrit}
+                  </p>
+                  
+                  {/* Verse */}
+                  <p className={`
+                    text-sm font-sanskrit italic mb-3
+                    ${text.available ? 'text-sandalwood-dark/60' : 'text-sandalwood-dark/40'}
+                  `}>
+                    "{text.verse}"
                   </p>
                   
                   {/* Description */}
                   <p className={`
                     text-sm leading-relaxed mb-4
-                    ${module.available ? 'text-sandalwood-dark/80' : 'text-sandalwood-dark/50'}
+                    ${text.available ? 'text-sandalwood-dark/80' : 'text-sandalwood-dark/50'}
                   `}>
-                    {module.description}
+                    {text.description}
                   </p>
 
-                  {/* Duration & Lessons */}
+                  {/* Duration & Chapters */}
                   <div className={`
-                    flex items-center gap-4 text-xs mb-4
-                    ${module.available ? 'text-sandalwood-dark/70' : 'text-sandalwood-dark/40'}
+                    flex items-center gap-4 text-xs
+                    ${text.available ? 'text-sandalwood-dark/70' : 'text-sandalwood-dark/40'}
                   `}>
                     <div className="flex items-center gap-1.5">
                       <Clock className="w-3.5 h-3.5" />
-                      <span>{module.duration}</span>
+                      <span>{text.duration}</span>
                     </div>
                     <div className="flex items-center gap-1.5">
                       <BookOpen className="w-3.5 h-3.5" />
-                      <span>{module.lessons} lessons</span>
+                      <span>{text.chapters} {text.chapters === 1 ? 'chapter' : 'chapters'}</span>
                     </div>
                   </div>
 
-                  {/* Topic Tags */}
-                  <div className="flex flex-wrap gap-2">
-                    {module.topics.slice(0, 2).map((topic, i) => (
-                      <span 
-                        key={i}
-                        className={`
-                          px-2.5 py-1 rounded-md text-xs
-                          ${module.available 
-                            ? 'bg-sandalwood/20 text-sandalwood-dark/70' 
-                            : 'bg-sandalwood/10 text-sandalwood-dark/40'
-                          }
-                        `}
-                      >
-                        {topic}
-                      </span>
-                    ))}
-                    {module.topics.length > 2 && (
-                      <span className={`
-                        px-2.5 py-1 text-xs
-                        ${module.available ? 'text-ochre/60' : 'text-sandalwood-dark/30'}
-                      `}>
-                        +{module.topics.length - 2} more
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Coming Soon footer for locked modules */}
-                  {!module.available && (
+                  {/* Coming Soon footer for locked texts */}
+                  {!text.available && (
                     <div className="mt-4 pt-3 border-t border-sandalwood/20">
                       <div className="flex items-center gap-2 text-sm text-sandalwood-dark/50">
                         <Lock className="w-4 h-4" />
@@ -291,18 +326,33 @@ export function ModulesScreen() {
             ))}
           </div>
 
+          {/* Duration notice */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.8 }}
+            transition={{ delay: 0.8 }}
+            className="mt-10 text-center"
+          >
+            <p className="font-sanskrit text-sm text-sandalwood-dark">
+              एषा साधना षण्मासान् व्याप्नोति
+            </p>
+            <p className="text-xs text-ochre/60 mt-1 italic">
+              This sadhana spans six months
+            </p>
+          </motion.div>
+
           {/* Footer wisdom */}
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.6 }}
-            transition={{ delay: 1 }}
-            className="mt-12 text-center"
+            animate={{ opacity: 0.5 }}
+            transition={{ delay: 1.2 }}
+            className="mt-8 text-center"
           >
-            <p className="font-sanskrit text-sm text-sandalwood-dark/60">
-              एकैकं पदं धीरं गच्छ
+            <p className="font-sanskrit text-sm text-sandalwood-dark/50">
+              विद्या ददाति विनयम्
             </p>
-            <p className="text-xs text-sandalwood-dark/40 mt-1 italic">
-              Walk each step with patience
+            <p className="text-xs text-sandalwood-dark/35 mt-1">
+              Knowledge bestows humility
             </p>
           </motion.div>
         </div>
