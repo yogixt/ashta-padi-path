@@ -76,10 +76,6 @@ export function GurukulScreen() {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="pt-16 md:pt-24 pb-8 text-center px-6"
           >
-            <h1 className="font-sanskrit text-4xl md:text-5xl text-earth mb-8">
-              योगगुरुकुलम्
-            </h1>
-            
             <div className="max-w-md mx-auto">
               <p className="font-sanskrit text-base md:text-lg text-sandalwood-dark leading-relaxed">
                 शिष्य, अत्र न पाठ्यक्रमः।
