@@ -43,7 +43,7 @@ The platform follows a structured **8-step pedagogical roadmap** (Ashta Padi = E
 - **Frontend**: React 18 + TypeScript + Vite
 - **Styling**: Tailwind CSS + shadcn/ui components
 - **State Management**: Zustand
-- **Backend**: Lovable Cloud (Supabase)
+- **Backend**: Supabase
 - **Authentication**: Email-based auth with role management
 - **Animations**: Framer Motion
 - **Charts**: Recharts
@@ -128,8 +128,8 @@ The interface layer provides a **synchronized, interactive learning environment*
 - **Responsive Design**: Mobile-first approach with Tailwind CSS and Framer Motion animations
 - **Role-Based Dashboards**: Distinct interfaces for Guru (teacher) and Śiṣya (student)
 
-### 4. Backend Layer — Lovable Cloud Services
-The backend layer leverages **Lovable Cloud** for persistence and AI capabilities:
+### 4. Backend Layer — Supabase Services
+The backend layer leverages **Supabase** for persistence and AI capabilities:
 
 - **Authentication**: Role-based auth (student/teacher) with profile management
 - **Database**: PostgreSQL with RLS policies for secure data access
@@ -171,7 +171,7 @@ The backend layer leverages **Lovable Cloud** for persistence and AI capabilitie
 │  │  Authentication │  │    Database     │  │ Edge Functions │  │
 │  │  (Role-based)   │  │ (PostgreSQL+RLS)│  │  (AI Chatbot)  │  │
 │  └─────────────────┘  └─────────────────┘  └────────────────┘  │
-│                      Lovable Cloud                              │
+│                        Supabase                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
