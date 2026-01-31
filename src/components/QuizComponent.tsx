@@ -66,12 +66,12 @@ export function QuizComponent() {
   // Results screen
   if (isComplete && quizScore !== null) {
     const percentage = Math.round((quizScore / totalQuestions) * 100);
-    const hasPassed = percentage >= 70;
+    const hasPassed = percentage === 100;
     
     const getMessage = () => {
-      if (percentage >= 90) return { text: "Outstanding Performance", subtext: "शाबाश — You have mastered the material" };
-      if (percentage >= 70) return { text: "Great Progress", subtext: "बहुत अच्छा — You've qualified for mentor selection" };
-      if (percentage >= 50) return { text: "Keep Practicing", subtext: "अभ्यास जारी रखें — Review and try again for 70%+" };
+      if (percentage === 100) return { text: "Perfect Score!", subtext: "शाबाश — You have mastered the material" };
+      if (percentage >= 80) return { text: "Almost There", subtext: "अभ्यास जारी रखें — You need 100% to select a mentor" };
+      if (percentage >= 60) return { text: "Keep Practicing", subtext: "पुनः प्रयास करें — Review and try again for 100%" };
       return { text: "More Study Needed", subtext: "पुनः प्रयास करें — Review the material and try again" };
     };
     const message = getMessage();
@@ -130,8 +130,8 @@ export function QuizComponent() {
           }`}>
             <p className="text-sm font-medium">
               {hasPassed 
-                ? "Congratulations! You've qualified for Mentor Selection." 
-                : "You need 70% or higher to proceed to Mentor Selection. Please review the content and try again."
+                ? "Congratulations! You've achieved a perfect score and can now select a Mentor." 
+                : "You need a 100% score to proceed to Mentor Selection. Please review the content and try again."
               }
             </p>
           </div>
