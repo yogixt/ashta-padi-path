@@ -5,7 +5,7 @@ import mandalaElegant from '@/assets/mandala-elegant.png';
 import certScripture from '@/assets/cert-scripture.png';
 import certDiploma from '@/assets/cert-diploma.png';
 import certDegree from '@/assets/cert-degree.png';
-import { Award, BookOpen, Calendar, CheckCircle2, GraduationCap, Users } from 'lucide-react';
+import { Award, BookOpen, Calendar, CheckCircle2, GraduationCap, ScrollText } from 'lucide-react';
 import { useLearningStore } from '@/store/learningStore';
 import { useMemo } from 'react';
 
@@ -157,6 +157,121 @@ function ProgressIndicator() {
   );
 }
 
+const SCRIPTURES = [
+  { name: 'Yoga Sūtra', sanskrit: 'योगसूत्र' },
+  { name: 'Haṭha Yoga', sanskrit: 'हठयोग' },
+  { name: 'Yoga Tārāvalī', sanskrit: 'योगतारावली' },
+  { name: 'Bhagavad Gītā', sanskrit: 'भगवद्गीता' },
+  { name: 'Yoga Vāsiṣṭha', sanskrit: 'योगवासिष्ठ' },
+];
+
+function ScriptureProgressTracker() {
+  // Mock: 0 scriptures completed for now - this would come from user data
+  const completedScriptures = 0;
+  
+  const getTierStatus = (required: number) => {
+    if (completedScriptures >= required) return 'completed';
+    if (completedScriptures > 0 && completedScriptures < required) return 'in-progress';
+    return 'locked';
+  };
+
+  const tiers = [
+    { required: 1, label: 'Certificate', sanskrit: 'प्रमाणपत्रम्' },
+    { required: 3, label: 'Diploma', sanskrit: 'उपाधिपत्रम्' },
+    { required: 5, label: 'Degree', sanskrit: 'उपाधिः' },
+  ];
+
+  return (
+    <div className="bg-card border border-border rounded-xl p-4">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <ScrollText className="w-4 h-4 text-primary" />
+          <h4 className="text-sm font-medium text-foreground">Scripture Journey</h4>
+        </div>
+        <span className="text-xs font-semibold text-primary">{completedScriptures}/5</span>
+      </div>
+
+      {/* Scripture dots */}
+      <div className="flex justify-between mb-4">
+        {SCRIPTURES.map((scripture, idx) => {
+          const isCompleted = idx < completedScriptures;
+          const isCurrent = idx === completedScriptures;
+          return (
+            <div key={idx} className="flex flex-col items-center gap-1.5">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: idx * 0.1 }}
+                className={`w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all ${
+                  isCompleted 
+                    ? 'bg-primary border-primary text-primary-foreground' 
+                    : isCurrent
+                    ? 'bg-primary/20 border-primary text-primary'
+                    : 'bg-muted border-border text-muted-foreground'
+                }`}
+              >
+                {isCompleted ? (
+                  <CheckCircle2 className="w-4 h-4" />
+                ) : (
+                  <span className="text-xs font-medium">{idx + 1}</span>
+                )}
+              </motion.div>
+              <span className="text-[10px] text-muted-foreground text-center leading-tight max-w-[50px]">
+                {scripture.sanskrit}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Progress bar with tier markers */}
+      <div className="relative mb-3">
+        <div className="h-2 bg-muted rounded-full overflow-hidden">
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: `${(completedScriptures / 5) * 100}%` }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="h-full bg-gradient-to-r from-primary to-primary/70 rounded-full"
+          />
+        </div>
+        {/* Tier markers */}
+        <div className="absolute top-0 left-0 right-0 h-2 flex">
+          {[1, 3, 5].map((tier) => (
+            <div
+              key={tier}
+              className="absolute top-1/2 -translate-y-1/2"
+              style={{ left: `${(tier / 5) * 100}%` }}
+            >
+              <div className={`w-1.5 h-3 rounded-full ${
+                completedScriptures >= tier ? 'bg-primary' : 'bg-border'
+              }`} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Tier labels */}
+      <div className="flex justify-between text-[10px]">
+        {tiers.map((tier) => {
+          const status = getTierStatus(tier.required);
+          return (
+            <div 
+              key={tier.required}
+              className={`flex flex-col items-center ${
+                status === 'completed' ? 'text-primary' : 
+                status === 'in-progress' ? 'text-foreground' : 'text-muted-foreground'
+              }`}
+            >
+              <span className="font-medium">{tier.label}</span>
+              <span className="opacity-70">{tier.required} text{tier.required > 1 ? 's' : ''}</span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 function CertificationCard({ 
   image, 
   titleSanskrit, 
@@ -222,7 +337,10 @@ function SadhanaDashboard() {
       className="w-full lg:w-80 shrink-0"
     >
       <div className="sticky top-24 space-y-3">
-        {/* Progress Indicator */}
+        {/* Scripture Progress Tracker */}
+        <ScriptureProgressTracker />
+
+        {/* Module Progress Indicator */}
         <ProgressIndicator />
 
         {/* Activity Calendar */}
