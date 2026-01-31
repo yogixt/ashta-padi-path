@@ -4,7 +4,7 @@ import { BookOpen, Target, Flame, Trophy, ArrowRight, Sparkles, GraduationCap, U
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { useLearningStore } from '@/store/learningStore';
-import { MentorSelection } from '@/components/MentorSelection';
+
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -14,7 +14,6 @@ import mandalaElegant from '@/assets/mandala-elegant.png';
 export function ShishyaDashboard() {
   const { setScreen, vocabCompleted, sutrasCompleted, quizScore } = useLearningStore();
   const { user } = useAuth();
-  const [selectedMentor, setSelectedMentor] = useState<string | null>(null);
   const [approvedTeachers, setApprovedTeachers] = useState(0);
   const [pendingBlogs, setPendingBlogs] = useState(0);
 
@@ -275,18 +274,6 @@ export function ShishyaDashboard() {
               </div>
             </motion.div>
 
-            {/* Mentor Selection Section */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.55 }}
-              className="lg:col-span-3 bg-card border border-border rounded-2xl p-6"
-            >
-              <MentorSelection 
-                onMentorSelect={setSelectedMentor}
-                selectedMentorId={selectedMentor}
-              />
-            </motion.div>
           </div>
 
           {/* Continue Learning CTA */}
