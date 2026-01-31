@@ -16,6 +16,7 @@ interface TeacherWithProfile {
   user_id: string;
   faculty_type: 'permanent' | 'visiting';
   degree: string | null;
+  // Meeting links only visible to approved students (fetched separately)
   zoom_link: string | null;
   gmeet_link: string | null;
   profile: {
@@ -52,42 +53,61 @@ export function BrowseTeachers() {
     if (!user) return;
     
     try {
-      // Fetch all teacher profiles
+      // Fetch teacher profiles using the public view (excludes meeting links for security)
       const { data: teacherProfiles, error } = await supabase
-        .from('teacher_profiles')
-        .select('user_id, faculty_type, degree, zoom_link, gmeet_link');
+        .from('teacher_profiles_public')
+        .select('user_id, faculty_type, degree');
 
       if (error) throw error;
 
       // Enrich with profile data and connection status
       const enrichedTeachers = await Promise.all(
         (teacherProfiles || []).map(async (tp) => {
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('full_name, avatar_url, bio, linkedin_url, university, department')
-            .eq('user_id', tp.user_id)
-            .maybeSingle();
-
-          // Count publications
-          const { count } = await supabase
-            .from('publications')
-            .select('*', { count: 'exact', head: true })
-            .eq('teacher_id', tp.user_id);
-
-          // Check connection status
+          // Check connection status first
           const { data: connection } = await supabase
             .from('connection_requests')
             .select('status')
             .eq('student_id', user.id)
             .eq('teacher_id', tp.user_id)
             .maybeSingle();
+          
+          const connectionStatus = (connection?.status as 'none' | 'pending' | 'approved' | 'rejected') || 'none';
+          
+          // Fetch profile data - for teachers, their profiles should be visible
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('full_name, avatar_url, bio, linkedin_url, university, department')
+            .eq('user_id', tp.user_id)
+            .maybeSingle();
+
+          // Only fetch meeting links if approved (via full teacher_profiles table)
+          let meetingLinks = { zoom_link: null, gmeet_link: null };
+          if (connectionStatus === 'approved') {
+            const { data: fullProfile } = await supabase
+              .from('teacher_profiles')
+              .select('zoom_link, gmeet_link')
+              .eq('user_id', tp.user_id)
+              .maybeSingle();
+            if (fullProfile) {
+              meetingLinks = fullProfile;
+            }
+          }
+
+          // Count publications (RLS will handle visibility)
+          const { count } = await supabase
+            .from('publications')
+            .select('*', { count: 'exact', head: true })
+            .eq('teacher_id', tp.user_id);
 
           return {
-            ...tp,
+            user_id: tp.user_id,
             faculty_type: tp.faculty_type as 'permanent' | 'visiting',
+            degree: tp.degree,
+            zoom_link: meetingLinks.zoom_link,
+            gmeet_link: meetingLinks.gmeet_link,
             profile,
             publications_count: count || 0,
-            connection_status: (connection?.status as 'none' | 'pending' | 'approved' | 'rejected') || 'none',
+            connection_status: connectionStatus,
           };
         })
       );
@@ -244,8 +264,9 @@ export function BrowseTeachers() {
                             <Linkedin className="w-4 h-4" />
                           </a>
                         )}
-                        {(teacher.zoom_link || teacher.gmeet_link) && (
-                          <Video className="w-4 h-4 text-muted-foreground" />
+                        {/* Only show meeting link icon for approved connections */}
+                        {teacher.connection_status === 'approved' && (teacher.zoom_link || teacher.gmeet_link) && (
+                          <Video className="w-4 h-4 text-primary" />
                         )}
                       </div>
                     </div>

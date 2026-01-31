@@ -240,6 +240,13 @@ export type Database = {
             referencedRelation: "teacher_profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "publications_teacher_id_fkey"
+            columns: ["teacher_id"]
+            isOneToOne: false
+            referencedRelation: "teacher_profiles_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       student_profiles: {
@@ -305,6 +312,13 @@ export type Database = {
             referencedRelation: "teacher_profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "teacher_blogs_teacher_id_fkey"
+            columns: ["teacher_id"]
+            isOneToOne: false
+            referencedRelation: "teacher_profiles_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       teacher_profiles: {
@@ -363,7 +377,33 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      teacher_profiles_public: {
+        Row: {
+          created_at: string | null
+          degree: string | null
+          faculty_type: Database["public"]["Enums"]["faculty_type"] | null
+          id: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          degree?: string | null
+          faculty_type?: Database["public"]["Enums"]["faculty_type"] | null
+          id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          degree?: string | null
+          faculty_type?: Database["public"]["Enums"]["faculty_type"] | null
+          id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       get_student_assessment_questions: {
