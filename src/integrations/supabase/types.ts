@@ -381,6 +381,54 @@ export type Database = {
         }
         Relationships: []
       }
+      user_progress: {
+        Row: {
+          id: string
+          user_id: string
+          selected_profession: string | null
+          selected_module: string | null
+          current_vocab_index: number
+          vocab_completed: boolean
+          completed_vocab_terms: number[]
+          current_sutra_index: number
+          sutras_completed: number
+          quiz_answers: Json
+          quiz_score: number | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          selected_profession?: string | null
+          selected_module?: string | null
+          current_vocab_index?: number
+          vocab_completed?: boolean
+          completed_vocab_terms?: number[]
+          current_sutra_index?: number
+          sutras_completed?: number
+          quiz_answers?: Json
+          quiz_score?: number | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          selected_profession?: string | null
+          selected_module?: string | null
+          current_vocab_index?: number
+          vocab_completed?: boolean
+          completed_vocab_terms?: number[]
+          current_sutra_index?: number
+          sutras_completed?: number
+          quiz_answers?: Json
+          quiz_score?: number | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string

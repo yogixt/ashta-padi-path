@@ -6,7 +6,7 @@ export function ProgressTracker() {
   const { completedVocabTerms, sutrasCompleted } = useLearningStore();
 
   // Use actual completed terms count, not boolean
-  const vocabProgress = completedVocabTerms.size;
+  const vocabProgress = completedVocabTerms.length;
   const sutraProgress = sutrasCompleted;
 
   const stats = [

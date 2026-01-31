@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useLearningStore, Screen } from '@/store/learningStore';
 import { useAuth } from '@/contexts/AuthContext';
+import { useProgressSync } from '@/hooks/useProgressSync';
 import { HomeScreen } from '@/components/screens/HomeScreen';
 import { GurukulScreen } from '@/components/screens/GurukulScreen';
 import { ModulesScreen } from '@/components/screens/ModulesScreen';
@@ -22,6 +23,9 @@ import { useState } from 'react';
 const Index = () => {
   const { currentScreen, setScreen, selectedProfession } = useLearningStore();
   const { user, loading, role } = useAuth();
+
+  // Sync progress with database
+  useProgressSync();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [chatQuery, setChatQuery] = useState<string | undefined>();

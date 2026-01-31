@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 export type Screen = 'home' | 'gurukul' | 'modules' | 'vocabulary' | 'learning' | 'quiz' | 'results' | 'analytics' | 'guru-dashboard' | 'shishya-dashboard' | 'teacher-profile' | 'student-profile' | 'browse-teachers' | 'mentor-selection' | 'assessments';
 
@@ -6,33 +7,33 @@ interface LearningState {
   // Navigation
   currentScreen: Screen;
   setScreen: (screen: Screen) => void;
-  
+
   // Profession
   selectedProfession: string | null;
   setSelectedProfession: (profession: string) => void;
-  
+
   // Module
   selectedModule: string | null;
   setSelectedModule: (module: string) => void;
-  
+
   // Vocabulary progress - track each term completion
   currentVocabIndex: number;
   vocabCompleted: boolean;
-  completedVocabTerms: Set<number>; // Track which terms have been explicitly completed
+  completedVocabTerms: number[]; // Track which terms have been explicitly completed (array for serialization)
   nextVocab: () => void;
   prevVocab: () => void;
   completeVocab: () => void;
   completeCurrentVocabTerm: () => void; // Mark current term as completed
   resetVocab: () => void;
   isAllVocabCompleted: () => boolean; // Check if all terms are completed
-  
+
   // Sutra progress
   currentSutraIndex: number;
   sutrasCompleted: number;
   nextSutra: () => void;
   prevSutra: () => void;
   completeSutra: () => void;
-  
+
   // Quiz
   quizAnswers: Record<number, number>;
   quizScore: number | null;
@@ -40,18 +41,20 @@ interface LearningState {
   calculateScore: (correctAnswers: Record<number, number>) => void;
   resetQuiz: () => void;
   hasPassedQuiz: () => boolean; // Check if score >= 70%
-  
+
   // Grammar sidebar
   expandedGrammar: string | null;
   setExpandedGrammar: (id: string | null) => void;
-  
+
   // Reset all
   resetProgress: () => void;
 }
 
 const TOTAL_VOCAB_TERMS = 6; // Number of vocabulary terms
 
-export const useLearningStore = create<LearningState>((set, get) => ({
+export const useLearningStore = create<LearningState>()(
+  persist(
+    (set, get) => ({
   // Navigation
   currentScreen: 'home',
   setScreen: (screen) => set({ currentScreen: screen }),
@@ -67,27 +70,28 @@ export const useLearningStore = create<LearningState>((set, get) => ({
   // Vocabulary
   currentVocabIndex: 0,
   vocabCompleted: false,
-  completedVocabTerms: new Set<number>(),
+  completedVocabTerms: [],
   nextVocab: () => set((state) => ({
-    currentVocabIndex: Math.min(state.currentVocabIndex + 1, TOTAL_VOCAB_TERMS - 1) 
+    currentVocabIndex: Math.min(state.currentVocabIndex + 1, TOTAL_VOCAB_TERMS - 1)
   })),
-  prevVocab: () => set((state) => ({ 
-    currentVocabIndex: Math.max(state.currentVocabIndex - 1, 0) 
+  prevVocab: () => set((state) => ({
+    currentVocabIndex: Math.max(state.currentVocabIndex - 1, 0)
   })),
   completeCurrentVocabTerm: () => set((state) => {
-    const newSet = new Set(state.completedVocabTerms);
-    newSet.add(state.currentVocabIndex);
-    const allCompleted = newSet.size >= TOTAL_VOCAB_TERMS;
-    return { 
-      completedVocabTerms: newSet,
+    const newTerms = state.completedVocabTerms.includes(state.currentVocabIndex)
+      ? state.completedVocabTerms
+      : [...state.completedVocabTerms, state.currentVocabIndex];
+    const allCompleted = newTerms.length >= TOTAL_VOCAB_TERMS;
+    return {
+      completedVocabTerms: newTerms,
       vocabCompleted: allCompleted
     };
   }),
   completeVocab: () => set({ vocabCompleted: true }),
-  resetVocab: () => set({ currentVocabIndex: 0, vocabCompleted: false, completedVocabTerms: new Set() }),
+  resetVocab: () => set({ currentVocabIndex: 0, vocabCompleted: false, completedVocabTerms: [] }),
   isAllVocabCompleted: () => {
     const state = get();
-    return state.completedVocabTerms.size >= TOTAL_VOCAB_TERMS;
+    return state.completedVocabTerms.length >= TOTAL_VOCAB_TERMS;
   },
   
   // Sutras
@@ -145,11 +149,29 @@ export const useLearningStore = create<LearningState>((set, get) => ({
     selectedModule: null,
     currentVocabIndex: 0,
     vocabCompleted: false,
-    completedVocabTerms: new Set(),
+    completedVocabTerms: [],
     currentSutraIndex: 0,
     sutrasCompleted: 0,
     quizAnswers: {},
     quizScore: null,
     expandedGrammar: null
   })
-}));
+    }),
+    {
+      name: 'ashta-padi-learning-progress',
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({
+        // Only persist learning progress, not navigation
+        selectedProfession: state.selectedProfession,
+        selectedModule: state.selectedModule,
+        currentVocabIndex: state.currentVocabIndex,
+        vocabCompleted: state.vocabCompleted,
+        completedVocabTerms: state.completedVocabTerms,
+        currentSutraIndex: state.currentSutraIndex,
+        sutrasCompleted: state.sutrasCompleted,
+        quizAnswers: state.quizAnswers,
+        quizScore: state.quizScore,
+      }),
+    }
+  )
+);

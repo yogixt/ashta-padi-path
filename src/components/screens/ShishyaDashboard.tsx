@@ -30,7 +30,7 @@ export function ShishyaDashboard() {
     : 0;
 
   // Calculate real overall progress based on actual completion
-  const vocabProgress = (completedVocabTerms.size / TOTAL_VOCAB_TERMS) * 25; // 25% weight
+  const vocabProgress = (completedVocabTerms.length / TOTAL_VOCAB_TERMS) * 25; // 25% weight
   const sutrasProgress = (sutrasCompleted / TOTAL_SUTRAS) * 50; // 50% weight
   const quizProgress = quizScore !== null ? (quizScore / totalQuizQuestions) * 25 : 0; // 25% weight
   const totalProgress = Math.round(vocabProgress + sutrasProgress + quizProgress);
@@ -47,7 +47,7 @@ export function ShishyaDashboard() {
       step: 2, 
       title: 'शब्दकोश', 
       subtitle: 'Vocabulary',
-      status: vocabCompleted ? 'completed' : completedVocabTerms.size > 0 ? 'in-progress' : 'current',
+      status: vocabCompleted ? 'completed' : completedVocabTerms.length > 0 ? 'in-progress' : 'current',
       action: () => setScreen('vocabulary')
     },
     { 
@@ -67,7 +67,7 @@ export function ShishyaDashboard() {
   ];
 
   const dailyGoals = [
-    { label: 'Learn vocabulary terms', completed: completedVocabTerms.size, total: TOTAL_VOCAB_TERMS },
+    { label: 'Learn vocabulary terms', completed: completedVocabTerms.length, total: TOTAL_VOCAB_TERMS },
     { label: 'Study sūtras', completed: sutrasCompleted, total: TOTAL_SUTRAS },
     { label: 'Complete quiz with 100%', completed: quizPercentage === 100 ? 1 : 0, total: 1 },
   ];

@@ -93,7 +93,7 @@ function ActivityCalendar() {
 
 function ProgressIndicator() {
   const { completedVocabTerms, quizScore } = useLearningStore();
-  const vocabProgress = (completedVocabTerms.size / TOTAL_VOCAB_TERMS) * 100;
+  const vocabProgress = (completedVocabTerms.length / TOTAL_VOCAB_TERMS) * 100;
   const quizProgress = quizScore !== null ? (quizScore / 5) * 100 : 0;
 
   return (
@@ -107,7 +107,7 @@ function ProgressIndicator() {
       <div className="space-y-2">
         <div className="flex items-center justify-between text-xs">
           <span className="text-muted-foreground">Vocabulary</span>
-          <span className="font-medium text-foreground">{completedVocabTerms.size}/{TOTAL_VOCAB_TERMS}</span>
+          <span className="font-medium text-foreground">{completedVocabTerms.length}/{TOTAL_VOCAB_TERMS}</span>
         </div>
         <div className="h-2 bg-muted rounded-full overflow-hidden">
           <motion.div

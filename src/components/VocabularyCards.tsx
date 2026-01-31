@@ -134,8 +134,8 @@ export function VocabularyCards({ onOpenChatWithQuery }: VocabularyCardsProps) {
   const currentTerm = vocabulary[currentVocabIndex];
   const isFirst = currentVocabIndex === 0;
   const isLast = currentVocabIndex === vocabulary.length - 1;
-  const isCurrentTermCompleted = completedVocabTerms.has(currentVocabIndex);
-  const allVocabCompleted = completedVocabTerms.size >= vocabulary.length;
+  const isCurrentTermCompleted = completedVocabTerms.includes(currentVocabIndex);
+  const allVocabCompleted = completedVocabTerms.length >= vocabulary.length;
 
   const handleMarkComplete = () => {
     completeCurrentVocabTerm();
@@ -321,7 +321,7 @@ export function VocabularyCards({ onOpenChatWithQuery }: VocabularyCardsProps) {
                 </>
               ) : (
                 <>
-                  Complete All Terms First ({completedVocabTerms.size}/{vocabulary.length})
+                  Complete All Terms First ({completedVocabTerms.length}/{vocabulary.length})
                   <BookOpen className="w-5 h-5" />
                 </>
               )}
@@ -336,13 +336,13 @@ export function VocabularyCards({ onOpenChatWithQuery }: VocabularyCardsProps) {
                 onClick={() => goToIndex(index)}
                 className={cn(
                   "w-3 h-3 rounded-full transition-all duration-300 border-2",
-                  completedVocabTerms.has(index)
+                  completedVocabTerms.includes(index)
                     ? "bg-primary border-primary"
-                    : index === currentVocabIndex 
-                      ? "bg-primary/40 border-primary/60 scale-110" 
+                    : index === currentVocabIndex
+                      ? "bg-primary/40 border-primary/60 scale-110"
                       : "bg-muted border-border hover:border-primary/40"
                 )}
-                aria-label={`Go to term ${index + 1}${completedVocabTerms.has(index) ? ' (completed)' : ''}`}
+                aria-label={`Go to term ${index + 1}${completedVocabTerms.includes(index) ? ' (completed)' : ''}`}
               />
             ))}
           </div>
