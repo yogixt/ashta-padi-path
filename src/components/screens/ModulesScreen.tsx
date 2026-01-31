@@ -3,7 +3,14 @@ import { ArrowLeft } from 'lucide-react';
 import { useLearningStore } from '@/store/learningStore';
 import { professions } from '@/data/yogaSutrasData';
 import { Button } from '@/components/ui/button';
-import gurukulBackground from '@/assets/gurukul-background.jpg';
+import { Header } from '@/components/Header';
+
+// Import scripture icons
+import iconYogaSutra from '@/assets/icon-yoga-sutra.png';
+import iconHathaYoga from '@/assets/icon-hatha-yoga.png';
+import iconYogaTaravali from '@/assets/icon-yoga-taravali.png';
+import iconBhagavadGita from '@/assets/icon-bhagavad-gita.png';
+import iconYogaVashistha from '@/assets/icon-yoga-vashistha.png';
 
 const sacredTexts = [
   {
@@ -12,7 +19,7 @@ const sacredTexts = [
     titleSanskrit: 'पातञ्जलयोगसूत्रम्',
     description: 'The foundational text of Raja Yoga, comprising 196 sutras on the philosophy and practice of yoga.',
     verse: 'योगश्चित्तवृत्तिनिरोधः',
-    icon: '🕉',
+    icon: iconYogaSutra,
     available: true,
   },
   {
@@ -21,7 +28,7 @@ const sacredTexts = [
     titleSanskrit: 'हठयोगप्रदीपिका',
     description: 'A classic manual on Hatha Yoga, detailing asanas, pranayama, mudras, and samadhi.',
     verse: 'हठविद्यां हि मत्स्येन्द्रगोरक्षाद्याः विजानते',
-    icon: '☸',
+    icon: iconHathaYoga,
     available: true,
   },
   {
@@ -30,7 +37,7 @@ const sacredTexts = [
     titleSanskrit: 'योगतरावली',
     description: 'A poetic treatise by Shankaracharya on the stages of yoga leading to liberation.',
     verse: 'योगमार्गस्य सोपानं विवृणोति तरङ्गवत्',
-    icon: '✴',
+    icon: iconYogaTaravali,
     available: true,
   },
   {
@@ -39,7 +46,7 @@ const sacredTexts = [
     titleSanskrit: 'भगवद्गीता',
     description: 'The divine song of Lord Krishna, teaching the paths of Karma, Bhakti, and Jnana Yoga.',
     verse: 'योगः कर्मसु कौशलम्',
-    icon: 'ॐ',
+    icon: iconBhagavadGita,
     available: true,
   },
   {
@@ -48,7 +55,7 @@ const sacredTexts = [
     titleSanskrit: 'योगवासिष्ठः',
     description: 'Sage Vashistha\'s teachings to Lord Rama on consciousness, liberation, and the nature of reality.',
     verse: 'चित्तमेव हि संसारः',
-    icon: '❈',
+    icon: iconYogaVashistha,
     available: true,
   },
 ];
@@ -86,124 +93,43 @@ export function ModulesScreen() {
   };
 
   return (
-    <div className="min-h-screen bg-manuscript relative overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0">
-        {/* Gurukul illustration */}
-        <motion.div
-          initial={{ scale: 1.05, opacity: 0 }}
-          animate={{ 
-            scale: [1.02, 1.05, 1.02],
-            opacity: 0.1 
-          }}
-          transition={{ 
-            scale: { duration: 25, repeat: Infinity, ease: 'easeInOut' },
-            opacity: { duration: 2 }
-          }}
-          className="absolute inset-0"
-        >
-          <img 
-            src={gurukulBackground} 
-            alt="" 
-            className="w-full h-full object-cover"
-          />
-        </motion.div>
-        
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-manuscript via-manuscript/95 to-manuscript" />
-        
-        {/* Floating particles */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {[...Array(8)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-1 h-1 rounded-full bg-ochre/20"
-              initial={{ 
-                x: `${10 + Math.random() * 80}%`, 
-                y: -10,
-                opacity: 0,
-              }}
-              animate={{ 
-                y: '110vh',
-                opacity: [0, 0.4, 0.4, 0],
-              }}
-              transition={{
-                duration: 25 + Math.random() * 15,
-                repeat: Infinity,
-                delay: i * 3,
-                ease: 'linear'
-              }}
-            />
-          ))}
-        </div>
-        
-        {/* Parchment texture */}
-        <div 
-          className="absolute inset-0 opacity-[0.05]"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-          }}
-        />
-        
-        {/* Vignette */}
-        <div 
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background: 'radial-gradient(ellipse at center, transparent 40%, hsl(var(--sandalwood) / 0.25) 100%)',
-          }}
-        />
-      </div>
-
-      {/* Back button */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
-        className="absolute top-6 left-6 z-20"
-      >
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setScreen('home')}
-          className="text-sandalwood-dark hover:text-earth hover:bg-sandalwood/20 gap-2"
-        >
-          <ArrowLeft className="w-4 h-4" />
-        </Button>
-      </motion.div>
+    <div className="min-h-screen bg-background">
+      <Header showBack backTo="home" />
 
       {/* Main Content */}
-      <main className="relative z-10 min-h-screen flex flex-col items-center py-12 px-4 md:px-6">
-        <div className="max-w-5xl w-full">
+      <main className="py-8 px-4 md:px-6">
+        <div className="max-w-6xl mx-auto">
           {/* Header Section */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-10 mt-8"
+            transition={{ duration: 0.5 }}
+            className="text-center mb-10"
           >
-            {/* Main title */}
-            <h1 className="font-sanskrit text-3xl md:text-4xl text-earth mb-3">
-              योगगुरुकुलम्
+            {/* Sanskrit title */}
+            <h2 className="font-sanskrit text-xl text-primary mb-2">
+              शास्त्राध्ययनम्
+            </h2>
+            
+            <h1 className="text-3xl md:text-4xl font-serif font-bold text-foreground mb-3">
+              Sacred Scriptures
             </h1>
             
-            <p className="font-sanskrit text-base text-sandalwood-dark mb-1">
-              शिष्य, अत्र न पाठ्यक्रमः।
-            </p>
-            <p className="font-sanskrit text-base text-sandalwood-dark">
-              अत्र साधनामार्गः।
+            <p className="text-muted-foreground max-w-lg mx-auto">
+              Begin your six-month immersive yogic sadhana through the study of these timeless texts
+              {profession && (
+                <span className="block mt-1">
+                  as a <span className="text-primary font-medium">{profession.name}</span>
+                </span>
+              )}
             </p>
 
-            {/* Decorative divider */}
-            <motion.div
-              initial={{ opacity: 0, scaleX: 0 }}
-              animate={{ opacity: 1, scaleX: 1 }}
-              transition={{ delay: 0.4, duration: 0.6 }}
-              className="flex items-center justify-center gap-4 mt-6"
-            >
-              <div className="h-px w-16 bg-gradient-to-r from-transparent to-sandalwood/50" />
-              <span className="text-ochre/50 text-sm">॰</span>
-              <div className="h-px w-16 bg-gradient-to-l from-transparent to-sandalwood/50" />
-            </motion.div>
+            {/* Progress dots */}
+            <div className="flex items-center justify-center gap-2 mt-6">
+              <div className="w-8 h-1 rounded-full bg-muted" />
+              <div className="w-3 h-3 rounded-full bg-primary" />
+              <div className="w-8 h-1 rounded-full bg-muted" />
+            </div>
           </motion.div>
 
           {/* Sacred Texts Grid */}
@@ -213,43 +139,41 @@ export function ModulesScreen() {
                 key={text.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 + index * 0.1, duration: 0.5 }}
+                transition={{ delay: 0.1 + index * 0.1, duration: 0.4 }}
                 onClick={() => handleSelectModule(text.id)}
-                className="group relative rounded-xl overflow-hidden cursor-pointer transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1"
+                className="group relative bg-card rounded-xl border border-border overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-primary/30 hover:-translate-y-1"
               >
-                {/* Card background */}
-                <div className="absolute inset-0 backdrop-blur-sm bg-manuscript/75 group-hover:bg-manuscript/85 transition-all duration-500" />
-                
-                {/* Border with hover glow */}
-                <div className="absolute inset-0 rounded-xl border border-sandalwood/40 group-hover:border-ochre/50 group-hover:shadow-lg group-hover:shadow-ochre/10 transition-all duration-500" />
-                
-                {/* Hover gradient */}
-                <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-b from-ochre/5 to-transparent" />
-                
-                {/* Content */}
-                <div className="relative p-5 text-center">
-                  {/* Scripture icon */}
-                  <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-ochre/10 border border-ochre/20 flex items-center justify-center">
-                    <span className="text-2xl text-ochre font-sanskrit">{text.icon}</span>
+                {/* Card Content */}
+                <div className="p-5">
+                  {/* Header with icon */}
+                  <div className="flex items-start justify-between mb-4">
+                    {/* Scripture icon */}
+                    <div className="w-14 h-14 rounded-lg bg-primary/5 flex items-center justify-center overflow-hidden">
+                      <img 
+                        src={text.icon} 
+                        alt={text.title}
+                        className="w-12 h-12 object-contain"
+                      />
+                    </div>
                   </div>
 
-                  {/* Sanskrit title */}
-                  <h3 className="font-sanskrit text-xl text-earth group-hover:text-ochre transition-colors duration-300 mb-1">
-                    {text.titleSanskrit}
+                  {/* Title */}
+                  <h3 className="text-lg font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
+                    {text.title}
                   </h3>
                   
-                  {/* English title */}
-                  <p className="font-serif text-sm text-sandalwood-dark/70 mb-3">
-                    {text.title}
+                  {/* Sanskrit title */}
+                  <p className="text-sm text-primary/80 font-sanskrit mb-2">
+                    {text.titleSanskrit}
                   </p>
                   
                   {/* Verse */}
-                  <p className="font-sanskrit text-sm text-ochre/70 italic mb-3">
-                    {text.verse}
+                  <p className="text-sm text-muted-foreground/70 font-sanskrit italic mb-3">
+                    "{text.verse}"
                   </p>
                   
                   {/* Description */}
-                  <p className="text-xs text-sandalwood-dark/60 leading-relaxed">
+                  <p className="text-sm text-muted-foreground leading-relaxed">
                     {text.description}
                   </p>
                 </div>
@@ -257,75 +181,63 @@ export function ModulesScreen() {
             ))}
           </div>
 
-          {/* Duration */}
+          {/* Duration notice */}
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.9 }}
-            transition={{ delay: 1.2, duration: 0.8 }}
-            className="text-center mb-10"
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.7 }}
+            className="text-center mb-10 py-6 border-y border-border"
           >
-            <p className="font-sanskrit text-base text-earth">
+            <p className="font-sanskrit text-base text-foreground">
               एषा साधना षण्मासान् व्याप्नोति।
             </p>
-            <p className="font-serif text-sm text-ochre/70 mt-1 italic">
+            <p className="text-sm text-primary mt-1 italic">
               A six-month immersive yogic sadhana
             </p>
-            <p className="font-sanskrit text-xs text-sandalwood-dark/50 mt-2">
+            <p className="font-sanskrit text-xs text-muted-foreground mt-2">
               कालः गुरुर्न भवति। अनुभवः एव।
             </p>
           </motion.div>
 
-          {/* Decorative divider */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.4 }}
-            className="flex items-center justify-center gap-4 mb-10"
-          >
-            <div className="h-px w-20 bg-gradient-to-r from-transparent to-sandalwood/40" />
-            <span className="text-ochre/40 text-xs tracking-[0.3em]">॰</span>
-            <div className="h-px w-20 bg-gradient-to-l from-transparent to-sandalwood/40" />
-          </motion.div>
-
           {/* Study Mode Selection */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.5 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8 }}
             className="max-w-xl mx-auto"
           >
             {/* Section title */}
-            <h2 className="font-sanskrit text-lg text-earth text-center mb-2">
+            <h2 className="font-sanskrit text-lg text-foreground text-center mb-2">
               मार्गचयनम्
             </h2>
-            <p className="font-serif text-xs text-sandalwood-dark/60 text-center mb-8">
+            <p className="text-sm text-muted-foreground text-center mb-6">
               Choose Your Path
             </p>
 
             {/* Study mode options */}
-            <div className="space-y-4">
+            <div className="space-y-3">
               {studyModes.map((mode, index) => (
                 <motion.div
                   key={mode.id}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 1.6 + index * 0.15, duration: 0.5 }}
+                  transition={{ delay: 0.9 + index * 0.1, duration: 0.4 }}
                   onClick={() => handleStudyModeSelect(mode.id)}
-                  className="group cursor-pointer transition-all duration-500 py-5 px-6 rounded-xl border border-sandalwood/30 hover:border-ochre/40 bg-manuscript/60 hover:bg-manuscript/80 hover:shadow-md hover:shadow-ochre/5"
+                  className="group cursor-pointer transition-all duration-300 py-4 px-5 rounded-xl border border-border bg-card hover:border-primary/30 hover:shadow-md"
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="font-sanskrit text-lg text-ochre group-hover:text-earth transition-colors">
+                      <h3 className="font-sanskrit text-lg text-primary group-hover:text-primary/80 transition-colors">
                         {mode.title}
                       </h3>
-                      <p className="font-serif text-sm text-sandalwood-dark/80 mt-0.5">
+                      <p className="text-sm text-foreground mt-0.5">
                         {mode.english}
                       </p>
-                      <p className="font-sanskrit text-xs text-sandalwood-dark/50 mt-1">
+                      <p className="font-sanskrit text-xs text-muted-foreground mt-1">
                         {mode.sanskrit}
                       </p>
                     </div>
-                    <div className="text-ochre/40 group-hover:text-ochre/70 transition-colors">
+                    <div className="text-muted-foreground group-hover:text-primary transition-colors">
                       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
                       </svg>
@@ -336,20 +248,20 @@ export function ModulesScreen() {
             </div>
           </motion.div>
 
-          {/* Footer Wisdom */}
-          <motion.footer
+          {/* Footer wisdom */}
+          <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.5 }}
-            transition={{ delay: 2, duration: 1 }}
-            className="mt-14 py-6 text-center"
+            animate={{ opacity: 0.7 }}
+            transition={{ delay: 1.2 }}
+            className="mt-12 text-center"
           >
-            <p className="font-sanskrit text-sm text-sandalwood-dark/50 italic">
+            <p className="font-sanskrit text-sm text-muted-foreground">
               विद्या ददाति विनयम्
             </p>
-            <p className="text-[10px] text-sandalwood-dark/30 mt-1">
+            <p className="text-xs text-muted-foreground/60 mt-1">
               Knowledge bestows humility
             </p>
-          </motion.footer>
+          </motion.div>
         </div>
       </main>
     </div>
