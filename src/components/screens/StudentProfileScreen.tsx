@@ -1,15 +1,9 @@
-import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Header } from '@/components/Header';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { User, GraduationCap } from 'lucide-react';
 import { StudentProfileForm } from '@/components/profile/StudentProfileForm';
-import { BrowseTeachers } from '@/components/profile/BrowseTeachers';
 import mandalaElegant from '@/assets/mandala-elegant.png';
 
 export function StudentProfileScreen() {
-  const [activeTab, setActiveTab] = useState('profile');
-
   return (
     <div className="min-h-screen bg-background relative">
       {/* Background mandala */}
@@ -38,41 +32,17 @@ export function StudentProfileScreen() {
               <h1 className="text-3xl font-serif font-bold text-foreground">Śiṣya Profile</h1>
             </div>
             <p className="text-muted-foreground">
-              Manage your profile and connect with teachers
+              Manage your learning profile
             </p>
           </motion.div>
 
-          {/* Tabs */}
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <TabsList className="grid grid-cols-2 w-full max-w-md">
-              <TabsTrigger value="profile" className="gap-2">
-                <User className="w-4 h-4" />
-                Profile
-              </TabsTrigger>
-              <TabsTrigger value="teachers" className="gap-2">
-                <GraduationCap className="w-4 h-4" />
-                Find Teachers
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="profile">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                <StudentProfileForm />
-              </motion.div>
-            </TabsContent>
-
-            <TabsContent value="teachers">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                <BrowseTeachers />
-              </motion.div>
-            </TabsContent>
-          </Tabs>
+          {/* Profile Form */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <StudentProfileForm />
+          </motion.div>
         </div>
       </main>
     </div>
