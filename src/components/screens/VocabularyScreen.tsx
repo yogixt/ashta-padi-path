@@ -298,39 +298,72 @@ function CertificationCard({
       icon: 'text-orange-600 dark:text-orange-500',
     },
     degree: {
-      bg: 'bg-gradient-to-br from-primary/10 via-purple-50 to-primary/20 dark:from-primary/20 dark:via-purple-950/30 dark:to-primary/30',
-      border: 'border-primary/40 dark:border-primary/50',
-      accent: 'text-primary dark:text-primary',
-      icon: 'text-primary dark:text-primary',
+      bg: 'bg-gradient-to-br from-amber-100 via-yellow-50 to-amber-200 dark:from-amber-900/50 dark:via-yellow-900/30 dark:to-amber-800/50',
+      border: 'border-amber-400 dark:border-amber-600',
+      accent: 'text-amber-800 dark:text-amber-300',
+      icon: 'text-amber-600 dark:text-amber-400',
     },
   };
 
   const styles = tierStyles[tier];
+  const isDegree = tier === 'degree';
 
   return (
     <motion.div 
       whileHover={{ scale: 1.02, y: -2 }}
       transition={{ duration: 0.2 }}
-      className={`${styles.bg} border-2 ${styles.border} rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all ${isLocked ? 'opacity-85' : ''}`}
+      className={`relative ${styles.bg} border-2 ${styles.border} rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all ${isLocked ? 'opacity-90' : ''} ${isDegree ? 'ring-2 ring-amber-400/50 dark:ring-amber-500/40' : ''}`}
     >
+      {/* Golden shimmer overlay for degree */}
+      {isDegree && (
+        <motion.div
+          className="absolute inset-0 pointer-events-none overflow-hidden"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-300/40 to-transparent dark:via-amber-400/30"
+            animate={{
+              x: ['-100%', '200%'],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              repeatDelay: 2,
+              ease: 'easeInOut',
+            }}
+            style={{ width: '50%' }}
+          />
+        </motion.div>
+      )}
+
       {/* Header with Sanskrit title */}
-      <div className="p-4 pb-3 text-center border-b border-current/10">
+      <div className={`p-4 pb-3 text-center border-b border-current/10 relative ${isDegree ? 'bg-gradient-to-r from-amber-200/30 via-yellow-100/50 to-amber-200/30 dark:from-amber-800/30 dark:via-yellow-900/20 dark:to-amber-800/30' : ''}`}>
         <div className="flex items-center justify-center gap-2 mb-1">
-          <Star className={`w-4 h-4 ${styles.icon}`} />
-          <h3 className={`font-sanskrit text-2xl font-bold ${styles.accent}`}>
+          <Star className={`w-4 h-4 ${styles.icon} ${isDegree ? 'fill-amber-400' : ''}`} />
+          <h3 className={`font-sanskrit text-2xl font-bold ${styles.accent} ${isDegree ? 'drop-shadow-sm' : ''}`}>
             {titleSanskrit}
           </h3>
-          <Star className={`w-4 h-4 ${styles.icon}`} />
+          <Star className={`w-4 h-4 ${styles.icon} ${isDegree ? 'fill-amber-400' : ''}`} />
         </div>
         <p className={`text-sm font-semibold uppercase tracking-wider ${styles.accent} opacity-80`}>
           {titleEnglish}
         </p>
+        {isDegree && (
+          <motion.div 
+            className="absolute top-1 right-2 text-xs font-bold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-900/50 px-2 py-0.5 rounded-full"
+            animate={{ scale: [1, 1.05, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            ✦ सर्वोच्च ✦
+          </motion.div>
+        )}
       </div>
 
       {/* Content */}
-      <div className="p-4 space-y-3">
-        <div className="flex items-center justify-center gap-2 bg-white/50 dark:bg-black/20 rounded-lg py-2 px-3">
-          <Award className={`w-5 h-5 ${styles.icon}`} />
+      <div className="p-4 space-y-3 relative">
+        <div className={`flex items-center justify-center gap-2 rounded-lg py-2 px-3 ${isDegree ? 'bg-gradient-to-r from-amber-100/70 via-yellow-50/80 to-amber-100/70 dark:from-amber-900/40 dark:via-yellow-900/30 dark:to-amber-900/40' : 'bg-white/50 dark:bg-black/20'}`}>
+          <Award className={`w-5 h-5 ${styles.icon} ${isDegree ? 'fill-amber-200' : ''}`} />
           <span className={`text-base font-bold ${styles.accent}`}>{requirement}</span>
         </div>
         
@@ -344,8 +377,8 @@ function CertificationCard({
         </div>
 
         {isLocked && (
-          <div className="text-center py-2 px-3 bg-white/60 dark:bg-black/30 rounded-lg border border-dashed border-current/20 mt-3">
-            <p className="text-sm font-medium text-muted-foreground">🔒 गुरुनिर्णयः</p>
+          <div className={`text-center py-2 px-3 rounded-lg border border-dashed mt-3 ${isDegree ? 'bg-amber-50/80 dark:bg-amber-950/40 border-amber-300 dark:border-amber-700' : 'bg-white/60 dark:bg-black/30 border-current/20'}`}>
+            <p className={`text-sm font-medium ${isDegree ? 'text-amber-700 dark:text-amber-400' : 'text-muted-foreground'}`}>🔒 गुरुनिर्णयः</p>
             <p className="text-xs text-muted-foreground">Guru/Gurukul decides</p>
           </div>
         )}
