@@ -1,298 +1,177 @@
 import { motion } from 'framer-motion';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Clock, BookOpen, Lock } from 'lucide-react';
 import { useLearningStore } from '@/store/learningStore';
+import { getModulesForProfession, LearningModule } from '@/data/modulesData';
+import { professions } from '@/data/yogaSutrasData';
 import { Button } from '@/components/ui/button';
-import gurukulBackground from '@/assets/gurukul-background.jpg';
-
-const scriptures = [
-  {
-    id: 'yoga-sutra',
-    title: 'पतञ्जलियोगसूत्रम्',
-    english: "Patanjali's Yoga Sutra",
-    verse: 'योगश्चित्तवृत्तिनिरोधः',
-  },
-  {
-    id: 'hatha-yoga',
-    title: 'हठयोगप्रदीपिका',
-    english: 'Hatha Yoga Pradipika',
-    verse: 'हठविद्यां हि मत्स्येन्द्रगोरक्षाद्याः विजानते',
-  },
-  {
-    id: 'yoga-taravali',
-    title: 'योगतरावली',
-    english: 'Yoga Taravali',
-    verse: 'योगमार्गस्य सोपानं विवृणोति तरङ्गवत्',
-  },
-  {
-    id: 'bhagavad-gita',
-    title: 'भगवद्गीता',
-    english: 'Bhagavad Gita',
-    verse: 'योगः कर्मसु कौशलम्',
-  },
-  {
-    id: 'yoga-vashistha',
-    title: 'योगवासिष्ठः',
-    english: 'Yoga Vashistha',
-    verse: 'चित्तमेव हि संसारः',
-  },
-];
-
-const studyModes = [
-  {
-    id: 'svadhyaya',
-    title: 'स्वाध्यायः',
-    english: 'Study Alone',
-    description: 'Self-directed contemplation and practice',
-    sanskrit: 'अन्तर्मुखया साधनया आत्ममार्गगमनम्',
-  },
-  {
-    id: 'gurukulavasa',
-    title: 'गुरुकुलवासः',
-    english: 'With Guru / Mentor',
-    description: 'Guided learning through tradition',
-    sanskrit: 'गुरुकृपया परम्परया च साधनाप्रवेशः',
-  },
-];
+import { Header } from '@/components/Header';
 
 export function ModulesScreen() {
-  const { setScreen } = useLearningStore();
+  const { selectedProfession, setScreen, setSelectedModule } = useLearningStore();
+  
+  const profession = professions.find(p => p.id === selectedProfession);
+  const modules = selectedProfession ? getModulesForProfession(selectedProfession) : [];
 
-  const handleStudyModeSelect = (mode: string) => {
-    if (mode === 'svadhyaya') {
-      setScreen('vocabulary');
-    } else {
-      setScreen('mentor-selection');
+  const handleSelectModule = (module: LearningModule) => {
+    if (!module.available) return;
+    setSelectedModule(module.id);
+    setScreen('vocabulary');
+  };
+
+  const getLevelStyle = (level: string) => {
+    switch (level) {
+      case 'beginner':
+        return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+      case 'intermediate':
+        return 'bg-amber-50 text-amber-700 border-amber-200';
+      case 'advanced':
+        return 'bg-rose-50 text-rose-700 border-rose-200';
+      default:
+        return 'bg-muted text-muted-foreground border-border';
     }
   };
 
-  return (
-    <div className="min-h-screen bg-manuscript relative overflow-hidden">
-      {/* Animated Vedic Gurukul Background */}
-      <div className="absolute inset-0">
-        {/* Gurukul illustration with slow breathing animation */}
-        <motion.div
-          initial={{ scale: 1.1, opacity: 0 }}
-          animate={{ 
-            scale: [1.05, 1.02, 1.05],
-            opacity: 0.1 
-          }}
-          transition={{ 
-            scale: { duration: 20, repeat: Infinity, ease: 'easeInOut' },
-            opacity: { duration: 3, ease: 'easeOut' }
-          }}
-          className="absolute inset-0"
-        >
-          <img 
-            src={gurukulBackground} 
-            alt="" 
-            className="w-full h-full object-cover"
-          />
-        </motion.div>
-        
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-manuscript/95 via-manuscript/90 to-manuscript/95" />
-        
-        {/* Floating particles - leaves/dust */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {[...Array(8)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-1 h-1 rounded-full bg-ochre/20"
-              initial={{ 
-                x: `${10 + Math.random() * 80}%`, 
-                y: -10,
-                opacity: 0,
-                rotate: 0,
-              }}
-              animate={{ 
-                y: '110vh',
-                opacity: [0, 0.3, 0.3, 0],
-                rotate: 360,
-              }}
-              transition={{
-                duration: 30 + Math.random() * 20,
-                repeat: Infinity,
-                delay: i * 3,
-                ease: 'linear'
-              }}
-            />
-          ))}
-        </div>
-        
-        {/* Parchment texture */}
-        <div 
-          className="absolute inset-0 opacity-8"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-          }}
-        />
-        
-        {/* Vignette */}
-        <div 
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background: 'radial-gradient(ellipse at center, transparent 40%, hsl(var(--sandalwood) / 0.3) 100%)',
-          }}
-        />
-      </div>
+  const getLevelLabel = (level: string) => {
+    return level.charAt(0).toUpperCase() + level.slice(1);
+  };
 
-      {/* Back button */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
-        className="absolute top-6 left-6 z-20"
-      >
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setScreen('home')}
-          className="text-sandalwood-dark hover:text-earth hover:bg-sandalwood/20 gap-2"
-        >
-          <ArrowLeft className="w-4 h-4" />
-        </Button>
-      </motion.div>
+  return (
+    <div className="min-h-screen bg-background">
+      <Header showBack backTo="home" />
 
       {/* Main Content */}
-      <div className="relative z-10 min-h-screen flex flex-col items-center justify-start py-12 px-4 md:px-8">
-        {/* Header */}
-        <motion.header
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="text-center mb-12 mt-8"
-        >
-          <h1 className="font-sanskrit text-3xl md:text-4xl text-earth mb-4">
-            योगगुरुकुलम्
-          </h1>
-          <p className="font-sanskrit text-base md:text-lg text-sandalwood-dark leading-relaxed">
-            शिष्य, अत्र न पाठ्यक्रमः।
-          </p>
-          <p className="font-sanskrit text-base md:text-lg text-sandalwood-dark">
-            अत्र साधनामार्गः।
-          </p>
-          
-          {/* Decorative divider */}
+      <main className="py-8 px-4 md:px-6">
+        <div className="max-w-6xl mx-auto">
+          {/* Header Section */}
           <motion.div
-            initial={{ opacity: 0, scaleX: 0 }}
-            animate={{ opacity: 1, scaleX: 1 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
-            className="flex items-center justify-center gap-4 mt-8"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-10"
           >
-            <div className="h-px w-20 bg-gradient-to-r from-transparent to-sandalwood/50" />
-            <span className="text-ochre/50 text-sm">॰</span>
-            <div className="h-px w-20 bg-gradient-to-l from-transparent to-sandalwood/50" />
+            {/* Step indicator */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-muted/50 border border-border mb-6">
+              <span className="text-sm text-muted-foreground">Step 1.5 of 8</span>
+            </div>
+
+            <h1 className="text-3xl md:text-4xl font-serif font-bold text-foreground mb-3">
+              Choose Your Module
+            </h1>
+            
+            <p className="text-muted-foreground">
+              Select a topic to begin your learning journey as a{' '}
+              <span className="text-primary font-medium">
+                {profession?.name || 'Student'}
+              </span>
+            </p>
+
+            {/* Progress dots */}
+            <div className="flex items-center justify-center gap-2 mt-6">
+              <div className="w-8 h-1 rounded-full bg-muted" />
+              <div className="w-3 h-3 rounded-full bg-primary" />
+              <div className="w-8 h-1 rounded-full bg-muted" />
+            </div>
           </motion.div>
-        </motion.header>
 
-        {/* Scripture Pillars */}
-        <div className="max-w-2xl w-full space-y-10 md:space-y-12 mb-16">
-          {scriptures.map((scripture, index) => (
-            <motion.div
-              key={scripture.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 + index * 0.15, duration: 0.6 }}
-              className="text-center"
-            >
-              {/* Sanskrit title */}
-              <h3 className="font-sanskrit text-xl md:text-2xl text-earth mb-1">
-                {scripture.title}
-              </h3>
-              
-              {/* English title */}
-              <p className="font-serif text-sm text-sandalwood-dark/70 mb-3">
-                {scripture.english}
-              </p>
-              
-              {/* Verse */}
-              <p className="font-sanskrit text-base text-ochre/80 italic">
-                {scripture.verse}
-              </p>
-              
-              {/* Divider */}
-              {index < scriptures.length - 1 && (
-                <div className="mt-8 md:mt-10 flex justify-center">
-                  <span className="text-sandalwood/40 text-xs tracking-[0.5em]">॰</span>
-                </div>
-              )}
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Duration */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.8 }}
-          transition={{ delay: 1.6, duration: 0.8 }}
-          className="text-center mb-14"
-        >
-          <p className="font-sanskrit text-sm text-sandalwood-dark leading-relaxed">
-            एषा साधना षण्मासान् व्याप्नोति।
-          </p>
-          <p className="font-serif text-xs text-ochre/60 mt-2 italic">
-            A six-month immersive yogic sadhana
-          </p>
-          <p className="font-sanskrit text-xs text-sandalwood-dark/50 mt-1">
-            कालः गुरुर्न भवति। अनुभवः एव।
-          </p>
-        </motion.div>
-
-        {/* Study Mode Selection */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.8 }}
-          className="w-full max-w-xl"
-        >
-          {/* Section title */}
-          <h2 className="font-sanskrit text-lg text-earth text-center mb-8">
-            मार्गचयनम्
-          </h2>
-          <p className="font-serif text-xs text-sandalwood-dark/60 text-center mb-8">
-            Choose Your Path
-          </p>
-
-          {/* Study mode options */}
-          <div className="space-y-6">
-            {studyModes.map((mode, index) => (
+          {/* Modules Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+            {modules.map((module, index) => (
               <motion.div
-                key={mode.id}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 2 + index * 0.2, duration: 0.5 }}
-                onClick={() => handleStudyModeSelect(mode.id)}
-                className="text-center cursor-pointer group transition-all duration-500 hover:scale-[1.02] py-4 px-6 rounded-lg hover:bg-sandalwood/10"
+                key={module.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 + index * 0.1, duration: 0.4 }}
+                onClick={() => handleSelectModule(module)}
+                className={`
+                  group relative bg-card rounded-xl border border-border overflow-hidden
+                  transition-all duration-300
+                  ${module.available 
+                    ? 'cursor-pointer hover:shadow-lg hover:border-primary/30 hover:-translate-y-1' 
+                    : 'cursor-not-allowed opacity-70'
+                  }
+                `}
               >
-                <h3 className="font-sanskrit text-lg md:text-xl text-ochre group-hover:text-earth transition-colors">
-                  {mode.title}
-                </h3>
-                <p className="font-serif text-sm text-sandalwood-dark/70 mt-1">
-                  {mode.english}
-                </p>
-                <p className="font-sanskrit text-xs text-sandalwood-dark/50 mt-2 max-w-sm mx-auto">
-                  {mode.sanskrit}
-                </p>
+                {/* Card Header */}
+                <div className="p-5 pb-4">
+                  <div className="flex items-start justify-between mb-4">
+                    {/* Icon */}
+                    <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
+                      <BookOpen className="w-6 h-6 text-primary" />
+                    </div>
+                    
+                    {/* Level badge + Lock */}
+                    <div className="flex items-center gap-2">
+                      <span className={`
+                        px-3 py-1 rounded-full text-xs font-medium border
+                        ${getLevelStyle(module.level)}
+                      `}>
+                        {getLevelLabel(module.level)}
+                      </span>
+                      {!module.available && (
+                        <Lock className="w-4 h-4 text-muted-foreground" />
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="text-lg font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
+                    {module.title}
+                  </h3>
+                  
+                  {/* Sanskrit subtitle */}
+                  <p className="text-sm text-primary/70 font-sanskrit mb-3">
+                    {module.titleSanskrit}
+                  </p>
+                  
+                  {/* Description */}
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                    {module.description}
+                  </p>
+
+                  {/* Duration & Lessons */}
+                  <div className="flex items-center gap-4 text-xs text-muted-foreground mb-4">
+                    <div className="flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5" />
+                      <span>{module.duration}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <BookOpen className="w-3.5 h-3.5" />
+                      <span>{module.lessons} lessons</span>
+                    </div>
+                  </div>
+
+                  {/* Topic Tags */}
+                  <div className="flex flex-wrap gap-2">
+                    {module.topics.slice(0, 2).map((topic, i) => (
+                      <span 
+                        key={i}
+                        className="px-2.5 py-1 rounded-md bg-muted/50 text-xs text-muted-foreground"
+                      >
+                        {topic}
+                      </span>
+                    ))}
+                    {module.topics.length > 2 && (
+                      <span className="px-2.5 py-1 text-xs text-muted-foreground">
+                        +{module.topics.length - 2} more
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Coming Soon footer for locked modules */}
+                {!module.available && (
+                  <div className="px-5 py-3 bg-muted/30 border-t border-border">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Lock className="w-4 h-4" />
+                      <span>Coming Soon</span>
+                    </div>
+                  </div>
+                )}
               </motion.div>
             ))}
           </div>
-        </motion.div>
-
-        {/* Footer Wisdom */}
-        <motion.footer
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.5 }}
-          transition={{ delay: 2.5, duration: 1 }}
-          className="mt-16 py-8 text-center"
-        >
-          <p className="font-sanskrit text-sm text-sandalwood-dark/50 italic">
-            मौनं अपि उपदेशः
-          </p>
-          <p className="text-[10px] text-sandalwood-dark/30 mt-1">
-            Silence too is a teaching
-          </p>
-        </motion.footer>
-      </div>
+        </div>
+      </main>
     </div>
   );
 }
