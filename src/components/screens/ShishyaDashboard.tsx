@@ -8,9 +8,32 @@ import { useAuth } from '@/contexts/AuthContext';
 import { GuruDiscoveryCard } from '@/components/shishya/GuruDiscoveryCard';
 import mandalaElegant from '@/assets/mandala-elegant.png';
 
+const TOTAL_VOCAB_TERMS = 6;
+const TOTAL_SUTRAS = 5;
+const TOTAL_QUIZ_QUESTIONS = 5;
+
 export function ShishyaDashboard() {
-  const { setScreen, vocabCompleted, sutrasCompleted, quizScore } = useLearningStore();
+  const { 
+    setScreen, 
+    vocabCompleted, 
+    sutrasCompleted, 
+    quizScore, 
+    quizAnswers,
+    completedVocabTerms 
+  } = useLearningStore();
   const { user } = useAuth();
+
+  // Calculate real quiz percentage
+  const totalQuizQuestions = Object.keys(quizAnswers).length || TOTAL_QUIZ_QUESTIONS;
+  const quizPercentage = quizScore !== null 
+    ? Math.round((quizScore / totalQuizQuestions) * 100) 
+    : 0;
+
+  // Calculate real overall progress based on actual completion
+  const vocabProgress = (completedVocabTerms.size / TOTAL_VOCAB_TERMS) * 25; // 25% weight
+  const sutrasProgress = (sutrasCompleted / TOTAL_SUTRAS) * 50; // 50% weight
+  const quizProgress = quizScore !== null ? (quizScore / totalQuizQuestions) * 25 : 0; // 25% weight
+  const totalProgress = Math.round(vocabProgress + sutrasProgress + quizProgress);
 
   const learningPath = [
     { 
@@ -24,32 +47,30 @@ export function ShishyaDashboard() {
       step: 2, 
       title: 'शब्दकोश', 
       subtitle: 'Vocabulary',
-      status: vocabCompleted ? 'completed' : 'current',
+      status: vocabCompleted ? 'completed' : completedVocabTerms.size > 0 ? 'in-progress' : 'current',
       action: () => setScreen('vocabulary')
     },
     { 
       step: 3, 
       title: 'सूत्र अध्ययनम्', 
       subtitle: 'Sūtra Study',
-      status: sutrasCompleted > 0 ? 'in-progress' : 'locked',
+      status: sutrasCompleted >= TOTAL_SUTRAS ? 'completed' : sutrasCompleted > 0 ? 'in-progress' : (vocabCompleted ? 'current' : 'locked'),
       action: () => setScreen('learning')
     },
     { 
       step: 4, 
       title: 'परीक्षा', 
       subtitle: 'Assessment',
-      status: quizScore > 0 ? 'completed' : 'locked',
+      status: quizPercentage === 100 ? 'completed' : quizScore !== null ? 'in-progress' : (sutrasCompleted > 0 ? 'current' : 'locked'),
       action: () => setScreen('quiz')
     },
   ];
 
   const dailyGoals = [
-    { label: 'Learn 5 new words', completed: 3, total: 5 },
-    { label: 'Study 2 sūtras', completed: sutrasCompleted, total: 2 },
-    { label: 'Complete 1 quiz', completed: quizScore > 0 ? 1 : 0, total: 1 },
+    { label: 'Learn vocabulary terms', completed: completedVocabTerms.size, total: TOTAL_VOCAB_TERMS },
+    { label: 'Study sūtras', completed: sutrasCompleted, total: TOTAL_SUTRAS },
+    { label: 'Complete quiz with 100%', completed: quizPercentage === 100 ? 1 : 0, total: 1 },
   ];
-
-  const totalProgress = Math.round(((vocabCompleted ? 25 : 0) + (sutrasCompleted * 5) + (quizScore > 0 ? 25 : 0)) / 100 * 100);
 
   return (
     <div className="min-h-screen bg-background relative">
@@ -117,7 +138,9 @@ export function ShishyaDashboard() {
               className="bg-card border border-border rounded-2xl p-4"
             >
               <Target className="w-6 h-6 mb-2 text-emerald-500" />
-              <p className="text-2xl font-bold text-foreground">{quizScore}%</p>
+              <p className="text-2xl font-bold text-foreground">
+                {quizScore !== null ? `${quizPercentage}%` : '—'}
+              </p>
               <p className="text-sm text-muted-foreground">Quiz Score</p>
             </motion.div>
             
