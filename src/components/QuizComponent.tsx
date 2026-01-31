@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, X, ChevronRight, RotateCcw, Home, GraduationCap, BookOpen } from 'lucide-react';
+import { Check, X, ChevronRight, RotateCcw, Home, GraduationCap, BookOpen, Target, Sparkles, Clock, Award } from 'lucide-react';
 import { quizQuestions } from '@/data/yogaSutrasData';
 import { useLearningStore } from '@/store/learningStore';
 import { Button } from '@/components/ui/button';
@@ -67,24 +67,29 @@ export function QuizComponent() {
   if (isComplete && quizScore !== null) {
     const percentage = Math.round((quizScore / totalQuestions) * 100);
     const hasPassed = percentage === 100;
-    
-    const getMessage = () => {
-      if (percentage === 100) return { text: "Perfect Score!", subtext: "शाबाश — You have mastered the material" };
-      if (percentage >= 80) return { text: "Almost There", subtext: "अभ्यास जारी रखें — You need 100% to select a mentor" };
-      if (percentage >= 60) return { text: "Keep Practicing", subtext: "पुनः प्रयास करें — Review and try again for 100%" };
-      return { text: "More Study Needed", subtext: "पुनः प्रयास करें — Review the material and try again" };
-    };
-    const message = getMessage();
 
     return (
       <motion.div
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="w-full max-w-lg mx-auto px-4"
+        className="w-full max-w-xl mx-auto px-4"
       >
         <div className="card-elevated rounded-2xl p-8 md:p-10 text-center">
+          {/* Master Scholar Badge - only on 100% */}
+          {hasPassed && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/30 text-primary mb-6"
+            >
+              <Award className="w-4 h-4" />
+              <span className="text-sm font-medium">Master Scholar</span>
+            </motion.div>
+          )}
+
           {/* Score circle */}
-          <div className="relative w-32 h-32 mx-auto mb-8">
+          <div className="relative w-40 h-40 mx-auto mb-6">
             <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
               <circle
                 cx="50"
@@ -92,15 +97,15 @@ export function QuizComponent() {
                 r="42"
                 fill="none"
                 stroke="hsl(var(--border))"
-                strokeWidth="8"
+                strokeWidth="6"
               />
               <motion.circle
                 cx="50"
                 cy="50"
                 r="42"
                 fill="none"
-                stroke={hasPassed ? "hsl(var(--primary))" : "hsl(var(--destructive))"}
-                strokeWidth="8"
+                stroke="hsl(var(--primary))"
+                strokeWidth="6"
                 strokeLinecap="round"
                 strokeDasharray={264}
                 initial={{ strokeDashoffset: 264 }}
@@ -109,71 +114,68 @@ export function QuizComponent() {
               />
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-3xl font-bold text-foreground">{percentage}%</span>
-              <span className="text-xs text-muted-foreground">{quizScore}/{totalQuestions}</span>
+              <span className="text-4xl font-bold text-foreground">{percentage}%</span>
+              <span className="text-sm text-muted-foreground">{quizScore}/{totalQuestions} correct</span>
             </div>
           </div>
           
-          <h2 className="text-2xl font-serif font-semibold text-foreground mb-2">
-            {message.text}
+          {/* Message */}
+          <h2 className="text-2xl font-serif font-bold text-foreground mb-2">
+            {hasPassed ? 'Outstanding!' : percentage >= 80 ? 'Almost There!' : 'Keep Practicing'}
           </h2>
           
-          <p className="text-muted-foreground mb-4 font-sanskrit">
-            {message.subtext}
+          <p className="text-muted-foreground mb-8">
+            {hasPassed 
+              ? 'You have truly mastered the Yoga Sutras' 
+              : 'You need 100% to unlock Guru selection'
+            }
           </p>
 
-          {/* Pass/Fail message */}
-          <div className={`mb-8 p-4 rounded-xl border ${
-            hasPassed 
-              ? 'bg-sage/10 border-sage/30 text-sage' 
-              : 'bg-destructive/10 border-destructive/30 text-destructive'
-          }`}>
-            <p className="text-sm font-medium">
-              {hasPassed 
-                ? "Congratulations! You've achieved a perfect score and can now select a Mentor." 
-                : "You need a 100% score to proceed to Mentor Selection. Please review the content and try again."
-              }
-            </p>
+          {/* Stats Cards */}
+          <div className="grid grid-cols-3 gap-3 mb-8">
+            <div className="bg-muted/30 rounded-xl p-4 border border-border">
+              <Target className="w-5 h-5 text-primary mx-auto mb-2" />
+              <p className="text-xl font-bold text-foreground">{quizScore}</p>
+              <p className="text-xs text-muted-foreground">Correct</p>
+            </div>
+            <div className="bg-muted/30 rounded-xl p-4 border border-border">
+              <Sparkles className="w-5 h-5 text-amber-500 mx-auto mb-2" />
+              <p className="text-xl font-bold text-foreground">{quizScore}</p>
+              <p className="text-xs text-muted-foreground">Best Streak</p>
+            </div>
+            <div className="bg-muted/30 rounded-xl p-4 border border-border">
+              <Clock className="w-5 h-5 text-muted-foreground mx-auto mb-2" />
+              <p className="text-xl font-bold text-foreground">{totalQuestions}</p>
+              <p className="text-xs text-muted-foreground">Questions</p>
+            </div>
           </div>
 
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Button
+              variant="outline"
+              onClick={handleRetake}
+              className="gap-2"
+            >
+              <RotateCcw className="w-4 h-4" />
+              Retake Quiz
+            </Button>
             {hasPassed ? (
-              <>
-                <Button
-                  variant="outline"
-                  onClick={handleRetake}
-                  className="gap-2"
-                >
-                  <RotateCcw className="w-4 h-4" />
-                  Retake Quiz
-                </Button>
-                <Button
-                  onClick={handleProceedToMentor}
-                  className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
-                >
-                  <GraduationCap className="w-4 h-4" />
-                  Select Mentor
-                </Button>
-              </>
+              <Button
+                onClick={handleProceedToMentor}
+                className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
+              >
+                <GraduationCap className="w-4 h-4" />
+                Choose Guru
+              </Button>
             ) : (
-              <>
-                <Button
-                  variant="outline"
-                  onClick={handleRetake}
-                  className="gap-2"
-                >
-                  <RotateCcw className="w-4 h-4" />
-                  Retake Quiz
-                </Button>
-                <Button
-                  onClick={handleReviewContent}
-                  className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
-                >
-                  <BookOpen className="w-4 h-4" />
-                  Review Content
-                </Button>
-              </>
+              <Button
+                onClick={handleBackToHome}
+                className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
+              >
+                <Home className="w-4 h-4" />
+                Back to Home
+              </Button>
             )}
           </div>
         </div>
