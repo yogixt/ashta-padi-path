@@ -243,10 +243,10 @@ export function HomeScreen() {
               <Button
                 variant="ghost"
                 size="lg"
-                className="h-12 px-6 gap-2 text-sandalwood-dark hover:text-earth hover:bg-sandalwood/20 font-sanskrit"
+                className="h-12 px-6 gap-2 text-sandalwood-dark hover:text-earth hover:bg-sandalwood/20"
                 onClick={() => setScreen('gurukul')}
               >
-                योगगुरुकुलम्
+                Enter Gurukul
                 <ChevronRight className="w-4 h-4" />
               </Button>
             </div>
