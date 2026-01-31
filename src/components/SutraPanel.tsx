@@ -3,20 +3,32 @@ import { ChevronLeft, ChevronRight, BookMarked, ArrowRight, Scroll } from 'lucid
 import { sutras } from '@/data/yogaSutrasData';
 import { useLearningStore } from '@/store/learningStore';
 import { Button } from '@/components/ui/button';
+import { useActivityTracking } from '@/hooks/useActivityTracking';
 
 export function SutraPanel() {
   const { 
     currentSutraIndex, 
     nextSutra, 
     prevSutra,
-    setScreen
+    setScreen,
+    completeSutra
   } = useLearningStore();
+  
+  const { logActivity } = useActivityTracking();
 
   const currentSutra = sutras[currentSutraIndex];
   const isFirst = currentSutraIndex === 0;
   const isLast = currentSutraIndex === sutras.length - 1;
 
+  const handleNextSutra = () => {
+    completeSutra();
+    logActivity('sutra');
+    nextSutra();
+  };
+
   const handleComplete = () => {
+    completeSutra();
+    logActivity('sutra');
     setScreen('quiz');
   };
 
@@ -166,7 +178,7 @@ export function SutraPanel() {
         ) : (
           <Button
             variant="outline"
-            onClick={nextSutra}
+            onClick={handleNextSutra}
             className="gap-2 h-12 px-6 border-2 font-semibold"
           >
             Next Sutra

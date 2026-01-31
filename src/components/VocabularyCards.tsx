@@ -5,6 +5,7 @@ import { vocabulary } from '@/data/yogaSutrasData';
 import { useLearningStore } from '@/store/learningStore';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useActivityTracking } from '@/hooks/useActivityTracking';
 
 interface SanskritEcosystemPanelProps {
   isOpen: boolean;
@@ -112,6 +113,7 @@ interface VocabularyCardsProps {
 
 export function VocabularyCards({ onOpenChatWithQuery }: VocabularyCardsProps) {
   const [showEcosystem, setShowEcosystem] = useState(false);
+  const { logActivity } = useActivityTracking();
   const { 
     currentVocabIndex, 
     nextVocab, 
@@ -137,6 +139,8 @@ export function VocabularyCards({ onOpenChatWithQuery }: VocabularyCardsProps) {
 
   const handleMarkComplete = () => {
     completeCurrentVocabTerm();
+    // Log activity to database
+    logActivity('vocabulary');
     if (!isLast) {
       nextVocab();
     }
