@@ -129,7 +129,7 @@ export const useLearningStore = create<LearningState>((set, get) => ({
     if (state.quizScore === null) return false;
     const totalQuestions = Object.keys(state.quizAnswers).length || 5; // Default to 5 questions
     const percentage = (state.quizScore / totalQuestions) * 100;
-    return percentage >= 70;
+    return percentage === 100; // Must score 100% to select a mentor
   },
   
   // Grammar
