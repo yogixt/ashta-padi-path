@@ -45,7 +45,7 @@ serve(async (req) => {
     }
 
     const token = authHeader.replace('Bearer ', '');
-    
+
     // Create Supabase client with user's token
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
@@ -110,58 +110,126 @@ serve(async (req) => {
       }
     }
 
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) {
-      console.error('LOVABLE_API_KEY not configured');
+    const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY');
+    if (!GEMINI_API_KEY) {
+      console.error('GEMINI_API_KEY not configured');
       return new Response(
-        JSON.stringify({ error: 'AI service not configured' }),
+        JSON.stringify({ error: 'AI service not configured. Please set GEMINI_API_KEY.' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    console.log('Sending request to AI gateway with', messages.length, 'messages for user:', userId);
+    console.log('Sending request to Gemini API with', messages.length, 'messages for user:', userId);
 
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'google/gemini-3-flash-preview',
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          ...messages,
-        ],
-        stream: true,
-      }),
+    // Convert messages to Gemini format
+    const geminiContents = [];
+
+    // Add system instruction as first user message context
+    geminiContents.push({
+      role: 'user',
+      parts: [{ text: `System Instructions: ${SYSTEM_PROMPT}\n\nNow respond to the following conversation:` }]
     });
+    geminiContents.push({
+      role: 'model',
+      parts: [{ text: 'I understand. I am ready to help as a Sanskrit teacher and Yoga philosophy expert.' }]
+    });
+
+    // Add conversation messages
+    for (const msg of messages) {
+      if (msg.role === 'user') {
+        geminiContents.push({
+          role: 'user',
+          parts: [{ text: msg.content }]
+        });
+      } else if (msg.role === 'assistant') {
+        geminiContents.push({
+          role: 'model',
+          parts: [{ text: msg.content }]
+        });
+      }
+    }
+
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:streamGenerateContent?alt=sse&key=${GEMINI_API_KEY}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: geminiContents,
+          generationConfig: {
+            temperature: 0.7,
+            topK: 40,
+            topP: 0.95,
+            maxOutputTokens: 2048,
+          },
+          safetySettings: [
+            { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+            { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+            { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+            { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+          ],
+        }),
+      }
+    );
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('AI gateway error:', response.status, errorText);
-      
+      console.error('Gemini API error:', response.status, errorText);
+
       if (response.status === 429) {
         return new Response(
           JSON.stringify({ error: 'Rate limit exceeded. Please try again in a moment.' }),
           { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
-      if (response.status === 402) {
-        return new Response(
-          JSON.stringify({ error: 'AI credits exhausted. Please add credits to continue.' }),
-          { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
-      }
-      
+
       return new Response(
         JSON.stringify({ error: 'Failed to get AI response' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    console.log('Streaming response from AI gateway for user:', userId);
-    return new Response(response.body, {
+    // Transform Gemini SSE stream to OpenAI-compatible format
+    const transformStream = new TransformStream({
+      transform(chunk, controller) {
+        const text = new TextDecoder().decode(chunk);
+        const lines = text.split('\n');
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            try {
+              const data = JSON.parse(line.slice(6));
+              const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+              if (content) {
+                // Convert to OpenAI format
+                const openAIFormat = {
+                  choices: [{
+                    delta: { content },
+                    index: 0,
+                    finish_reason: null
+                  }]
+                };
+                controller.enqueue(new TextEncoder().encode(`data: ${JSON.stringify(openAIFormat)}\n\n`));
+              }
+
+              // Check for completion
+              if (data.candidates?.[0]?.finishReason) {
+                controller.enqueue(new TextEncoder().encode('data: [DONE]\n\n'));
+              }
+            } catch (e) {
+              // Skip malformed JSON
+            }
+          }
+        }
+      }
+    });
+
+    console.log('Streaming response from Gemini API for user:', userId);
+
+    return new Response(response.body?.pipeThrough(transformStream), {
       headers: { ...corsHeaders, 'Content-Type': 'text/event-stream' },
     });
 
