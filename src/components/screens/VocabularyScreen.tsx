@@ -2,10 +2,7 @@ import { motion } from 'framer-motion';
 import { Header } from '@/components/Header';
 import { VocabularyCards } from '@/components/VocabularyCards';
 import mandalaElegant from '@/assets/mandala-elegant.png';
-import certScripture from '@/assets/cert-scripture-traditional.jpg';
-import certDiploma from '@/assets/cert-diploma-traditional.jpg';
-import certDegree from '@/assets/cert-degree-traditional.jpg';
-import { Award, BookOpen, Calendar, CheckCircle2, GraduationCap, ScrollText } from 'lucide-react';
+import { Award, BookOpen, Calendar, CheckCircle2, GraduationCap, ScrollText, Scroll, Star } from 'lucide-react';
 import { useLearningStore } from '@/store/learningStore';
 import { useMemo } from 'react';
 
@@ -273,54 +270,83 @@ function ScriptureProgressTracker() {
 }
 
 function CertificationCard({ 
-  image, 
   titleSanskrit, 
   titleEnglish, 
   requirement, 
   details,
+  tier,
   isLocked = false 
 }: { 
-  image: string; 
   titleSanskrit: string; 
   titleEnglish: string; 
   requirement: string;
   details: string[];
+  tier: 'certificate' | 'diploma' | 'degree';
   isLocked?: boolean;
 }) {
+  const tierStyles = {
+    certificate: {
+      bg: 'bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 dark:from-amber-950/40 dark:via-orange-950/30 dark:to-amber-900/40',
+      border: 'border-amber-300 dark:border-amber-700',
+      accent: 'text-amber-700 dark:text-amber-400',
+      icon: 'text-amber-600 dark:text-amber-500',
+    },
+    diploma: {
+      bg: 'bg-gradient-to-br from-orange-50 via-rose-50 to-orange-100 dark:from-orange-950/40 dark:via-rose-950/30 dark:to-orange-900/40',
+      border: 'border-orange-300 dark:border-orange-700',
+      accent: 'text-orange-700 dark:text-orange-400',
+      icon: 'text-orange-600 dark:text-orange-500',
+    },
+    degree: {
+      bg: 'bg-gradient-to-br from-primary/10 via-purple-50 to-primary/20 dark:from-primary/20 dark:via-purple-950/30 dark:to-primary/30',
+      border: 'border-primary/40 dark:border-primary/50',
+      accent: 'text-primary dark:text-primary',
+      icon: 'text-primary dark:text-primary',
+    },
+  };
+
+  const styles = tierStyles[tier];
+
   return (
     <motion.div 
-      whileHover={{ scale: 1.02 }}
+      whileHover={{ scale: 1.02, y: -2 }}
       transition={{ duration: 0.2 }}
-      className={`bg-card border border-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow ${isLocked ? 'opacity-80' : ''}`}
+      className={`${styles.bg} border-2 ${styles.border} rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all ${isLocked ? 'opacity-85' : ''}`}
     >
-      <div className="relative h-24 overflow-hidden">
-        <img 
-          src={image} 
-          alt={titleEnglish} 
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-card via-card/40 to-transparent" />
-        <div className="absolute bottom-2 left-3 right-3">
-          <h3 className="font-serif font-semibold text-foreground text-sm">{titleSanskrit}</h3>
-          <p className="text-xs text-muted-foreground">{titleEnglish}</p>
+      {/* Header with Sanskrit title */}
+      <div className="p-4 pb-3 text-center border-b border-current/10">
+        <div className="flex items-center justify-center gap-2 mb-1">
+          <Star className={`w-4 h-4 ${styles.icon}`} />
+          <h3 className={`font-sanskrit text-2xl font-bold ${styles.accent}`}>
+            {titleSanskrit}
+          </h3>
+          <Star className={`w-4 h-4 ${styles.icon}`} />
         </div>
+        <p className={`text-sm font-semibold uppercase tracking-wider ${styles.accent} opacity-80`}>
+          {titleEnglish}
+        </p>
       </div>
-      <div className="p-3 space-y-2">
-        <div className="flex items-center gap-2">
-          <Award className="w-4 h-4 text-primary shrink-0" />
-          <span className="text-xs font-medium text-foreground">{requirement}</span>
+
+      {/* Content */}
+      <div className="p-4 space-y-3">
+        <div className="flex items-center justify-center gap-2 bg-white/50 dark:bg-black/20 rounded-lg py-2 px-3">
+          <Award className={`w-5 h-5 ${styles.icon}`} />
+          <span className={`text-base font-bold ${styles.accent}`}>{requirement}</span>
         </div>
-        <div className="space-y-1.5">
+        
+        <div className="space-y-2">
           {details.map((detail, idx) => (
-            <div key={idx} className="flex items-start gap-2">
-              <CheckCircle2 className="w-3 h-3 text-primary shrink-0 mt-0.5" />
-              <span className="text-xs text-muted-foreground">{detail}</span>
+            <div key={idx} className="flex items-center gap-2">
+              <CheckCircle2 className={`w-4 h-4 ${styles.icon} shrink-0`} />
+              <span className="text-sm font-medium text-foreground">{detail}</span>
             </div>
           ))}
         </div>
+
         {isLocked && (
-          <div className="text-center py-1.5 px-2 bg-muted/50 rounded-lg border border-dashed border-border mt-2">
-            <p className="text-xs text-muted-foreground">🔒 Guru/Gurukul decides</p>
+          <div className="text-center py-2 px-3 bg-white/60 dark:bg-black/30 rounded-lg border border-dashed border-current/20 mt-3">
+            <p className="text-sm font-medium text-muted-foreground">🔒 गुरुनिर्णयः</p>
+            <p className="text-xs text-muted-foreground">Guru/Gurukul decides</p>
           </div>
         )}
       </div>
@@ -355,7 +381,7 @@ function SadhanaDashboard() {
           
           {/* 1 Scripture = Certificate */}
           <CertificationCard
-            image={certScripture}
+            tier="certificate"
             titleSanskrit="प्रमाणपत्रम्"
             titleEnglish="Certificate"
             requirement="Complete 1 Scripture"
@@ -368,7 +394,7 @@ function SadhanaDashboard() {
 
           {/* 3 Scriptures = Diploma */}
           <CertificationCard
-            image={certDiploma}
+            tier="diploma"
             titleSanskrit="उपाधिपत्रम्"
             titleEnglish="Diploma"
             requirement="Complete 3 Scriptures"
@@ -381,7 +407,7 @@ function SadhanaDashboard() {
 
           {/* 5 Scriptures = Degree */}
           <CertificationCard
-            image={certDegree}
+            tier="degree"
             titleSanskrit="उपाधिः"
             titleEnglish="Degree"
             requirement="Complete All 5 Scriptures"
