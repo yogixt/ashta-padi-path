@@ -19,10 +19,13 @@ export function FooterWisdom() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 0.6 }}
       transition={{ delay: 2, duration: 1 }}
-      className="py-10 text-center"
+      className="py-10 text-center space-y-4"
     >
       <p className="font-sanskrit text-sm text-sandalwood-dark italic">
         {wisdom}
+      </p>
+      <p className="text-xs text-muted-foreground">
+        © {new Date().getFullYear()} Ashta Padi. All rights reserved.
       </p>
     </motion.footer>
   );
