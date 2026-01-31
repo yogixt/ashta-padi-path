@@ -240,6 +240,15 @@ export function HomeScreen() {
                 <Play className="w-4 h-4" />
                 Watch Demo
               </Button>
+              <Button
+                variant="ghost"
+                size="lg"
+                className="h-12 px-6 gap-2 text-sandalwood-dark hover:text-earth hover:bg-sandalwood/20 font-sanskrit"
+                onClick={() => setScreen('gurukul')}
+              >
+                योगगुरुकुलम्
+                <ChevronRight className="w-4 h-4" />
+              </Button>
             </div>
 
             {/* Stats */}

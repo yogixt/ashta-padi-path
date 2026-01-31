@@ -62,6 +62,16 @@
     --cream: 40 30% 96%;
     --parchment: 38 25% 93%;
 
+    /* Sacred Gurukul palette - earth tones */
+    --sandalwood: 30 35% 75%;
+    --sandalwood-dark: 28 30% 55%;
+    --ochre: 38 60% 50%;
+    --ochre-muted: 36 40% 60%;
+    --muted-saffron: 32 50% 65%;
+    --earth: 25 25% 35%;
+    --manuscript: 40 30% 92%;
+    --sacred-ink: 25 30% 20%;
+
     /* Modern shadows */
     --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.03);
     --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05);

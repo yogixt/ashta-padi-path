@@ -80,6 +80,18 @@ export default {
         sage: "hsl(var(--sage))",
         peacock: "hsl(var(--peacock))",
         terracotta: "hsl(var(--terracotta))",
+        sandalwood: {
+          DEFAULT: "hsl(var(--sandalwood))",
+          dark: "hsl(var(--sandalwood-dark))",
+        },
+        ochre: {
+          DEFAULT: "hsl(var(--ochre))",
+          muted: "hsl(var(--ochre-muted))",
+        },
+        "muted-saffron": "hsl(var(--muted-saffron))",
+        earth: "hsl(var(--earth))",
+        manuscript: "hsl(var(--manuscript))",
+        "sacred-ink": "hsl(var(--sacred-ink))",
         cream: "hsl(var(--cream))",
         parchment: "hsl(var(--parchment))",
       },

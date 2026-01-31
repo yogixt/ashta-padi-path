@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useLearningStore, Screen } from '@/store/learningStore';
 import { useAuth } from '@/contexts/AuthContext';
 import { HomeScreen } from '@/components/screens/HomeScreen';
+import { GurukulScreen } from '@/components/screens/GurukulScreen';
 import { ModulesScreen } from '@/components/screens/ModulesScreen';
 import { VocabularyScreen } from '@/components/screens/VocabularyScreen';
 import { LearningScreen } from '@/components/screens/LearningScreen';
@@ -54,6 +55,8 @@ const Index = () => {
     switch (currentScreen) {
       case 'home':
         return <HomeScreen />;
+      case 'gurukul':
+        return <GurukulScreen />;
       case 'modules':
         return <ModulesScreen />;
       case 'vocabulary':
