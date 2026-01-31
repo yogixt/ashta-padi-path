@@ -85,10 +85,94 @@ src/
 ├── contexts/            # React contexts (Auth, etc.)
 ├── data/                # Static data (modules, grammar, sutras)
 ├── hooks/               # Custom React hooks
-├── integrations/        # Backend integration (Supabase client)
+├── integrations/        # Backend integration
 ├── pages/               # Route pages
 ├── store/               # Zustand state management
 └── lib/                 # Utility functions
+supabase/
+└── functions/           # Edge functions (AI chat, etc.)
+```
+
+## 🏗️ System Architecture
+
+The Ashta-Padi system architecture employs a modular, layered approach comprising four distinct layers:
+
+### 1. Content Layer — TypeScript Data Modules
+The content layer is powered by **strongly-typed TypeScript modules** (not JSON) that provide structured Sanskrit educational content:
+
+- **`yogaSutrasData.ts`**: Maps Sanskrit sūtras to word-by-word breakdowns with morphological markers (vibhakti, sandhi splits, dhātu roots)
+- **`grammarModules.ts`**: Comprehensive 22-lesson Vyākaraṇa curriculum covering foundational grammar and scripture-specific analysis
+- **`modulesData.ts`**: Profession-specific learning modules with topic mappings and progression metadata
+
+This approach enables compile-time type safety and IntelliSense support for content authoring.
+
+### 2. Pedagogy Layer — State-Driven Learning Engine
+The pedagogy layer implements a **gated progression engine** using Zustand for state management:
+
+```
+Profession Selection → Authentication → Module Selection → 
+Vocabulary (6 terms, all required) → Sūtra Study → Quiz (70% pass) → Mentor Selection
+```
+
+Key mechanisms:
+- **Progression gating**: Each stage must be completed before advancing
+- **Profession-based filtering**: Content dynamically filtered by selected profession (Philosopher, Psychologist, Economist, Yoga Practitioner, Wellness Expert)
+- **Completion tracking**: Granular tracking of vocabulary terms, sūtra progress, and quiz scores
+- **Pass/fail logic**: 70% threshold enforced before mentor access
+
+### 3. Presentation Layer — Dual-Panel Learning Interface
+The interface layer provides a **synchronized, interactive learning environment**:
+
+- **Left Panel (Sūtra Panel)**: Word-by-word verse analysis with expandable morphological details
+- **Right Panel (Grammar Sidebar)**: Contextual Vyākaraṇa reference (22 lessons across 2 modules)
+- **Responsive Design**: Mobile-first approach with Tailwind CSS and Framer Motion animations
+- **Role-Based Dashboards**: Distinct interfaces for Guru (teacher) and Śiṣya (student)
+
+### 4. Backend Layer — Lovable Cloud Services
+The backend layer leverages **Lovable Cloud** for persistence and AI capabilities:
+
+- **Authentication**: Role-based auth (student/teacher) with profile management
+- **Database**: PostgreSQL with RLS policies for secure data access
+- **AI Integration**: Edge functions connecting to Google Gemini for the Sanskrit chatbot
+- **Connection System**: Teacher-student relationship management with request/approval workflow
+
+### Architecture Diagram
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    PRESENTATION LAYER                           │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌────────────────┐  │
+│  │   Sūtra Panel   │  │ Grammar Sidebar │  │   Dashboards   │  │
+│  │  (Word Analysis)│  │  (Vyākaraṇa)    │  │ (Guru/Śiṣya)   │  │
+│  └────────┬────────┘  └────────┬────────┘  └───────┬────────┘  │
+└───────────┼────────────────────┼───────────────────┼────────────┘
+            │                    │                   │
+┌───────────┴────────────────────┴───────────────────┴────────────┐
+│                     PEDAGOGY LAYER                              │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │              Zustand Learning Store                       │  │
+│  │  • Gated Progression Engine (Auth → Vocab → Quiz → ...)  │  │
+│  │  • Profession-Based Content Filtering                     │  │
+│  │  • Score Calculation & Pass/Fail Logic                    │  │
+│  └──────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────┘
+            │                    │                   │
+┌───────────┴────────────────────┴───────────────────┴────────────┐
+│                      CONTENT LAYER                              │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌────────────────┐  │
+│  │ yogaSutrasData  │  │ grammarModules  │  │  modulesData   │  │
+│  │ (Sūtra + Padāni)│  │ (Vyākaraṇa 22L) │  │ (Profession)   │  │
+│  └─────────────────┘  └─────────────────┘  └────────────────┘  │
+└─────────────────────────────────────────────────────────────────┘
+            │                    │                   │
+┌───────────┴────────────────────┴───────────────────┴────────────┐
+│                      BACKEND LAYER                              │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌────────────────┐  │
+│  │  Authentication │  │    Database     │  │ Edge Functions │  │
+│  │  (Role-based)   │  │ (PostgreSQL+RLS)│  │  (AI Chatbot)  │  │
+│  └─────────────────┘  └─────────────────┘  └────────────────┘  │
+│                      Lovable Cloud                              │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ## 🎨 Design System
