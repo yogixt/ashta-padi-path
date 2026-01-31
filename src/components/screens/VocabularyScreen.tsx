@@ -2,7 +2,9 @@ import { motion } from 'framer-motion';
 import { Header } from '@/components/Header';
 import { VocabularyCards } from '@/components/VocabularyCards';
 import mandalaElegant from '@/assets/mandala-elegant.png';
-import { Award, BookOpen, Calendar, CheckCircle2 } from 'lucide-react';
+import certificateSelfStudy from '@/assets/certificate-self-study.png';
+import certificateUniversity from '@/assets/certificate-university.png';
+import { Award, BookOpen, Calendar, CheckCircle2, GraduationCap, Users } from 'lucide-react';
 import { useLearningStore } from '@/store/learningStore';
 import { useMemo } from 'react';
 
@@ -169,33 +171,104 @@ function SadhanaDashboard() {
         {/* Activity Calendar */}
         <ActivityCalendar />
 
-        {/* Self Study Path */}
-        <div className="bg-card border border-border rounded-xl overflow-hidden">
-          <div className="bg-gradient-to-r from-primary/10 to-primary/5 p-4 border-b border-border">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center">
-                <BookOpen className="w-5 h-5 text-primary" />
-              </div>
-              <div>
-                <h3 className="font-serif font-semibold text-foreground">स्वाध्यायः</h3>
-                <p className="text-xs text-muted-foreground">Self Study Path</p>
+        {/* Self Study Path Card */}
+        <motion.div 
+          whileHover={{ scale: 1.02 }}
+          transition={{ duration: 0.2 }}
+          className="bg-card border border-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+        >
+          <div className="relative h-28 overflow-hidden">
+            <img 
+              src={certificateSelfStudy} 
+              alt="Completion Certificate" 
+              className="w-full h-full object-cover opacity-90"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-card via-card/60 to-transparent" />
+            <div className="absolute bottom-3 left-3 right-3">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-primary/90 flex items-center justify-center">
+                  <BookOpen className="w-4 h-4 text-primary-foreground" />
+                </div>
+                <div>
+                  <h3 className="font-serif font-semibold text-foreground text-sm">स्वाध्यायः</h3>
+                  <p className="text-xs text-muted-foreground">Self Study</p>
+                </div>
               </div>
             </div>
           </div>
-          <div className="p-4 space-y-3">
+          <div className="p-4">
             <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center shrink-0 mt-0.5">
+              <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
                 <Award className="w-4 h-4 text-amber-600" />
               </div>
               <div>
                 <p className="text-sm font-medium text-foreground">Completion Certificate</p>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  Receive a digital certificate upon completing all modules
+                  Digital certificate upon completing all modules
                 </p>
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
+
+        {/* 6-Month Guru Path Card */}
+        <motion.div 
+          whileHover={{ scale: 1.02 }}
+          transition={{ duration: 0.2 }}
+          className="bg-card border border-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+        >
+          <div className="relative h-28 overflow-hidden">
+            <img 
+              src={certificateUniversity} 
+              alt="University Certification" 
+              className="w-full h-full object-cover opacity-90"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-card via-card/60 to-transparent" />
+            <div className="absolute bottom-3 left-3 right-3">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-accent/90 flex items-center justify-center">
+                  <Users className="w-4 h-4 text-accent-foreground" />
+                </div>
+                <div>
+                  <h3 className="font-serif font-semibold text-foreground text-sm">गुरुकुलवासः</h3>
+                  <p className="text-xs text-muted-foreground">6-Month with Guru</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="p-4 space-y-3">
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-full bg-violet-100 flex items-center justify-center shrink-0">
+                <Calendar className="w-4 h-4 text-violet-600" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-foreground">6-Month Sādhanā</p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Immersive journey with dedicated mentor
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
+                <GraduationCap className="w-4 h-4 text-emerald-600" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-foreground">University Certification</p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Accredited by partner universities
+                </p>
+              </div>
+            </div>
+          </div>
+          {/* Unlock hint */}
+          <div className="px-4 pb-4">
+            <div className="text-center py-2 px-3 bg-muted/50 rounded-lg border border-dashed border-border">
+              <p className="text-xs text-muted-foreground">
+                🔒 Unlocks after 100% quiz score
+              </p>
+            </div>
+          </div>
+        </motion.div>
 
 
         {/* Sanskrit wisdom */}
