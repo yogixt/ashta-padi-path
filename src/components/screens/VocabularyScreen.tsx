@@ -2,37 +2,16 @@ import { motion } from 'framer-motion';
 import { Header } from '@/components/Header';
 import { VocabularyCards } from '@/components/VocabularyCards';
 import mandalaElegant from '@/assets/mandala-elegant.png';
-import { Award, BookOpen, Calendar, CheckCircle2, GraduationCap, ScrollText, Scroll, Star } from 'lucide-react';
+import { Award, BookOpen, Calendar, CheckCircle2, GraduationCap, ScrollText, Star } from 'lucide-react';
 import { useLearningStore } from '@/store/learningStore';
-import { useMemo } from 'react';
+import { useActivityTracking } from '@/hooks/useActivityTracking';
 
 const TOTAL_VOCAB_TERMS = 6;
 
-// Generate mock activity data for the last 12 weeks
-function generateActivityData() {
-  const weeks = 12;
-  const data: { date: Date; level: number }[] = [];
-  const today = new Date();
-  
-  for (let w = weeks - 1; w >= 0; w--) {
-    for (let d = 0; d < 7; d++) {
-      const date = new Date(today);
-      date.setDate(date.getDate() - (w * 7 + (6 - d)));
-      // Random activity level (0-4), with higher probability for recent days
-      const recency = 1 - (w / weeks);
-      const level = Math.random() < 0.3 + recency * 0.3 
-        ? Math.floor(Math.random() * 4) + 1 
-        : 0;
-      data.push({ date, level });
-    }
-  }
-  return data;
-}
-
 function ActivityCalendar() {
-  const activityData = useMemo(() => generateActivityData(), []);
-  const weeks: { date: Date; level: number }[][] = [];
+  const { activityData, totalActiveDays, loading } = useActivityTracking();
   
+  const weeks: { date: Date; level: number }[][] = [];
   for (let i = 0; i < activityData.length; i += 7) {
     weeks.push(activityData.slice(i, i + 7));
   }
@@ -48,7 +27,21 @@ function ActivityCalendar() {
     }
   };
 
-  const totalActiveDays = activityData.filter(d => d.level > 0).length;
+  if (loading) {
+    return (
+      <div className="bg-card border border-border rounded-xl p-4">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <Calendar className="w-4 h-4 text-primary" />
+            <h4 className="text-sm font-medium text-foreground">Sādhanā Activity</h4>
+          </div>
+        </div>
+        <div className="h-20 flex items-center justify-center">
+          <div className="animate-pulse text-sm text-muted-foreground">Loading...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-card border border-border rounded-xl p-4">

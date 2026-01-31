@@ -4,6 +4,7 @@ import { Check, X, ChevronRight, RotateCcw, Home, GraduationCap, BookOpen, Targe
 import { quizQuestions } from '@/data/yogaSutrasData';
 import { useLearningStore } from '@/store/learningStore';
 import { Button } from '@/components/ui/button';
+import { useActivityTracking } from '@/hooks/useActivityTracking';
 
 export function QuizComponent() {
   const { 
@@ -14,6 +15,8 @@ export function QuizComponent() {
     resetQuiz,
     setScreen
   } = useLearningStore();
+  
+  const { logActivity } = useActivityTracking();
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showFeedback, setShowFeedback] = useState(false);
@@ -41,6 +44,8 @@ export function QuizComponent() {
       });
       calculateScore(correctAnswers);
       setIsComplete(true);
+      // Log quiz completion activity
+      logActivity('quiz');
     }
   };
 
