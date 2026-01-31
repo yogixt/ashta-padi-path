@@ -48,7 +48,7 @@ export function useProgressSync() {
           completedVocabTerms: data.completed_vocab_terms || [],
           currentSutraIndex: data.current_sutra_index || 0,
           sutrasCompleted: data.sutras_completed || 0,
-          quizAnswers: data.quiz_answers || {},
+          quizAnswers: (data.quiz_answers as Record<number, number>) || {},
           quizScore: data.quiz_score,
         });
       }
