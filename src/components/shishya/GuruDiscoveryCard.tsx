@@ -158,8 +158,9 @@ export function GuruDiscoveryCard() {
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
             <GraduationCap className="w-5 h-5 text-primary" />
-            <span className="font-sanskrit">गुरु</span> Guru Discovery
+            <span className="font-sanskrit">अध्याय-परम्परा</span>
           </CardTitle>
+          <p className="text-sm text-muted-foreground">Guru-Śiṣya Lineage</p>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-center py-8">
@@ -176,10 +177,10 @@ export function GuruDiscoveryCard() {
         <CardHeader className="pb-3">
           <CardTitle className="text-lg flex items-center gap-2">
             <GraduationCap className="w-5 h-5 text-primary" />
-            <span className="font-sanskrit">गुरु</span> Guru Discovery
+            <span className="font-sanskrit">अध्याय-परम्परा</span>
           </CardTitle>
           <p className="text-sm text-muted-foreground">
-            Connect with mentors for personalized guidance
+            गुरुशिष्यपरम्परा — The sacred lineage of knowledge transmission
           </p>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -204,7 +205,7 @@ export function GuruDiscoveryCard() {
             <div className="space-y-2">
               <h4 className="text-sm font-medium text-foreground flex items-center gap-2">
                 <Check className="w-4 h-4 text-emerald-500" />
-                Your Gurus
+                <span className="font-sanskrit">आचार्याः</span> — Your Gurus
               </h4>
               <div className="space-y-2">
                 {connectedTeachers.slice(0, 2).map((teacher) => (
@@ -237,7 +238,7 @@ export function GuruDiscoveryCard() {
             <div className="space-y-2">
               <h4 className="text-sm font-medium text-foreground flex items-center gap-2">
                 <Clock className="w-4 h-4 text-amber-500" />
-                Pending Requests
+                <span className="font-sanskrit">प्रतीक्षा</span> — Awaiting Response
               </h4>
               <div className="space-y-2">
                 {pendingTeachers.slice(0, 2).map((teacher) => (
@@ -270,7 +271,7 @@ export function GuruDiscoveryCard() {
             <div className="space-y-2">
               <h4 className="text-sm font-medium text-foreground flex items-center gap-2">
                 <Users className="w-4 h-4 text-primary" />
-                Available Gurus
+                <span className="font-sanskrit">उपलब्धाः गुरवः</span> — Available Gurus
               </h4>
               <ScrollArea className="max-h-[280px]">
                 <div className="space-y-2 pr-2">
@@ -348,8 +349,9 @@ export function GuruDiscoveryCard() {
           {teachers.length === 0 && (
             <div className="text-center py-6">
               <GraduationCap className="w-12 h-12 mx-auto text-muted-foreground/50 mb-3" />
+              <p className="font-sanskrit text-primary text-lg mb-1">गुरुर्ब्रह्मा गुरुर्विष्णुः</p>
               <p className="text-muted-foreground text-sm">No gurus available yet</p>
-              <p className="text-xs text-muted-foreground mt-1">Check back later for available mentors</p>
+              <p className="text-xs text-muted-foreground mt-1">The lineage awaits — check back later</p>
             </div>
           )}
 
@@ -357,8 +359,9 @@ export function GuruDiscoveryCard() {
           {teachers.length > 0 && availableTeachers.length === 0 && connectedTeachers.length === teachers.length && (
             <div className="text-center py-4 bg-emerald-50 dark:bg-emerald-950/20 rounded-lg border border-emerald-200 dark:border-emerald-800">
               <Check className="w-8 h-8 mx-auto text-emerald-500 mb-2" />
-              <p className="text-sm font-medium text-foreground">All gurus connected!</p>
-              <p className="text-xs text-muted-foreground">You're connected with all available mentors</p>
+              <p className="font-sanskrit text-primary mb-1">परम्परा पूर्णा</p>
+              <p className="text-sm font-medium text-foreground">Lineage Complete</p>
+              <p className="text-xs text-muted-foreground">You're connected with all available gurus</p>
             </div>
           )}
         </CardContent>
@@ -369,8 +372,8 @@ export function GuruDiscoveryCard() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <span className="font-sanskrit">गुरु</span>
-              Connect with {selectedTeacher?.profile?.full_name || 'Teacher'}
+              <span className="font-sanskrit">गुरुसेवा</span>
+              — Seek guidance from {selectedTeacher?.profile?.full_name || 'Āchārya'}
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-4">
