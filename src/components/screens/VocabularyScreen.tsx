@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { Header } from '@/components/Header';
 import { VocabularyCards } from '@/components/VocabularyCards';
 import mandalaElegant from '@/assets/mandala-elegant.png';
-import { Award, GraduationCap, BookOpen, Users, Sparkles, Calendar, CheckCircle2 } from 'lucide-react';
+import { Award, BookOpen, Calendar, CheckCircle2 } from 'lucide-react';
 import { useLearningStore } from '@/store/learningStore';
 import { useMemo } from 'react';
 
@@ -49,14 +49,6 @@ function ActivityCalendar() {
   };
 
   const totalActiveDays = activityData.filter(d => d.level > 0).length;
-  const currentStreak = useMemo(() => {
-    let streak = 0;
-    for (let i = activityData.length - 1; i >= 0; i--) {
-      if (activityData[i].level > 0) streak++;
-      else break;
-    }
-    return streak;
-  }, [activityData]);
 
   return (
     <div className="bg-card border border-border rounded-xl p-4">
@@ -97,13 +89,11 @@ function ActivityCalendar() {
         <span>More</span>
       </div>
 
-      {/* Current streak */}
-      {currentStreak > 0 && (
-        <div className="mt-3 pt-3 border-t border-border flex items-center justify-center gap-2">
-          <Sparkles className="w-4 h-4 text-amber-500" />
-          <span className="text-sm font-medium text-foreground">{currentStreak} Day Streak</span>
-        </div>
-      )}
+      {/* Total learning days */}
+      <div className="mt-3 pt-3 border-t border-border flex items-center justify-center gap-2">
+        <BookOpen className="w-4 h-4 text-primary" />
+        <span className="text-sm font-medium text-foreground">{totalActiveDays} Days Learning</span>
+      </div>
     </div>
   );
 }
@@ -207,44 +197,6 @@ function SadhanaDashboard() {
           </div>
         </div>
 
-        {/* Gurukulavasa Path */}
-        <div className="bg-card border border-border rounded-xl overflow-hidden">
-          <div className="bg-gradient-to-r from-accent/20 to-accent/10 p-4 border-b border-border">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-accent/30 flex items-center justify-center">
-                <Users className="w-5 h-5 text-accent-foreground" />
-              </div>
-              <div>
-                <h3 className="font-serif font-semibold text-foreground">गुरुकुलवासः</h3>
-                <p className="text-xs text-muted-foreground">With Guru / Mentor</p>
-              </div>
-            </div>
-          </div>
-          <div className="p-4 space-y-3">
-            <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-full bg-violet-100 flex items-center justify-center shrink-0 mt-0.5">
-                <Calendar className="w-4 h-4 text-violet-600" />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-foreground">6-Month Sādhanā</p>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  Structured immersive journey with a dedicated mentor
-                </p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center shrink-0 mt-0.5">
-                <GraduationCap className="w-4 h-4 text-emerald-600" />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-foreground">University Certification</p>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  Accredited certification from partner universities
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* Sanskrit wisdom */}
         <div className="text-center py-3 px-4 bg-muted/30 rounded-xl border border-border">
