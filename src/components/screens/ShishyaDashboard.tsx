@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Header } from '@/components/Header';
-import { BookOpen, Target, Flame, Trophy, ArrowRight, Sparkles, GraduationCap, User } from 'lucide-react';
+import { BookOpen, Target, Trophy, ArrowRight, Sparkles, GraduationCap, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { useLearningStore } from '@/store/learningStore';
@@ -49,7 +49,6 @@ export function ShishyaDashboard() {
     { label: 'Complete 1 quiz', completed: quizScore > 0 ? 1 : 0, total: 1 },
   ];
 
-  const streakDays = 7;
   const totalProgress = Math.round(((vocabCompleted ? 25 : 0) + (sutrasCompleted * 5) + (quizScore > 0 ? 25 : 0)) / 100 * 100);
 
   return (
@@ -100,21 +99,10 @@ export function ShishyaDashboard() {
           </div>
 
           {/* Stats Row */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="grid grid-cols-3 gap-4 mb-8">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-gradient-to-br from-primary to-primary/80 rounded-2xl p-4 text-primary-foreground"
-            >
-              <Flame className="w-6 h-6 mb-2" />
-              <p className="text-2xl font-bold">{streakDays}</p>
-              <p className="text-sm opacity-90">Day Streak</p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.1 }}
               className="bg-card border border-border rounded-2xl p-4"
             >
               <BookOpen className="w-6 h-6 mb-2 text-primary" />
@@ -125,7 +113,7 @@ export function ShishyaDashboard() {
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 }}
+              transition={{ delay: 0.1 }}
               className="bg-card border border-border rounded-2xl p-4"
             >
               <Target className="w-6 h-6 mb-2 text-emerald-500" />
@@ -136,12 +124,12 @@ export function ShishyaDashboard() {
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.3 }}
-              className="bg-card border border-border rounded-2xl p-4"
+              transition={{ delay: 0.2 }}
+              className="bg-gradient-to-br from-primary to-primary/80 rounded-2xl p-4 text-primary-foreground"
             >
-              <Trophy className="w-6 h-6 mb-2 text-amber-500" />
-              <p className="text-2xl font-bold text-foreground">{totalProgress}%</p>
-              <p className="text-sm text-muted-foreground">Overall Progress</p>
+              <Trophy className="w-6 h-6 mb-2" />
+              <p className="text-2xl font-bold">{totalProgress}%</p>
+              <p className="text-sm opacity-90">Overall Progress</p>
             </motion.div>
           </div>
 
