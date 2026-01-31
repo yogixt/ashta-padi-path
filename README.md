@@ -1,73 +1,140 @@
-# Welcome to your Lovable project
+# Ashta Padi — संस्कृतं च शास्त्राणि
 
-## Project info
+<p align="center">
+  <img src="src/assets/logo.png" alt="Ashta Padi Logo" width="120" />
+</p>
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+<p align="center">
+  <strong>A Scripture-Agnostic Framework for Sanskrit Learning</strong><br/>
+  Learn Sanskrit & Scriptures Through Your Profession
+</p>
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## 📖 About
 
-**Use Lovable**
+**Ashta Padi** (अष्टपदी) is an innovative, profession-based Sanskrit learning platform that makes ancient wisdom accessible to modern learners. The framework covers major scriptures including:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+- **Yoga Sūtras** of Patañjali
+- **Bhagavad Gītā**
+- **Arthaśāstra**
+- And more...
 
-Changes made via Lovable will be committed automatically to this repo.
+The platform follows a structured **8-step pedagogical roadmap** (Ashta Padi = Eight Steps) designed to guide learners from foundational concepts to advanced understanding.
 
-**Use your preferred IDE**
+## 🎯 Key Features
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### For Students (Śiṣya)
+- **Profession-Based Learning**: Content personalized for Philosophers, Psychologists, Economists, Yoga Practitioners, and Wellness Experts
+- **Interactive Sūtra Panel**: Study verses with word-by-word analysis, grammar breakdowns, and contextual meanings
+- **AI-Powered Chatbot**: Get instant answers to Sanskrit and scripture-related questions
+- **Progress Tracking**: Monitor your learning journey with detailed analytics
+- **Vocabulary Cards**: Build your Sanskrit vocabulary with spaced repetition
+- **Quizzes & Assessments**: Test your understanding with interactive quizzes
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### For Teachers (Guru)
+- **Student Management**: Connect with and guide your śiṣyas
+- **Assessment Creation**: Create custom assessments for your students
+- **Publication Management**: Share your research, blogs, and teaching materials
+- **Connection Requests**: Accept or manage student connection requests
 
-Follow these steps:
+## 🛠️ Technology Stack
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
+- **Frontend**: React 18 + TypeScript + Vite
+- **Styling**: Tailwind CSS + shadcn/ui components
+- **State Management**: Zustand
+- **Backend**: Lovable Cloud (Supabase)
+- **Authentication**: Email-based auth with role management
+- **Animations**: Framer Motion
+- **Charts**: Recharts
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+ and npm (or use [nvm](https://github.com/nvm-sh/nvm#installing-and-updating))
+
+### Installation
+
+```bash
+# Clone the repository
 git clone <YOUR_GIT_URL>
 
-# Step 2: Navigate to the project directory.
+# Navigate to project directory
 cd <YOUR_PROJECT_NAME>
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Install dependencies
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The app will be available at `http://localhost:5173`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 📁 Project Structure
 
-**Use GitHub Codespaces**
+```
+src/
+├── assets/              # Images, mandalas, and static assets
+├── components/
+│   ├── screens/         # Main screen components
+│   ├── profile/         # Profile-related components
+│   ├── analytics/       # Learning analytics components
+│   └── ui/              # Reusable UI components (shadcn)
+├── contexts/            # React contexts (Auth, etc.)
+├── data/                # Static data (modules, grammar, sutras)
+├── hooks/               # Custom React hooks
+├── integrations/        # Backend integration (Supabase client)
+├── pages/               # Route pages
+├── store/               # Zustand state management
+└── lib/                 # Utility functions
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 🎨 Design System
 
-## What technologies are used for this project?
+The UI follows a professional editorial aesthetic with:
+- Sanskrit-inspired typography using custom Devanagari fonts
+- Elegant mandala decorative elements
+- Warm, scholarly color palette
+- Light/dark mode support
 
-This project is built with:
+## 📚 The Ashta Padi Framework
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+The 8-step learning methodology:
+1. **Introduction** — Overview of the scripture
+2. **Context** — Historical and philosophical background
+3. **Vocabulary** — Key Sanskrit terms
+4. **Grammar** — Sandhi, Samasa, and linguistic analysis
+5. **Translation** — Word-by-word and contextual meaning
+6. **Commentary** — Traditional and modern interpretations
+7. **Application** — Practical relevance to your profession
+8. **Assessment** — Test your understanding
 
-## How can I deploy this project?
+## 🔬 Research Credits
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+This project is a submission for **ISCLS 2026** by:
 
-## Can I connect a custom domain to my Lovable project?
+- Bhagyashree Joshi Vyasa
+- Bijoy Laxmi Biswas
+- Divyangana Kothari
+- Aarti Panwar
 
-Yes, you can!
+**Affiliated Institutions:**
+- Satyam Sadhana Kutir Ashram
+- Uttarakhand Sanskrit University
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 🤝 Contributing
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+We welcome contributions! Please feel free to submit issues and pull requests.
+
+## 📄 License
+
+This project is part of academic research. Please contact the authors for usage permissions.
+
+---
+
+<p align="center">
+  <em>गुरुर्ब्रह्मा गुरुर्विष्णुः गुरुर्देवो महेश्वरः</em><br/>
+  <small>The Guru is Brahma, Vishnu, and Maheswara</small>
+</p>
